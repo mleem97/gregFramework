@@ -1,33 +1,8 @@
-# 📒 Changelog
+## 0.1.0 (2026-04-01)
 
-All notable project changes are documented in this file.
 
----
+### Features
 
-## [Unreleased]
+* add initial DataCenterExporter project and core mod code ([3b2b394](https://github.com/mleem97/DataCenter-AEMod/commit/3b2b394e6151a389abb9006c36890f3ec97f6346))
+* extend export structure and beta export functionality ([fb70085](https://github.com/mleem97/DataCenter-AEMod/commit/fb70085ed5933cd5e88b632922a4985304ca957f))
 
-### ✨ Added
-
-- Structured export folders: `Models`, `Textures`, `Sprites`, `Materials`, `Scripts`, `Settings`.
-- Optional export of unused assets to `NotUsed/Models` and `NotUsed/Textures`.
-- Additional files: `components.txt`, `materials.txt`, `objects.txt`, `summary.txt`.
-
-### 🔧 Changed
-
-- Improved IL2CPP runtime compatibility (string comparison without problematic overloads).
-- Build configuration: excluded `il2cpp-unpack` files from compilation.
-
-### 🐛 Fixed
-
-- Reduced/fixed failures related to `ReadOnlySpan<T>.GetPinnableReference()` in the export path.
-
----
-
-## [Historical Commits]
-
-### 🧾 Migrated to Conventional Commits
-
-- `chore: initialize repository metadata files`
-- `feat: add initial DataCenterExporter project and core mod code`
-- `feat: extend export structure and beta export functionality`
-- `docs: add documentation set and build/changelog updates`
