@@ -1,4 +1,11 @@
-## 0.1.0 (2026-04-01)
+## [0.1.1](https://github.com/mleem97/DataCenter-AEMod/compare/v0.1.0...v0.1.1) (2026-04-01)
+
+
+### Bug Fixes
+
+* **build:** remove duplicate CI compile include for Main.CI.cs ([7113607](https://github.com/mleem97/DataCenter-AEMod/commit/7113607d6c6ed83ecbc6620c8434d1bdc83619dc))
+
+## [0.1.0](https://github.com/mleem97/DataCenter-AEMod/compare/3b2b394e6151a389abb9006c36890f3ec97f6346...v0.1.0) (2026-04-01)
 
 
 ### Features
