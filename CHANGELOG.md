@@ -1,20 +1,33 @@
-# Changelog
+# 📒 Changelog
 
-Alle relevanten Änderungen am Projekt werden in dieser Datei dokumentiert.
+All notable project changes are documented in this file.
+
+---
 
 ## [Unreleased]
 
-### Added
+### ✨ Added
 
-- Strukturierter Export nach Ordnern: `Models`, `Textures`, `Sprites`, `Materials`, `Scripts`, `Settings`.
-- Optionaler Export nicht verwendeter Assets nach `NotUsed/Models` und `NotUsed/Textures`.
-- Zusatzdateien: `components.txt`, `materials.txt`, `objects.txt`, `summary.txt`.
+- Structured export folders: `Models`, `Textures`, `Sprites`, `Materials`, `Scripts`, `Settings`.
+- Optional export of unused assets to `NotUsed/Models` and `NotUsed/Textures`.
+- Additional files: `components.txt`, `materials.txt`, `objects.txt`, `summary.txt`.
 
-### Changed
+### 🔧 Changed
 
-- Runtime-Kompatibilität für IL2CPP verbessert (String-Vergleich ohne problematische Overloads).
-- Build-Konfiguration: `il2cpp-unpack`-Dateien von Kompilierung ausgeschlossen.
+- Improved IL2CPP runtime compatibility (string comparison without problematic overloads).
+- Build configuration: excluded `il2cpp-unpack` files from compilation.
 
-### Fixed
+### 🐛 Fixed
 
-- Fehlerbild mit `ReadOnlySpan<T>.GetPinnableReference()` im Exportpfad reduziert/behoben.
+- Reduced/fixed failures related to `ReadOnlySpan<T>.GetPinnableReference()` in the export path.
+
+---
+
+## [Historical Commits]
+
+### 🧾 Migrated to Conventional Commits
+
+- `chore: initialize repository metadata files`
+- `feat: add initial DataCenterExporter project and core mod code`
+- `feat: extend export structure and beta export functionality`
+- `docs: add documentation set and build/changelog updates`

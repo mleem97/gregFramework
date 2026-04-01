@@ -1,35 +1,43 @@
-# Contributing
+# 🤝 Contributing
 
-Vielen Dank für dein Interesse an Beiträgen zu `DataCenterExporter`.
+Thank you for your interest in contributing to `DataCenterExporter`.
 
-## Grundsätze
+---
 
-- Beiträge müssen dem legitimen Modding-Zweck dienen.
-- Keine Features oder Änderungen, die Urheberrechtsverletzungen, Asset-Diebstahl oder unrechtmäßige Weiterverbreitung unterstützen.
-- Änderungen bitte klein, fokussiert und nachvollziehbar halten.
+## 📌 Core Principles
 
-## Lokale Entwicklung
+- Contributions must serve a legitimate modding purpose.
+- Do not add features or changes that support copyright infringement, asset theft, or unauthorized redistribution.
+- Keep changes small, focused, and easy to review.
 
-1. Repository forken und Branch erstellen (`feature/...`, `fix/...`).
-2. Änderungen umsetzen.
-3. Lokal bauen:
+---
 
-```powershell
+## 🛠 Local Development Workflow
+
+1. Fork the repository and create a branch (`feature/...`, `fix/...`).
+2. Implement your changes.
+3. Build locally:
+
+```sh
 dotnet build DataCenterExporter.sln -v:minimal
 ```
 
-4. Funktional prüfen (Hotkeys `F8`, `F9`, `F10`).
-5. Pull Request mit klarer Beschreibung öffnen.
+4. Validate functionality (hotkeys `F8`, `F9`, `F10`).
+5. Open a pull request with a clear description.
 
-## Coding-Richtlinien
+---
 
-- Bestehenden Stil in `Main.cs` beibehalten.
-- Keine unnötigen Abhängigkeiten hinzufügen.
-- IL2CPP-/MelonLoader-Kompatibilität beachten.
+## 🧩 Coding Guidelines
 
-## Pull-Request-Checkliste
+- Keep the existing style in `Main.cs`.
+- Do not add unnecessary dependencies.
+- Preserve IL2CPP/MelonLoader compatibility.
 
-- [ ] Build ist erfolgreich.
-- [ ] Änderung ist auf das Thema begrenzt.
-- [ ] README/Docs wurden bei Bedarf aktualisiert.
-- [ ] Keine ethisch/rechtlich problematischen Inhalte.
+---
+
+## ✅ Pull Request Checklist
+
+- [ ] Build is successful.
+- [ ] Change is limited to the intended scope.
+- [ ] README/docs updated where necessary.
+- [ ] No ethically or legally problematic content.

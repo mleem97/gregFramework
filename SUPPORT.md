@@ -1,21 +1,31 @@
-# Support
+# 🆘 Support
 
-## Bevor du ein Issue erstellst
+Use this guide before opening a support request.
 
-Bitte prüfen:
+---
 
-- aktuelle `README.md`
-- bestehende Issues
-- Build mit `dotnet build DataCenterExporter.sln -v:minimal`
+## 📋 Before Opening an Issue
 
-## Benötigte Informationen bei Problemen
+Please check the following first:
 
-- Spielversion (`Data Center`)
-- MelonLoader-Version
-- Mod-Version / Commit
-- Reproduktionsschritte
-- Relevante Logs / Fehlermeldungen
+- Latest `README.md`
+- Existing issues
+- Local build with `dotnet build DataCenterExporter.sln -v:minimal`
 
-## Hinweis
+---
 
-Support umfasst keine Anfragen, die auf unrechtmäßige Nutzung von Spielinhalten abzielen.
+## 🐛 Required Information for Problem Reports
+
+When reporting a bug, include:
+
+- Game version (`Data Center`)
+- MelonLoader version
+- Mod version / commit
+- Reproduction steps
+- Relevant logs / error messages
+
+---
+
+## ⚠️ Scope Note
+
+Support does not cover requests aimed at unlawful use of game content.

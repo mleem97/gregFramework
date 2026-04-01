@@ -1,132 +1,150 @@
 # DataCenter Asset Exporter Mod (MelonLoader)
 
-> **Wichtiger Hinweis (Ethik & Nutzung):**
-> Dieser Mod ruft **nicht** dazu auf, Code, Assets oder sonstige Inhalte von Indie-Entwickler:innen zu stehlen, unrechtmäßig weiterzuverwenden oder zu verbreiten.
-> Er wurde entwickelt, um die **Mod-Entwicklung für MelonLoader** auf Basis von **Data Center (Waseku)** zu unterstützen – insbesondere für Mods, die tiefer eingreifen als reiner Code (z. B. eigene Assets/Erweiterungen im legitimen Modding-Kontext).
+> ⚠️ **Important Notice (Ethics & Usage)**  
+> This mod **does not** encourage or endorse the theft, unauthorized reuse, or distribution of code, assets, or any other content created by indie developers. It was developed strictly to support the **modding workflow** for the game *Data Center* (by Waseku) via MelonLoader. It is intended for modders who need a deeper understanding of the game's structure to create legitimate, transformative mods (e.g., custom assets, structural extensions) within a fair modding context.
 
-## Überblick
+---
 
-`DataCenterExporter` ist ein MelonLoader-Mod für `Data Center`, der zur Laufzeit verwendete Inhalte (Meshes/Texturen) für Modding-Workflows exportiert.
+## 📖 Overview
 
-Aktueller Fokus:
+**DataCenterExporter** is a MelonLoader-based mod for the game *Data Center*. It allows modders to export in-game content (meshes, textures, etc.) at runtime to streamline custom modding workflows. 
 
-- Export von **im Spiel verwendeten Assets** (aktive + inaktive Objekte in geladenen Szenen)
-- Optionaler Export von geladenen, aber aktuell nicht verwendeten Assets (`NotUsed`)
-- UI-Hilfsfunktionen zur schnelleren Referenzsuche
-- Erweiterte Metadaten-Exporte (Komponenten, Objekt-Settings, Material-Infos, Summary)
+**Current Focus:**
+- **In-Use Asset Export:** Captures assets actively utilized in the game (both active and inactive objects within loaded scenes).
+- **Unused Asset Export (Optional):** Extracts loaded but currently unreferenced assets.
+- **UI Helper Functions:** Accelerates UI reference searches and structure mapping.
+- **Extended Metadata Export:** Generates detailed text logs regarding components, object settings, material configurations, and general summaries.
 
-## Features
+---
 
-- `F8`: Startet den Exportlauf
-- `F9`: Loggt den UI-Pfad unter dem Mauszeiger
-- `F10`: Schaltet Beta-Export (`an/aus`)
+## ✨ Features
 
-Exportziele:
+### Hotkeys
+- <kbd>F8</kbd> : Start the asset export process.
+- <kbd>F9</kbd> : Log the exact UI hierarchy path under the mouse cursor.
+- <kbd>F10</kbd> : Toggle Beta Export features (On/Off).
 
-- `Mods/ExportedAssets/CurrentGame`
-  - `Models`
-  - `Textures`
-  - `Sprites`
-  - `Materials`
-  - `Scripts` (`components.txt`)
-  - `Settings` (`objects.txt`, `summary.txt`)
-- `Mods/ExportedAssets/CurrentGame/NotUsed`
-  - Optional: Nicht verwendete, aber geladene Assets (aufgeteilt in `Models` und `Textures`)
+### Export Destinations
+Assets are exported to the `Mods/ExportedAssets/CurrentGame` directory, organized as follows:
+- `Models/`
+- `Textures/`
+- `Sprites/`
+- `Materials/`
+- `Scripts/` (outputs `components.txt`)
+- `Settings/` (outputs `objects.txt`, `summary.txt`)
 
-Zusätzlich wird eine `README_NOT_USED.txt` im `CurrentGame`-Ordner erzeugt.
+### Unused Assets (Optional)
+Exported to `Mods/ExportedAssets/CurrentGame/NotUsed`.
+- Separated into `Models/` and `Textures/`.
+- Automatically generates a `README_NOT_USED.txt` file in the main `CurrentGame` directory explaining its contents.
 
-## Technologie-Stack
+---
 
-- `.NET 6`
-- `MelonLoader`
-- `Unity IL2CPP` Interop
-- `Unity Input System`
+## 🛠 Technology Stack
 
-## Voraussetzungen
+- **.NET 6**
+- **MelonLoader** (Modding Framework)
+- **Unity IL2CPP Interop**
+- **Unity Input System**
 
-- Installiertes Spiel: `Data Center`
-- Installierter `MelonLoader` für das Spiel
-- `Visual Studio 2022/2026` oder `dotnet SDK` mit .NET 6
+---
 
-## Build
+## 📋 Prerequisites
 
-Im Projektordner:
+To build and use this mod, you need:
+1. The game **Data Center** installed.
+2. **MelonLoader** installed and configured for the game.
+3. **Visual Studio 2022/2026** OR the **.NET 6 SDK** installed on your machine.
 
-```powershell
+---
+
+## 🏗 Build Instructions
+
+Navigate to the project directory in your terminal and run:
+
+```sh
 dotnet build DataCenterExporter.sln -v:minimal
+
 ```
+The compiled mod will typically be output to:  
+`bin/Debug/net6.0/DataCenterExporter.dll`
 
-Ausgabe typischerweise in:
+---
 
-- `bin/Debug/net6.0/DataCenterExporter.dll`
+## 🚀 Installation & Usage
 
-## Installation
+1. Build the project following the instructions above (or download the compiled `.dll`).
+2. Copy the `DataCenterExporter.dll` into the `Mods` folder located inside your *Data Center* game directory.
+3. Launch the game.
+4. Press the designated hotkeys (<kbd>F8</kbd>, <kbd>F9</kbd>, <kbd>F10</kbd>) in-game to trigger the exports and UI logging.
 
-1. Projekt bauen
-2. `DataCenterExporter.dll` in den `Mods`-Ordner von `Data Center` kopieren
-3. Spiel starten
-4. Im Spiel die Hotkeys (`F8/F9/F10`) verwenden
+---
 
-## Laufzeitverhalten (Kurz)
+## ⚙️ Runtime Behavior (Technical Details)
 
-- Export nutzt Szenen-Hierarchien (inkl. inaktive Objekte), um „wirklich verbaute“ Inhalte zu erfassen.
-- UI-Erkennung für `F9` erfolgt robust via Reflection, damit fehlende direkte UI-Assembly-Referenzen im Mod-Build kein Hard-Blocker sind.
-- `NotUsed` wird gefiltert, damit primär relevante Asset-Kandidaten exportiert werden (keine offensichtlichen internen/mini-Assets).
+- **Scene Hierarchy Traversal:** The export relies on scene hierarchies (including inactive objects) to ensure it only captures "actually built/placed" content.
+- **Robust UI Detection:** The <kbd>F9</kbd> UI path detection utilizes C# Reflection. This ensures that missing direct UI assembly references during the mod's compilation do not cause hard crashes at runtime.
+- **Smart Filtering:** The `NotUsed` export process includes intelligent filtering to primarily export relevant asset candidates, ignoring obvious internal Unity or micro-assets.
 
-## Projektstruktur
+---
 
-- `Main.cs` – zentrale Mod-Logik (Hotkeys, Export, UI-Logging)
-- `AssetExport.md` – Anforderungs-/Notizdatei zum Exportverhalten
-- `ui.md` – UI-Referenzkontext
+## 📁 Project Structure
 
-## Contribution
+- `Main.cs` — Central mod logic (Hotkey handling, Export routing, UI Logging).
+- `AssetExport.md` — Documentation, requirements, and development notes regarding export behavior.
+- `ui.md` — UI reference context and layout documentation.
 
-Beiträge sind willkommen.
+---
 
-### Ablauf
+## 🤝 Contributing
 
-1. Repository forken
-2. Branch erstellen (`feature/...`, `fix/...`)
-3. Änderungen klein und fokussiert halten
-4. Build lokal prüfen
-5. Pull Request mit klarer Beschreibung erstellen
+Contributions are always welcome! If you'd like to help improve the tool, please follow this workflow:
 
-### Beitrag-Richtlinien
+### Workflow
+1. **Fork** the repository.
+2. Create a new **branch** (`feature/AddCoolThing` or `fix/ExportBug`).
+3. Keep your changes small, focused, and well-documented.
+4. Test your build locally inside the game.
+5. Open a **Pull Request** with a clear and detailed description.
 
-- Keine Änderungen einbringen, die auf Urheberrechtsverletzungen oder Asset-Diebstahl abzielen.
-- Exporte/Features müssen den legitimen Modding-Zweck unterstützen.
-- Bestehenden Stil und Architektur beibehalten.
-- Keine unnötigen Abhängigkeiten hinzufügen.
+### Contribution Guidelines
+- **Strictly No Piracy:** Do not submit PRs that facilitate copyright infringement, asset theft, or bypassing game protections. Exports and features must serve a legitimate modding purpose.
+- **Maintain Architecture:** Adhere to the existing coding style and project architecture.
+- **Minimal Dependencies:** Do not add unnecessary external dependencies or libraries.
 
-## Issues & Bug Reports
+---
 
-Bitte bei Issues angeben:
+## 🐛 Issues & Bug Reports
 
-- Spielversion
-- MelonLoader-Version
-- Mod-Version / Commit
-- Reproduktionsschritte
-- Relevante Logs / Fehlermeldungen
+If you encounter a bug, please open an issue and include the following information to help us troubleshoot:
+- **Game Version**
+- **MelonLoader Version**
+- **Mod Version / Commit Hash**
+- **Exact Reproduction Steps**
+- **Relevant Logs / Error Messages** (Attach your `MelonLoader/Latest.log`)
 
-## Security Policy
+---
 
-Bitte keine Sicherheitslücken öffentlich als Issue posten.
-Melde sie verantwortungsvoll über einen privaten Kanal (Maintainer kontaktieren).
+## 🔒 Security Policy
 
-## Code of Conduct
+If you discover a security vulnerability or a critical exploit, **please do not report it publicly via GitHub Issues.** Instead, report it responsibly through a private channel by contacting the repository maintainer directly.
 
-- Respektvoller Umgang
-- Konstruktives Feedback
-- Keine diskriminierenden oder beleidigenden Inhalte
+---
 
-Bei wiederholten Verstößen können Beiträge/Interaktionen eingeschränkt werden.
+## 📜 Code of Conduct
 
-## Lizenz
+- **Be Respectful:** Treat all community members with respect.
+- **Be Constructive:** Keep feedback helpful and focused on the code/project.
+- **Zero Tolerance:** No discriminatory, offensive, or toxic behavior will be tolerated. Repeated violations will result in bans from interacting with the repository.
 
-Dieses Projekt steht unter der **MIT-Lizenz**.
-Siehe `LICENSE.txt`.
+---
 
-## Haftungsausschluss
+## 📄 License
 
-Dieses Projekt ist ein Community-Modding-Werkzeug.
-Es besteht keine Verbindung zu oder offizielle Unterstützung durch die Entwickler von `Data Center`.
+This project is licensed under the **MIT License**. See the `LICENSE.txt` file for full details.
+
+---
+
+## ⚠️ Disclaimer
+
+This project is a community-driven modding tool. It is **unofficial**, not affiliated with, nor endorsed by Waseku or the developers of *Data Center*. Use it at your own risk.

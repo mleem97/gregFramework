@@ -1,25 +1,31 @@
-# Code of Conduct
+# 📜 Code of Conduct
 
-## Unser Standard
+This project expects respectful, constructive, and inclusive collaboration.
 
-Wir erwarten einen respektvollen und konstruktiven Umgang.
+---
 
-## Erwartetes Verhalten
+## ✅ Expected Behavior
 
-- Freundliche, sachliche Kommunikation
-- Konstruktives Feedback
-- Offenheit für unterschiedliche Erfahrungsstände
+- Friendly and factual communication
+- Constructive and actionable feedback
+- Openness toward contributors with different experience levels
 
-## Inakzeptables Verhalten
+---
 
-- Beleidigungen, Diskriminierung, Belästigung
-- Toxisches oder destruktives Verhalten
-- Beiträge mit Ziel auf Urheberrechtsverletzung oder Asset-Diebstahl
+## ❌ Unacceptable Behavior
 
-## Durchsetzung
+- Insults, discrimination, or harassment
+- Toxic or destructive behavior
+- Contributions aimed at copyright infringement or asset theft
 
-Maintainer können Beiträge oder Interaktionen einschränken, wenn diese Richtlinien verletzt werden.
+---
 
-## Meldung von Problemen
+## ⚖️ Enforcement
 
-Bitte kontaktiere die Maintainer über einen privaten Kanal oder über die Repository-Issues (sofern angemessen).
+Maintainers may restrict contributions or interactions when these guidelines are violated.
+
+---
+
+## 📫 Reporting Conduct Issues
+
+Please contact maintainers through a private channel or via repository issues (when appropriate).

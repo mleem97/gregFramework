@@ -1,17 +1,27 @@
-# Security Policy
+# 🔒 Security Policy
 
-## Supported Versions
+This document explains how security issues should be reported for `DataCenterExporter`.
 
-Aktive Sicherheitsfixes erfolgen für den aktuellen Stand auf `master`.
+---
 
-## Meldung von Sicherheitslücken
+## ✅ Supported Version Scope
 
-Bitte keine Sicherheitslücken öffentlich als Issue posten.
+Active security fixes are provided for the current state of `master`.
 
-Stattdessen:
+---
 
-1. Maintainer privat kontaktieren.
-2. Reproduktionsschritte und Auswirkungen beschreiben.
-3. Optional: Vorschlag für Fix oder Mitigation ergänzen.
+## 🚨 Reporting Security Vulnerabilities
 
-Wir bemühen uns um zeitnahe Rückmeldung und koordinierte Offenlegung.
+Please do **not** post security vulnerabilities publicly as issues.
+
+Use the following process instead:
+
+1. Contact the maintainer privately.
+2. Describe reproduction steps and impact.
+3. Optionally include a proposed fix or mitigation.
+
+---
+
+## ⏱ Response Commitment
+
+We aim to respond in a timely manner and coordinate responsible disclosure.
