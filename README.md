@@ -1,5 +1,10 @@
 # DataCenter Asset Exporter Mod (MelonLoader)
 
+[![.NET CI](https://github.com/mleem97/DataCenterAssetExporter_Mod/actions/workflows/dotnet-ci.yml/badge.svg?branch=master)](https://github.com/mleem97/DataCenterAssetExporter_Mod/actions/workflows/dotnet-ci.yml)
+[![Commit Lint](https://github.com/mleem97/DataCenterAssetExporter_Mod/actions/workflows/commitlint.yml/badge.svg?branch=master)](https://github.com/mleem97/DataCenterAssetExporter_Mod/actions/workflows/commitlint.yml)
+[![Last Commit](https://img.shields.io/github/last-commit/mleem97/DataCenterAssetExporter_Mod/master)](https://github.com/mleem97/DataCenterAssetExporter_Mod/commits/master)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE.txt)
+
 > ⚠️ **Important Notice (Ethics & Usage)**  
 > This mod **does not** encourage or endorse the theft, unauthorized reuse, or distribution of code, assets, or any other content created by indie developers. It was developed strictly to support the **modding workflow** for the game *Data Center* (by Waseku) via MelonLoader. It is intended for modders who need a deeper understanding of the game's structure to create legitimate, transformative mods (e.g., custom assets, structural extensions) within a fair modding context.
 
