@@ -10,7 +10,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 // Namespace AssetExporter muss zu deiner AssemblyInfo passen
-[assembly: MelonInfo(typeof(AssetExporter.Main), "Asset Exporter", "1.0.1", "mleem97", "https://github.com/mleem97/DataCenter-AEMod")]
+[assembly: MelonInfo(typeof(AssetExporter.Main), "Asset Exporter", "1.0.2", "mleem97")]
 [assembly: MelonGame(null, null)]
 
 namespace AssetExporter
