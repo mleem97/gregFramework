@@ -1,3 +1,11 @@
+## [0.1.3](https://github.com/mleem97/DataCenter-AEMod/compare/v0.1.2...v0.1.3) (2026-04-01)
+
+
+### Bug Fixes
+
+* **meta:** switch repository slug from underscore to hyphen ([bc7cd2d](https://github.com/mleem97/DataCenter-AEMod/commit/bc7cd2dc07a0083c8ab3cfe310c61ee0e793e454))
+* **meta:** update melon author/url and repository badge links ([05a15bb](https://github.com/mleem97/DataCenter-AEMod/commit/05a15bb2dbdbe1966c3741f42c29bd54e81f9595))
+
 ## [0.1.2](https://github.com/mleem97/DataCenter-AEMod/compare/v0.1.1...v0.1.2) (2026-04-01)
 
 
