@@ -46,4 +46,10 @@
     <Compile Remove="il2cpp-unpack\**\*.cs" />
     <None Include="il2cpp-unpack\**\*.cs" />
   </ItemGroup>
+
+  <ItemGroup>
+    <None Include=".github\copilot-instructions.md" />
+    <None Include=".github\workflows\commitlint.yml" />
+    <None Include=".github\workflows\dotnet-ci.yml" />
+  </ItemGroup>
 </Project>
