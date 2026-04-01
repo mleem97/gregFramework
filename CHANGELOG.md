@@ -1,3 +1,10 @@
+## [0.1.4](https://github.com/mleem97/DataCenter-AEMod/compare/v0.1.3...v0.1.4) (2026-04-01)
+
+
+### Bug Fixes
+
+* **loader:** use compatible MelonInfo signature to restore mod loading ([df8b62d](https://github.com/mleem97/DataCenter-AEMod/commit/df8b62d3f41118d0551827c0426fe5f2c3907751))
+
 ## [0.1.3](https://github.com/mleem97/DataCenter-AEMod/compare/v0.1.2...v0.1.3) (2026-04-01)
 
 
