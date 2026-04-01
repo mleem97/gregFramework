@@ -1,4 +1,4 @@
-﻿using Il2CppInterop.Runtime.InteropTypes.Arrays;
+using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using MelonLoader;
 using MelonLoader.Utils;
 using System;
@@ -10,7 +10,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 // Namespace AssetExporter muss zu deiner AssemblyInfo passen
-[assembly: MelonInfo(typeof(AssetExporter.Main), "Asset Exporter", "1.0.1", "mleem97", "https://github.com/mleem97/DataCenter_AEMod")]
+[assembly: MelonInfo(typeof(AssetExporter.Main), "Asset Exporter", "1.0.1", "mleem97", "https://github.com/mleem97/DataCenter-AEMod")]
 [assembly: MelonGame(null, null)]
 
 namespace AssetExporter
@@ -27,7 +27,7 @@ namespace AssetExporter
             if (!Directory.Exists(exportPath)) Directory.CreateDirectory(exportPath);
 
             MelonLogger.Msg("Asset Exporter geladen. Drücke F8 im Spiel (während ein Save geladen ist).");
-            MelonLogger.Msg("Projekt: https://github.com/mleem97/DataCenter_AEMod");
+            MelonLogger.Msg("Projekt: https://github.com/mleem97/DataCenter-AEMod");
         }
 
         public override void OnUpdate()

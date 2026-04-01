@@ -1,8 +1,8 @@
 # DataCenter Asset Exporter Mod (MelonLoader)
 
-[![.NET CI](https://github.com/mleem97/DataCenter_AEMod/actions/workflows/dotnet-ci.yml/badge.svg?branch=master)](https://github.com/mleem97/DataCenter_AEMod/actions/workflows/dotnet-ci.yml)
-[![Commit Lint](https://github.com/mleem97/DataCenter_AEMod/actions/workflows/commitlint.yml/badge.svg?branch=master)](https://github.com/mleem97/DataCenter_AEMod/actions/workflows/commitlint.yml)
-[![Last Commit](https://img.shields.io/github/last-commit/mleem97/DataCenter_AEMod/master)](https://github.com/mleem97/DataCenter_AEMod/commits/master)
+[![.NET CI](https://github.com/mleem97/DataCenter-AEMod/actions/workflows/dotnet-ci.yml/badge.svg?branch=master)](https://github.com/mleem97/DataCenter-AEMod/actions/workflows/dotnet-ci.yml)
+[![Commit Lint](https://github.com/mleem97/DataCenter-AEMod/actions/workflows/commitlint.yml/badge.svg?branch=master)](https://github.com/mleem97/DataCenter-AEMod/actions/workflows/commitlint.yml)
+[![Last Commit](https://img.shields.io/github/last-commit/mleem97/DataCenter-AEMod/master)](https://github.com/mleem97/DataCenter-AEMod/commits/master)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE.txt)
 
 > ⚠️ **Important Notice (Ethics & Usage)**  
