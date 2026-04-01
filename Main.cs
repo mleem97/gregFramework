@@ -279,7 +279,14 @@ namespace AssetExporter
             object pointerEventData = Activator.CreateInstance(pointerEventDataType, currentEventSystem);
             pointerEventDataType.GetProperty("position")?.SetValue(pointerEventData, Mouse.current.position.ReadValue());
 
-            Type listType = typeof(List<>).MakeGenericType(raycastResultType);
+            Type il2CppListGeneric = Type.GetType("Il2CppSystem.Collections.Generic.List`1, Il2Cppmscorlib");
+            if (il2CppListGeneric == null)
+            {
+                MelonLogger.Warning("Il2Cpp-Liste für UI-Raycasts konnte nicht aufgelöst werden.");
+                return;
+            }
+
+            Type listType = il2CppListGeneric.MakeGenericType(raycastResultType);
             object results = Activator.CreateInstance(listType);
             eventSystemType.GetMethod("RaycastAll")?.Invoke(currentEventSystem, new[] { pointerEventData, results });
 
@@ -291,8 +298,16 @@ namespace AssetExporter
                 return;
             }
 
-            foreach (object result in (System.Collections.IEnumerable)results)
+            MethodInfo getItemMethod = listType.GetMethod("get_Item");
+            if (getItemMethod == null)
             {
+                MelonLogger.Warning("Il2Cpp-Raycast-Liste konnte nicht gelesen werden.");
+                return;
+            }
+
+            for (int i = 0; i < resultCount; i++)
+            {
+                object result = getItemMethod.Invoke(results, new object[] { i });
                 GameObject gameObject = raycastResultType.GetProperty("gameObject")?.GetValue(result) as GameObject;
                 if (gameObject == null) continue;
 
