@@ -1,3 +1,10 @@
+## [0.1.2](https://github.com/mleem97/DataCenter-AEMod/compare/v0.1.1...v0.1.2) (2026-04-01)
+
+
+### Bug Fixes
+
+* **ui:** use Il2Cpp list for EventSystem raycast results ([4ee8935](https://github.com/mleem97/DataCenter-AEMod/commit/4ee893521aa6e2b9f761ce2c384b459b01276e04))
+
 ## [0.1.1](https://github.com/mleem97/DataCenter-AEMod/compare/v0.1.0...v0.1.1) (2026-04-01)
 
 
