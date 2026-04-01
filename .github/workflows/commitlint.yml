@@ -15,7 +15,39 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Lint commit messages
-        uses: wagoid/commitlint-github-action@v6
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          configFile: .commitlintrc.json
+          node-version: 20
+
+      - name: Install commitlint
+        run: npm install --no-save @commitlint/cli @commitlint/config-conventional
+
+      - name: Lint commit messages (push)
+        if: github.event_name == 'push'
+        shell: bash
+        run: |
+          BEFORE="${{ github.event.before }}"
+          AFTER="${{ github.sha }}"
+
+          if [[ "$BEFORE" == "0000000000000000000000000000000000000000" ]]; then
+            echo "New branch push detected; linting latest commit only."
+            npx commitlint --config .commitlintrc.json --from "$AFTER~1" --to "$AFTER"
+          else
+            npx commitlint --config .commitlintrc.json --from "$BEFORE" --to "$AFTER"
+          fi
+
+      - name: Lint commit messages (pull_request)
+        if: github.event_name == 'pull_request'
+        shell: bash
+        run: |
+          BASE_SHA="${{ github.event.pull_request.base.sha }}"
+          HEAD_SHA="${{ github.event.pull_request.head.sha }}"
+
+          if ! git merge-base --is-ancestor "$BASE_SHA" "$HEAD_SHA" && ! git merge-base "$BASE_SHA" "$HEAD_SHA" >/dev/null; then
+            echo "No common ancestor between PR base and head (history was likely rewritten)."
+            echo "Please rebase/recreate the PR on the current master branch."
+            exit 1
+          fi
+
+          npx commitlint --config .commitlintrc.json --from "$BASE_SHA" --to "$HEAD_SHA"

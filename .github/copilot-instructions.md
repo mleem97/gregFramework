@@ -1,0 +1,5 @@
+# Copilot Instructions
+
+## General Guidelines
+- Use English language for all Markdown documentation files that are not excluded by .gitignore.
+- Always use Conventional Commits with atomic commit messages (e.g., feat:, fix:, docs:, chore:) for this repository.
