@@ -9,7 +9,11 @@
 *.user
 *.userosscache
 *.sln.docstates
-
+[Ee]xportedAssets/
+[Ii]l2Cpp-Unpack/
+AssetUnpack.md
+MelonLoader.md
+ui.md
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 

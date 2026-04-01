@@ -18,6 +18,7 @@ namespace AssetExporter
     public class Main : MelonMod
     {
         private string exportPath = string.Empty;
+        private bool exportBetaNotUsed = true;
 
         public override void OnInitializeMelon()
         {
@@ -39,37 +40,80 @@ namespace AssetExporter
             {
                 LogUiPathUnderCursor();
             }
+
+            if (Keyboard.current != null && Keyboard.current.f10Key.wasPressedThisFrame)
+            {
+                exportBetaNotUsed = !exportBetaNotUsed;
+                MelonLogger.Msg($"Beta-Export (nicht verwendete Assets) ist jetzt: {(exportBetaNotUsed ? "AKTIV" : "INAKTIV")}");
+            }
         }
 
         private void ExportAllResources()
         {
             string currentGamePath = Path.Combine(exportPath, "CurrentGame");
-            string betaNotUsedPath = Path.Combine(currentGamePath, "Beta_NotUsed_Unity6");
+            string modelsPath = Path.Combine(currentGamePath, "Models");
+            string texturesPath = Path.Combine(currentGamePath, "Textures");
+            string spritesPath = Path.Combine(currentGamePath, "Sprites");
+            string materialsPath = Path.Combine(currentGamePath, "Materials");
+            string scriptsPath = Path.Combine(currentGamePath, "Scripts");
+            string settingsPath = Path.Combine(currentGamePath, "Settings");
+            string notUsedPath = Path.Combine(currentGamePath, "NotUsed");
+            string notUsedModelsPath = Path.Combine(notUsedPath, "Models");
+            string notUsedTexturesPath = Path.Combine(notUsedPath, "Textures");
+
             Directory.CreateDirectory(currentGamePath);
-            Directory.CreateDirectory(betaNotUsedPath);
+            Directory.CreateDirectory(modelsPath);
+            Directory.CreateDirectory(texturesPath);
+            Directory.CreateDirectory(spritesPath);
+            Directory.CreateDirectory(materialsPath);
+            Directory.CreateDirectory(scriptsPath);
+            Directory.CreateDirectory(settingsPath);
+            if (exportBetaNotUsed)
+            {
+                Directory.CreateDirectory(notUsedPath);
+                Directory.CreateDirectory(notUsedModelsPath);
+                Directory.CreateDirectory(notUsedTexturesPath);
+            }
 
             File.WriteAllText(
                 Path.Combine(currentGamePath, "README_NOT_USED.txt"),
                 "Dieser Ordner enthält verwendete Assets aus dem aktuellen Spielstand (aktiv + inaktiv).\n" +
-                "Nicht verwendete, aber geladene Assets wurden zu Beta-Zwecken nach 'Beta_NotUsed_Unity6' exportiert."
+                "Struktur: Models, Textures, Sprites, Materials, Scripts, Settings.\n" +
+                "Optional werden nicht verwendete, aber geladene Assets nach 'NotUsed/Models' und 'NotUsed/Textures' exportiert."
             );
 
             MelonLogger.Msg("Starte Export: verwendete Assets (aktiv + inaktiv) aus allen geladenen Szenen...");
 
             HashSet<int> usedMeshIds = new HashSet<int>();
             HashSet<int> usedTextureIds = new HashSet<int>();
+            HashSet<int> usedSpriteTextureIds = new HashSet<int>();
             HashSet<string> exportedCurrentGame = new HashSet<string>();
+            HashSet<string> exportedScriptTypes = new HashSet<string>();
+            HashSet<string> exportedMaterials = new HashSet<string>();
+            List<string> settingLines = new List<string>();
+            List<string> materialInfoLines = new List<string>();
 
             foreach (GameObject obj in EnumerateAllSceneObjects(includeInactive: true))
             {
                 try
                 {
+                    settingLines.Add($"{GetGameObjectPath(obj)} | activeSelf={obj.activeSelf} | activeInHierarchy={obj.activeInHierarchy} | layer={obj.layer} | tag={obj.tag} | scene={obj.scene.name}");
+
+                    Component[] components = obj.GetComponents<Component>();
+                    foreach (Component component in components)
+                    {
+                        if (component == null) continue;
+                        string typeName = component.GetType().FullName;
+                        if (!string.IsNullOrWhiteSpace(typeName))
+                            exportedScriptTypes.Add(typeName);
+                    }
+
                     MeshFilter meshFilter = obj.GetComponent<MeshFilter>();
                     if (meshFilter != null && meshFilter.sharedMesh != null)
                     {
                         usedMeshIds.Add(meshFilter.sharedMesh.GetInstanceID());
                         if (TryRegister(exportedCurrentGame, $"mesh:{meshFilter.sharedMesh.name}"))
-                            SaveMesh(meshFilter.sharedMesh, currentGamePath);
+                            SaveMesh(meshFilter.sharedMesh, modelsPath);
                     }
 
                     SkinnedMeshRenderer skinnedMeshRenderer = obj.GetComponent<SkinnedMeshRenderer>();
@@ -77,7 +121,7 @@ namespace AssetExporter
                     {
                         usedMeshIds.Add(skinnedMeshRenderer.sharedMesh.GetInstanceID());
                         if (TryRegister(exportedCurrentGame, $"mesh:{skinnedMeshRenderer.sharedMesh.name}"))
-                            SaveMesh(skinnedMeshRenderer.sharedMesh, currentGamePath);
+                            SaveMesh(skinnedMeshRenderer.sharedMesh, modelsPath);
                     }
 
                     Renderer renderer = obj.GetComponent<Renderer>();
@@ -88,6 +132,11 @@ namespace AssetExporter
                         {
                             if (material == null) continue;
 
+                            if (TryRegister(exportedMaterials, $"mat:{material.name}"))
+                            {
+                                materialInfoLines.Add($"material={material.name} | shader={material.shader?.name ?? "null"} | object={GetGameObjectPath(obj)}");
+                            }
+
                             string[] texturePropertyNames = material.GetTexturePropertyNames();
                             foreach (string propertyName in texturePropertyNames)
                             {
@@ -95,8 +144,9 @@ namespace AssetExporter
                                 if (texture is Texture2D tex2D)
                                 {
                                     usedTextureIds.Add(tex2D.GetInstanceID());
+                                    materialInfoLines.Add($"material={material.name} | texProp={propertyName} | texture={tex2D.name}");
                                     if (TryRegister(exportedCurrentGame, $"tex:{tex2D.name}"))
-                                        SaveTexture(tex2D, currentGamePath);
+                                        SaveTexture(tex2D, texturesPath);
                                 }
                             }
                         }
@@ -110,8 +160,9 @@ namespace AssetExporter
                         if (sprite != null && sprite.texture != null)
                         {
                             usedTextureIds.Add(sprite.texture.GetInstanceID());
+                            usedSpriteTextureIds.Add(sprite.texture.GetInstanceID());
                             if (TryRegister(exportedCurrentGame, $"tex:{sprite.texture.name}"))
-                                SaveTexture(sprite.texture, currentGamePath);
+                                SaveTexture(sprite.texture, spritesPath);
                         }
                     }
                 }
@@ -121,27 +172,61 @@ namespace AssetExporter
                 }
             }
 
-            MelonLogger.Msg("Starte Beta-Export: nicht verwendete, aber geladene Assets...");
+            File.WriteAllLines(Path.Combine(scriptsPath, "components.txt"), exportedScriptTypes);
+            File.WriteAllLines(Path.Combine(settingsPath, "objects.txt"), settingLines);
+            File.WriteAllLines(Path.Combine(materialsPath, "materials.txt"), materialInfoLines);
 
-            HashSet<string> exportedBeta = new HashSet<string>();
+            int notUsedMeshCount = 0;
+            int notUsedTextureCount = 0;
 
-            foreach (Mesh mesh in Resources.FindObjectsOfTypeAll<Mesh>())
+            if (exportBetaNotUsed)
             {
-                if (mesh == null) continue;
-                if (usedMeshIds.Contains(mesh.GetInstanceID())) continue;
-                if (!TryRegister(exportedBeta, $"mesh:{mesh.name}")) continue;
-                SaveMesh(mesh, betaNotUsedPath);
+                MelonLogger.Msg("Starte Beta-Export: nicht verwendete, aber geladene Assets...");
+
+                HashSet<string> exportedBeta = new HashSet<string>();
+
+                foreach (Mesh mesh in Resources.FindObjectsOfTypeAll<Mesh>())
+                {
+                    if (mesh == null) continue;
+                    if (usedMeshIds.Contains(mesh.GetInstanceID())) continue;
+                    if (!IsCandidateNotUsedMesh(mesh)) continue;
+                    if (!TryRegister(exportedBeta, $"mesh:{mesh.name}")) continue;
+                    SaveMesh(mesh, notUsedModelsPath);
+                    notUsedMeshCount++;
+                }
+
+                foreach (Texture2D tex in Resources.FindObjectsOfTypeAll<Texture2D>())
+                {
+                    if (tex == null) continue;
+                    if (usedTextureIds.Contains(tex.GetInstanceID())) continue;
+                    if (!IsCandidateNotUsedTexture(tex)) continue;
+                    if (!TryRegister(exportedBeta, $"tex:{tex.name}")) continue;
+                    SaveTexture(tex, notUsedTexturesPath);
+                    notUsedTextureCount++;
+                }
+
+                MelonLogger.Msg($"Export abgeschlossen! Verbaute Assets: {currentGamePath} | Nicht verwendet: {notUsedPath}");
+            }
+            else
+            {
+                MelonLogger.Msg($"Export abgeschlossen! Verbaute Assets: {currentGamePath} | NotUsed-Export deaktiviert (F10 zum Umschalten).");
             }
 
-            foreach (Texture2D tex in Resources.FindObjectsOfTypeAll<Texture2D>())
+            var summaryLines = new List<string>
             {
-                if (tex == null) continue;
-                if (usedTextureIds.Contains(tex.GetInstanceID())) continue;
-                if (!TryRegister(exportedBeta, $"tex:{tex.name}")) continue;
-                SaveTexture(tex, betaNotUsedPath);
-            }
-
-            MelonLogger.Msg($"Export abgeschlossen! Verbaute Assets: {currentGamePath} | Beta (nicht verwendet): {betaNotUsedPath}");
+                $"timestamp={DateTime.Now:yyyy-MM-dd HH:mm:ss}",
+                $"scenesLoaded={SceneManager.sceneCount}",
+                $"objectsScanned={settingLines.Count}",
+                $"uniqueComponents={exportedScriptTypes.Count}",
+                $"usedMeshes={usedMeshIds.Count}",
+                $"usedTextures={usedTextureIds.Count}",
+                $"usedSpriteTextures={usedSpriteTextureIds.Count}",
+                $"usedMaterials={exportedMaterials.Count}",
+                $"notUsedEnabled={exportBetaNotUsed}",
+                $"notUsedMeshes={notUsedMeshCount}",
+                $"notUsedTextures={notUsedTextureCount}"
+            };
+            File.WriteAllLines(Path.Combine(settingsPath, "summary.txt"), summaryLines);
         }
 
         private IEnumerable<GameObject> EnumerateAllSceneObjects(bool includeInactive)
@@ -227,8 +312,38 @@ namespace AssetExporter
         private static bool TryRegister(HashSet<string> exportedNames, string rawName)
         {
             if (string.IsNullOrWhiteSpace(rawName)) return false;
-            if (rawName.Contains("unity", StringComparison.OrdinalIgnoreCase)) return false;
+            if (rawName.ToLowerInvariant().Contains("unity")) return false;
             return exportedNames.Add(rawName);
+        }
+
+        private static string GetGameObjectPath(GameObject gameObject)
+        {
+            string path = gameObject.name;
+            Transform parent = gameObject.transform.parent;
+            while (parent != null)
+            {
+                path = parent.name + "/" + path;
+                parent = parent.parent;
+            }
+            return path;
+        }
+
+        private static bool IsCandidateNotUsedMesh(Mesh mesh)
+        {
+            if (mesh == null) return false;
+            if (mesh.vertexCount <= 0) return false;
+            if (string.IsNullOrWhiteSpace(mesh.name)) return false;
+            if (mesh.hideFlags == HideFlags.HideAndDontSave) return false;
+            return true;
+        }
+
+        private static bool IsCandidateNotUsedTexture(Texture2D tex)
+        {
+            if (tex == null) return false;
+            if (string.IsNullOrWhiteSpace(tex.name)) return false;
+            if (tex.width <= 4 && tex.height <= 4) return false;
+            if (tex.hideFlags == HideFlags.HideAndDontSave) return false;
+            return true;
         }
 
         private void SaveTexture(Texture2D tex, string targetDirectory)
