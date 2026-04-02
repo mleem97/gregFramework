@@ -28,8 +28,13 @@
 - <kbd>F8</kbd> : Start the asset export process.
 - <kbd>F9</kbd> : Log the exact UI hierarchy path under the mouse cursor.
 - <kbd>F10</kbd> : Toggle Beta Export features (On/Off).
+
+> Dev hotkeys are enabled in `Debug` builds only.
 - <kbd>F11</kbd> : Export IL2CPP diagnostics (`il2cpp-event-catalog.txt` + `il2cpp-gameplay-index.txt`).
 - <kbd>F12</kbd> : Discover and install runtime hook candidates (framework mode).
+
+At startup, the mod now automatically exports a full consolidated snapshot to:
+- `Mods/ExportedAssets/Diagnostics/game-signals-full.txt`
 
 ### Export Destinations
 Assets are exported to the `Mods/ExportedAssets/CurrentGame` directory, organized as follows:
