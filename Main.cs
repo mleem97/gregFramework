@@ -20,6 +20,8 @@ namespace AssetExporter
         private string exportPath = string.Empty;
         private bool exportBetaNotUsed = true;
         private readonly Il2CppEventCatalogService eventCatalogService = new Il2CppEventCatalogService();
+        private readonly Il2CppGameplayIndexService gameplayIndexService = new Il2CppGameplayIndexService();
+        private readonly RuntimeHookService runtimeHookService = new RuntimeHookService();
 
         public override void OnInitializeMelon()
         {
@@ -27,9 +29,11 @@ namespace AssetExporter
             exportPath = Path.Combine(MelonEnvironment.ModsDirectory, "ExportedAssets");
             if (!Directory.Exists(exportPath)) Directory.CreateDirectory(exportPath);
 
-            MelonLogger.Msg("Asset Exporter geladen. Drücke F8 (Export), F9 (UI-Pfad), F10 (NotUsed), F11 (Event-Katalog).");
+            MelonLogger.Msg("Asset Exporter geladen. F8 Export | F9 UI-Pfad | F10 NotUsed | F11 Katalog+Index | F12 Hooks installieren.");
             MelonLogger.Msg("Projekt: https://github.com/mleem97/DataCenter-AEMod");
             ModFramework.Events.Publish(new ModInitializedEvent(DateTime.UtcNow, "1.0.2"));
+
+            ModFramework.Events.Subscribe<HookTriggeredEvent>(OnHookTriggered);
         }
 
         public override void OnUpdate()
@@ -57,6 +61,11 @@ namespace AssetExporter
             {
                 ExportIl2CppEventCatalog();
             }
+
+            if (Keyboard.current != null && Keyboard.current.f12Key.wasPressedThisFrame)
+            {
+                InstallRuntimeHooks();
+            }
         }
 
         private void ExportIl2CppEventCatalog()
@@ -66,14 +75,48 @@ namespace AssetExporter
                 string diagnosticsPath = Path.Combine(exportPath, "Diagnostics");
                 string filePath = eventCatalogService.ExportCatalog(diagnosticsPath);
                 int linesCount = File.ReadAllLines(filePath).Length;
+                string gameplayIndex = gameplayIndexService.ExportGameplayIndex(diagnosticsPath);
 
                 MelonLogger.Msg($"IL2CPP Event-Katalog exportiert: {filePath}");
+                MelonLogger.Msg($"IL2CPP Gameplay-Index exportiert: {gameplayIndex}");
                 ModFramework.Events.Publish(new Il2CppCatalogExportedEvent(DateTime.UtcNow, filePath, linesCount));
+                ModFramework.Events.Publish(new Il2CppGameplayIndexExportedEvent(DateTime.UtcNow, gameplayIndex));
             }
             catch (Exception ex)
             {
                 MelonLogger.Error($"Fehler beim Export des IL2CPP Event-Katalogs: {ex.Message}");
                 ModFramework.Events.Publish(new ModErrorEvent(DateTime.UtcNow, "Il2CppCatalog", ex.Message));
+            }
+        }
+
+        private void InstallRuntimeHooks()
+        {
+            try
+            {
+                HookInstallResult result = runtimeHookService.ScanAndInstall(250);
+                MelonLogger.Msg($"Hook-Scan abgeschlossen. Kandidaten={result.Scanned}, installiert={result.Installed}, fehlgeschlagen={result.Failed}");
+
+                if (result.Errors.Count > 0)
+                {
+                    string diagnosticsPath = Path.Combine(exportPath, "Diagnostics");
+                    Directory.CreateDirectory(diagnosticsPath);
+                    string errorFile = Path.Combine(diagnosticsPath, "hook-install-errors.txt");
+                    File.WriteAllLines(errorFile, result.Errors);
+                    MelonLogger.Warning($"Hook-Fehlerliste geschrieben: {errorFile}");
+                }
+            }
+            catch (Exception ex)
+            {
+                MelonLogger.Error($"Fehler beim Installieren der Runtime-Hooks: {ex.Message}");
+                ModFramework.Events.Publish(new ModErrorEvent(DateTime.UtcNow, "RuntimeHooks", ex.Message));
+            }
+        }
+
+        private static void OnHookTriggered(HookTriggeredEvent evt)
+        {
+            if (evt.TriggerCount <= 3 || evt.TriggerCount % 100 == 0)
+            {
+                MelonLogger.Msg($"Hook Trigger: {evt.MethodName} (count={evt.TriggerCount})");
             }
         }
 
