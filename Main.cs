@@ -30,21 +30,26 @@ namespace AssetExporter
             exportPath = Path.Combine(MelonEnvironment.ModsDirectory, "ExportedAssets");
             if (!Directory.Exists(exportPath)) Directory.CreateDirectory(exportPath);
 
-            MelonLogger.Msg("Asset Exporter geladen. F8 Export | F9 UI-Pfad | F10 NotUsed.");
+            MelonLogger.Msg("Asset Exporter geladen.");
 #if DEBUG
-            MelonLogger.Msg("Dev-Hotkeys aktiv: F11 Katalog+Index | F12 Hooks installieren.");
+            MelonLogger.Msg("Debug-Modus aktiv: F8 Export | F9 UI-Pfad | F10 NotUsed | F11 Katalog+Index | F12 Hooks installieren.");
+#else
+            MelonLogger.Msg("Release-Modus aktiv: nur Game-Kommunikation/Framework-Basis, keine Dev-Exports/Hooks.");
 #endif
             MelonLogger.Msg("Projekt: https://github.com/mleem97/DataCenter-AEMod");
             ModFramework.Events.Publish(new ModInitializedEvent(DateTime.UtcNow, "1.0.3"));
 
+#if DEBUG
             ModFramework.Events.Subscribe<HookTriggeredEvent>(OnHookTriggered);
             ExportAllGameSignalsOnStartup();
+#endif
         }
 
         public override void OnUpdate()
         {
             ModFramework.Events.Publish(new ModTickEvent(DateTime.UtcNow));
 
+#if DEBUG
             if (Keyboard.current != null && Keyboard.current.f8Key.wasPressedThisFrame)
             {
                 ExportAllResources();
@@ -62,7 +67,6 @@ namespace AssetExporter
                 ModFramework.Events.Publish(new ToggleChangedEvent(DateTime.UtcNow, "ExportBetaNotUsed", exportBetaNotUsed));
             }
 
-#if DEBUG
             if (Keyboard.current != null && Keyboard.current.f11Key.wasPressedThisFrame)
             {
                 ExportIl2CppEventCatalog();
