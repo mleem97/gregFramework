@@ -1,6 +1,6 @@
 # 🔒 Security Policy
 
-This document explains how security issues should be reported for `DataCenterExporter`.
+This document explains how security issues should be reported for `Frikadelle Modding Framework`.
 
 ---
 
