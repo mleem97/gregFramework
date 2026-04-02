@@ -10,7 +10,7 @@ Please check the following first:
 
 - Latest `README.md`
 - Existing issues
-- Local build with `dotnet build DataCenterExporter.sln -v:minimal`
+- Local build with `dotnet build FrikaMF.sln -v:minimal`
 
 ---
 

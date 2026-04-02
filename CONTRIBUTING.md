@@ -19,11 +19,12 @@ Thank you for your interest in contributing to `Frikadelle Modding Framework`.
 3. Build locally:
 
 ```sh
-dotnet build DataCenterExporter.sln -v:minimal
+dotnet build FrikaMF.csproj -c Release -p:TreatWarningsAsErrors=true -nologo
+dotnet build HexLabelMod/HexLabelMod.csproj -c Release -nologo
 ```
 
-4. Validate functionality (hotkeys `F8`, `F9`, `F10`).
-5. Open a pull request with a clear description.
+1. Validate functionality (hotkeys `F8`, `F9`, `F10`).
+2. Open a pull request with a clear description.
 
 ---
 
@@ -41,3 +42,15 @@ dotnet build DataCenterExporter.sln -v:minimal
 - [ ] Change is limited to the intended scope.
 - [ ] README/docs updated where necessary.
 - [ ] No ethically or legally problematic content.
+
+---
+
+## 📦 Release Notes for Maintainers
+
+Release DLLs are uploaded from local builds, not from GitHub Actions build jobs.
+
+```powershell
+. .\scripts\Publish-LocalRelease.ps1
+$env:GITHUB_TOKEN = "<github_token_with_repo_scope>"
+Publish-LocalRelease -Tag "vX.Y.Z"
+```

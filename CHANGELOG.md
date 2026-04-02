@@ -1,3 +1,22 @@
+# Changelog
+
+<!-- markdownlint-disable MD024 -->
+
+## [0.1.5](https://github.com/mleem97/DataCenter-AEMod/compare/v0.1.4...v0.1.5) (2026-04-02)
+
+### Features
+
+* **framework:** migrate active runtime bridge and hook/event layer into `JoniML` + `FrikaMF` structure
+* **events:** restore `EventDispatcher` and `EventIds` integration for runtime patch dispatch
+
+### Documentation
+
+* **docs:** expand README, modding guide, and wiki with contribution, build, and hooks/events usage guidance
+
+### Build System
+
+* **release:** switch to local DLL upload flow for GitHub releases (game-dependent refs stay local)
+
 ## [0.1.4](https://github.com/mleem97/DataCenter-AEMod/compare/v0.1.3...v0.1.4) (2026-04-01)
 
 
@@ -32,6 +51,6 @@
 
 ### Features
 
-* add initial DataCenterExporter project and core mod code ([3b2b394](https://github.com/mleem97/DataCenter-AEMod/commit/3b2b394e6151a389abb9006c36890f3ec97f6346))
+* add initial FrikaMF project and core mod code ([3b2b394](https://github.com/mleem97/DataCenter-AEMod/commit/3b2b394e6151a389abb9006c36890f3ec97f6346))
 * extend export structure and beta export functionality ([fb70085](https://github.com/mleem97/DataCenter-AEMod/commit/fb70085ed5933cd5e88b632922a4985304ca957f))
 

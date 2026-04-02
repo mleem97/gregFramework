@@ -1,12 +1,63 @@
+<!-- markdownlint-disable MD010 MD022 MD029 MD031 MD032 MD033 -->
+
 # Frikadelle Modding Framework (MelonLoader)
 
-[![.NET CI](https://github.com/mleem97/DataCenter-AEMod/actions/workflows/dotnet-ci.yml/badge.svg?branch=master)](https://github.com/mleem97/DataCenter-AEMod/actions/workflows/dotnet-ci.yml)
-[![Commit Lint](https://github.com/mleem97/DataCenter-AEMod/actions/workflows/commitlint.yml/badge.svg?branch=master)](https://github.com/mleem97/DataCenter-AEMod/actions/workflows/commitlint.yml)
-[![Last Commit](https://img.shields.io/github/last-commit/mleem97/DataCenter-AEMod/master)](https://github.com/mleem97/DataCenter-AEMod/commits/master)
+[![.NET CI](https://github.com/mleem97/FrikaModFramework/actions/workflows/dotnet-ci.yml/badge.svg?branch=master)](https://github.com/mleem97/FrikaModFramework/actions/workflows/dotnet-ci.yml)
+[![Commit Lint](https://github.com/mleem97/FrikaModFramework/actions/workflows/commitlint.yml/badge.svg?branch=master)](https://github.com/mleem97/FrikaModFramework/actions/workflows/commitlint.yml)
+[![Last Commit](https://img.shields.io/github/last-commit/mleem97/FrikaModFramework/master)](https://github.com/mleem97/FrikaModFramework/commits/master)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE.txt)
 
 > ⚠️ **Important Notice (Ethics & Usage)**  
 > This mod **does not** encourage or endorse the theft, unauthorized reuse, or distribution of code, assets, or any other content created by indie developers. It was developed strictly to support the **modding workflow** for the game *Data Center* (by Waseku) via MelonLoader. It is intended for modders who need a deeper understanding of the game's structure to create legitimate, transformative mods (e.g., custom assets, structural extensions) within a fair modding context.
+
+---
+
+## ✅ Quick Start
+
+### Build the framework and label mod
+
+```powershell
+dotnet build .\FrikaMF.csproj -c Release
+dotnet build .\HexLabelMod\HexLabelMod.csproj -c Release
+```
+
+### Install into the game
+
+1. Copy `bin/Release/net6.0/DataCenterModLoader.dll` to `Data Center/Mods`.
+2. Copy `HexLabelMod/bin/Release/net6.0/HexLabelMod.dll` to `Data Center/Mods`.
+3. Start the game and verify load in `MelonLoader/Latest.log`.
+
+### Deploy helper command
+
+```powershell
+. .\scripts\Invoke-DataCenterModDeploy.ps1
+Invoke-Deploy --all
+```
+
+### Local release upload (important)
+
+GitHub Actions **must not** build release DLLs for this repo because game-specific references are local by design.
+Release DLLs are uploaded from your local machine after local build:
+
+```powershell
+. .\scripts\Publish-LocalRelease.ps1
+$env:GITHUB_TOKEN = "<github_token_with_repo_scope>"
+Publish-LocalRelease -Tag "v0.1.5"
+```
+
+This uploads:
+
+- `bin/Release/net6.0/DataCenterModLoader.dll`
+- `HexLabelMod/bin/Release/net6.0/HexLabelMod.dll`
+
+---
+
+## ✅ C# Quality Checks (no pnpm)
+
+```powershell
+dotnet build .\FrikaMF.csproj -c Release -p:TreatWarningsAsErrors=true -nologo
+dotnet build .\HexLabelMod\HexLabelMod.csproj -c Release -nologo
+```
 
 ---
 
@@ -59,6 +110,12 @@ Exported to `Mods/ExportedAssets/CurrentGame/NotUsed`.
 - **Unity IL2CPP Interop**
 - **Unity Input System**
 
+### Rust Plugin Development
+
+If you want to write plugins in Rust, use the Rust bridge project:
+
+- `https://github.com/Joniii11/DataCenter-RustBridge`
+
 ---
 
 ## 📋 Prerequisites
@@ -75,7 +132,7 @@ To build and use this mod, you need:
 Navigate to the project directory in your terminal and run:
 
 ```sh
-dotnet build DataCenterExporter.sln -v:minimal
+dotnet build FrikaMF.sln -v:minimal
 
 ```
 The compiled mod will typically be output to:  
@@ -123,10 +180,38 @@ Contributions are always welcome! If you'd like to help improve the tool, please
 4. Test your build locally inside the game.
 5. Open a **Pull Request** with a clear and detailed description.
 
+### Where help is needed most
+
+- **Hooks & events:** Expand stable hook coverage in `JoniML/HarmonyPatches.cs`.
+- **Event transport:** Add strongly typed payloads in `JoniML/EventDispatcher.cs`.
+- **Game API bridge:** Extend `JoniML/GameApi.cs` and `JoniML/GameHooks.cs` safely.
+- **Docs & examples:** Improve `.wiki/Modding-Guide.md` with practical recipes.
+
 ### Contribution Guidelines
 - **Strictly No Piracy:** Do not submit PRs that facilitate copyright infringement, asset theft, or bypassing game protections. Exports and features must serve a legitimate modding purpose.
 - **Maintain Architecture:** Adhere to the existing coding style and project architecture.
 - **Minimal Dependencies:** Do not add unnecessary external dependencies or libraries.
+- **Conventional Commits:** Use `feat:`, `fix:`, `docs:`, `chore:`, etc.
+
+---
+
+## 🧩 Build Your Own Mod With This Framework
+
+The project exposes two practical extension paths:
+
+1. **C# side hooks/events**
+	- Hook game methods in `JoniML/HarmonyPatches.cs`.
+	- Emit events through `EventDispatcher` (`FireSimple`, `FireValueChanged`, and typed helpers).
+2. **Rust native plugins**
+	- Place Rust plugin DLLs in `Data Center/Mods/native`.
+	- Implement optional exports like `mod_init`, `mod_update`, `mod_on_event`.
+	- Use the Rust bridge reference: `https://github.com/Joniii11/DataCenter-RustBridge`.
+
+### Current event ID source
+
+- Event constants are defined in `JoniML/EventIds.cs`.
+- Event dispatch implementation is in `JoniML/EventDispatcher.cs`.
+- Runtime forwarding to native plugins happens via `JoniML/FfiBridge.cs`.
 
 ---
 
