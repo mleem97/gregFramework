@@ -26,7 +26,7 @@ namespace AssetExporter
         private static readonly ConcurrentDictionary<string, int> TriggerCounts = new ConcurrentDictionary<string, int>();
         private static readonly ConcurrentDictionary<string, byte> PatchedMethods = new ConcurrentDictionary<string, byte>();
 
-        private readonly string harmonyId = "assetexporter.framework.runtimehooks";
+        private readonly string harmonyId = "frikadelle.framework.runtimehooks";
 
         public HookScanResult ScanCandidates(int maxHooks)
         {

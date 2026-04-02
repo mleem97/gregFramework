@@ -4,6 +4,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>disable</Nullable>
     <PlatformTarget>x64</PlatformTarget>
+    <AssemblyName>FrikadelleModdingFramework</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup Condition="Exists('..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Data Center\MelonLoader\net6\MelonLoader.dll')">

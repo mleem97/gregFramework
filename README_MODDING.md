@@ -26,7 +26,7 @@ Use this mod as a central runtime framework to:
 ## Installation into the Game
 
 1. Build this project.
-2. Copy `DataCenterExporter.dll` into the game `Mods` folder.
+2. Copy `FrikadelleModdingFramework.dll` into the game `Mods` folder.
 3. Start the game.
 4. Verify in `MelonLoader/Latest.log` that the assembly is loaded.
 

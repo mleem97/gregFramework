@@ -1,6 +1,6 @@
 # 🧭 UI Reference Notes
 
-This document summarizes UI-related investigation guidance for `DataCenterExporter`.
+This document summarizes UI-related investigation guidance for `Frikadelle Modding Framework`.
 
 ---
 

@@ -1,6 +1,6 @@
 # 🤝 Contributing
 
-Thank you for your interest in contributing to `DataCenterExporter`.
+Thank you for your interest in contributing to `Frikadelle Modding Framework`.
 
 ---
 

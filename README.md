@@ -79,14 +79,14 @@ dotnet build DataCenterExporter.sln -v:minimal
 
 ```
 The compiled mod will typically be output to:  
-`bin/Debug/net6.0/DataCenterExporter.dll`
+`bin/Debug/net6.0/FrikadelleModdingFramework.dll`
 
 ---
 
 ## 🚀 Installation & Usage
 
 1. Build the project following the instructions above (or download the compiled `.dll`).
-2. Copy the `DataCenterExporter.dll` into the `Mods` folder located inside your *Data Center* game directory.
+2. Copy the `FrikadelleModdingFramework.dll` into the `Mods` folder located inside your *Data Center* game directory.
 3. Launch the game.
 4. Press the designated hotkeys (<kbd>F8</kbd>, <kbd>F9</kbd>, <kbd>F10</kbd>) in-game to trigger the exports and UI logging.
 
