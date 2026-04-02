@@ -14,8 +14,26 @@ namespace AssetExporter
             "dispatch",
             "invoke",
             "callback",
-            "notify",
-            "on"
+            "notify"
+        };
+
+        private static readonly HashSet<string> IgnoredMethodNames = new HashSet<string>(StringComparer.Ordinal)
+        {
+            "MemberwiseClone",
+            "Finalize",
+            "ToString",
+            "GetHashCode",
+            "Equals",
+            "GetType"
+        };
+
+        private static readonly string[] IgnoredTypeNameFragments =
+        {
+            "+InternalCompiler",
+            "+InternalCompilerQueryAndHandleData",
+            "+TypeHandle",
+            "+Enumerator",
+            "+ResolvedChunk"
         };
 
         public string ExportCatalog(string outputDirectory)
@@ -49,6 +67,10 @@ namespace AssetExporter
 
             foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
             {
+                string assemblyName = assembly.GetName().Name ?? string.Empty;
+                if (!IsGameAssembly(assemblyName))
+                    continue;
+
                 Type[] types;
                 try
                 {
@@ -73,7 +95,7 @@ namespace AssetExporter
 
                     foreach (EventInfo evt in events)
                     {
-                        lines.Add($"runtime_event | asm={assembly.GetName().Name} | type={type.FullName} | event={evt.Name}");
+                        lines.Add($"runtime_event | asm={assemblyName} | type={type.FullName} | event={evt.Name}");
                         count++;
                     }
                 }
@@ -87,9 +109,14 @@ namespace AssetExporter
         {
             lines.Add("## Runtime Trigger-like Methods (Reflection)");
             int count = 0;
+            var seen = new HashSet<string>(StringComparer.Ordinal);
 
             foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
             {
+                string assemblyName = assembly.GetName().Name ?? string.Empty;
+                if (!IsGameAssembly(assemblyName))
+                    continue;
+
                 Type[] types;
                 try
                 {
@@ -102,10 +129,13 @@ namespace AssetExporter
 
                 foreach (Type type in types)
                 {
+                    if (IsIgnoredTriggerType(type))
+                        continue;
+
                     MethodInfo[] methods;
                     try
                     {
-                        methods = type.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
+                        methods = type.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static | BindingFlags.DeclaredOnly);
                     }
                     catch
                     {
@@ -114,11 +144,15 @@ namespace AssetExporter
 
                     foreach (MethodInfo method in methods)
                     {
-                        string name = method.Name ?? string.Empty;
-                        if (!LooksLikeTrigger(name))
+                        if (!LooksLikeTrigger(method))
                             continue;
 
-                        lines.Add($"runtime_trigger | asm={assembly.GetName().Name} | type={type.FullName} | method={name}");
+                        string name = method.Name ?? string.Empty;
+                        string entry = $"runtime_trigger | asm={assemblyName} | type={type.FullName} | method={name}";
+                        if (!seen.Add(entry))
+                            continue;
+
+                        lines.Add(entry);
                         count++;
                     }
                 }
@@ -178,9 +212,28 @@ namespace AssetExporter
             return count;
         }
 
-        private static bool LooksLikeTrigger(string methodName)
+        private static bool LooksLikeTrigger(MethodInfo method)
         {
+            if (method == null)
+                return false;
+
+            if (method.IsSpecialName)
+                return false;
+
+            string methodName = method.Name ?? string.Empty;
+            if (methodName.StartsWith("get_", StringComparison.Ordinal)
+                || methodName.StartsWith("set_", StringComparison.Ordinal)
+                || methodName.StartsWith("add_", StringComparison.Ordinal)
+                || methodName.StartsWith("remove_", StringComparison.Ordinal)
+                || IgnoredMethodNames.Contains(methodName))
+            {
+                return false;
+            }
+
             string lower = methodName.ToLowerInvariant();
+            if (lower.StartsWith("on"))
+                return true;
+
             foreach (string keyword in TriggerKeywords)
             {
                 if (lower.Contains(keyword))
@@ -188,6 +241,26 @@ namespace AssetExporter
             }
 
             return false;
+        }
+
+        private static bool IsIgnoredTriggerType(Type type)
+        {
+            string fullName = type?.FullName ?? string.Empty;
+            if (string.IsNullOrEmpty(fullName))
+                return false;
+
+            foreach (string fragment in IgnoredTypeNameFragments)
+            {
+                if (fullName.IndexOf(fragment, StringComparison.OrdinalIgnoreCase) >= 0)
+                    return true;
+            }
+
+            return false;
+        }
+
+        private static bool IsGameAssembly(string assemblyName)
+        {
+            return string.Equals(assemblyName, "Assembly-CSharp", StringComparison.OrdinalIgnoreCase);
         }
     }
 }

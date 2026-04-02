@@ -152,8 +152,7 @@ namespace AssetExporter
 
         private static bool IsRelevantAssembly(string assemblyName)
         {
-            string lower = assemblyName.ToLowerInvariant();
-            return lower.Contains("assembly-csharp") || lower.Contains("unity") || lower.Contains("data") || lower.Contains("game");
+            return string.Equals(assemblyName, "Assembly-CSharp", StringComparison.OrdinalIgnoreCase);
         }
 
         private static bool IsHookCandidate(MethodInfo method)
