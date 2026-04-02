@@ -28,10 +28,13 @@ namespace AssetExporter
 
             MelonLogger.Msg("Asset Exporter geladen. Drücke F8 im Spiel (während ein Save geladen ist).");
             MelonLogger.Msg("Projekt: https://github.com/mleem97/DataCenter-AEMod");
+            ModFramework.Events.Publish(new ModInitializedEvent(DateTime.UtcNow, "1.0.2"));
         }
 
         public override void OnUpdate()
         {
+            ModFramework.Events.Publish(new ModTickEvent(DateTime.UtcNow));
+
             if (Keyboard.current != null && Keyboard.current.f8Key.wasPressedThisFrame)
             {
                 ExportAllResources();
@@ -46,11 +49,14 @@ namespace AssetExporter
             {
                 exportBetaNotUsed = !exportBetaNotUsed;
                 MelonLogger.Msg($"Beta-Export (nicht verwendete Assets) ist jetzt: {(exportBetaNotUsed ? "AKTIV" : "INAKTIV")}");
+                ModFramework.Events.Publish(new ToggleChangedEvent(DateTime.UtcNow, "ExportBetaNotUsed", exportBetaNotUsed));
             }
         }
 
         private void ExportAllResources()
         {
+            ModFramework.Events.Publish(new ExportStartedEvent(DateTime.UtcNow, exportPath));
+
             string currentGamePath = Path.Combine(exportPath, "CurrentGame");
             string modelsPath = Path.Combine(currentGamePath, "Models");
             string texturesPath = Path.Combine(currentGamePath, "Textures");
@@ -170,6 +176,7 @@ namespace AssetExporter
                 catch (Exception ex)
                 {
                     MelonLogger.Warning($"Export-Fehler bei Objekt '{obj.name}': {ex.Message}");
+                    ModFramework.Events.Publish(new ModErrorEvent(DateTime.UtcNow, "ExportObject", ex.Message));
                 }
             }
 
@@ -228,6 +235,7 @@ namespace AssetExporter
                 $"notUsedTextures={notUsedTextureCount}"
             };
             File.WriteAllLines(Path.Combine(settingsPath, "summary.txt"), summaryLines);
+            ModFramework.Events.Publish(new ExportCompletedEvent(DateTime.UtcNow, currentGamePath, settingLines.Count));
         }
 
         private IEnumerable<GameObject> EnumerateAllSceneObjects(bool includeInactive)
@@ -257,6 +265,7 @@ namespace AssetExporter
             if (Mouse.current == null)
             {
                 MelonLogger.Warning("Keine Maus verfügbar.");
+                ModFramework.Events.Publish(new ModErrorEvent(DateTime.UtcNow, "UIPath", "Keine Maus verfügbar"));
                 return;
             }
 
@@ -267,6 +276,7 @@ namespace AssetExporter
             if (eventSystemType == null || pointerEventDataType == null || raycastResultType == null)
             {
                 MelonLogger.Warning("UI EventSystem-Typen konnten nicht aufgelöst werden.");
+                ModFramework.Events.Publish(new ModErrorEvent(DateTime.UtcNow, "UIPath", "UI EventSystem-Typen konnten nicht aufgelöst werden"));
                 return;
             }
 
@@ -274,6 +284,7 @@ namespace AssetExporter
             if (currentEventSystem == null)
             {
                 MelonLogger.Warning("Kein aktives EventSystem gefunden.");
+                ModFramework.Events.Publish(new ModErrorEvent(DateTime.UtcNow, "UIPath", "Kein aktives EventSystem gefunden"));
                 return;
             }
 
@@ -284,6 +295,7 @@ namespace AssetExporter
             if (il2CppListGeneric == null)
             {
                 MelonLogger.Warning("Il2Cpp-Liste für UI-Raycasts konnte nicht aufgelöst werden.");
+                ModFramework.Events.Publish(new ModErrorEvent(DateTime.UtcNow, "UIPath", "Il2Cpp-Liste für UI-Raycasts konnte nicht aufgelöst werden"));
                 return;
             }
 
@@ -303,6 +315,7 @@ namespace AssetExporter
             if (getItemMethod == null)
             {
                 MelonLogger.Warning("Il2Cpp-Raycast-Liste konnte nicht gelesen werden.");
+                ModFramework.Events.Publish(new ModErrorEvent(DateTime.UtcNow, "UIPath", "Il2Cpp-Raycast-Liste konnte nicht gelesen werden"));
                 return;
             }
 
