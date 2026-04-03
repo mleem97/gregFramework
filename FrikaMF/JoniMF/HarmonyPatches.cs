@@ -4,7 +4,7 @@ using HarmonyLib;
 using Il2Cpp;
 using UnityEngine;
 
-namespace DataCenterModLoader;
+namespace FrikaMF;
 
 // harmony patches -> rust events
 

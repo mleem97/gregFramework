@@ -10,7 +10,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-namespace DataCenterModLoader;
+namespace FrikaMF;
 
 public class CustomEmployeeEntry
 {

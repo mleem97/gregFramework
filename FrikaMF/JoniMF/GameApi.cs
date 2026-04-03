@@ -4,7 +4,7 @@ using Il2Cpp;
 using MelonLoader;
 using UnityEngine;
 
-namespace DataCenterModLoader;
+namespace FrikaMF;
 
 // function pointer table for rust mods, append-only
 [StructLayout(LayoutKind.Sequential)]

@@ -1,46 +1,48 @@
-namespace DataCenterModLoader;
+namespace FrikaMF;
 
 internal static class EventIds
 {
-    public const uint MoneyChanged = 1;
-    public const uint XPChanged = 2;
-    public const uint ReputationChanged = 3;
+    public const uint MoneyChanged = 100;
+    public const uint XPChanged = 101;
+    public const uint ReputationChanged = 102;
 
-    public const uint ServerPowered = 10;
-    public const uint ServerBroken = 11;
-    public const uint ServerRepaired = 12;
-    public const uint ServerInstalled = 13;
-    public const uint ServerCustomerChanged = 14;
-    public const uint ServerAppChanged = 15;
+    public const uint ServerPowered = 200;
+    public const uint ServerBroken = 201;
+    public const uint ServerRepaired = 202;
+    public const uint ServerInstalled = 203;
+    public const uint CableConnected = 204;
+    public const uint CableDisconnected = 205;
+    public const uint ServerCustomerChanged = 206;
+    public const uint ServerAppChanged = 207;
+    public const uint RackUnmounted = 208;
+    public const uint SwitchBroken = 209;
+    public const uint SwitchRepaired = 210;
 
-    public const uint DayEnded = 20;
-    public const uint MonthEnded = 21;
+    public const uint DayEnded = 300;
+    public const uint MonthEnded = 301;
 
-    public const uint CustomerAccepted = 30;
-    public const uint CustomerSatisfied = 31;
-    public const uint CustomerUnsatisfied = 32;
+    public const uint CustomerAccepted = 400;
+    public const uint CustomerSatisfied = 401;
+    public const uint CustomerUnsatisfied = 402;
 
-    public const uint ShopCheckout = 40;
-    public const uint ShopItemAdded = 41;
-    public const uint ShopCartCleared = 42;
-    public const uint ShopItemRemoved = 43;
+    public const uint ShopCheckout = 500;
+    public const uint ShopItemAdded = 501;
+    public const uint ShopCartCleared = 502;
+    public const uint ShopItemRemoved = 503;
 
-    public const uint EmployeeHired = 50;
-    public const uint EmployeeFired = 51;
-    public const uint CustomEmployeeHired = 52;
-    public const uint CustomEmployeeFired = 53;
+    public const uint EmployeeHired = 600;
+    public const uint EmployeeFired = 601;
 
-    public const uint CableConnected = 60;
-    public const uint CableDisconnected = 61;
-    public const uint RackUnmounted = 62;
-    public const uint SwitchBroken = 63;
-    public const uint SwitchRepaired = 64;
-    public const uint WallPurchased = 65;
+    public const uint GameSaved = 700;
+    public const uint GameLoaded = 701;
+    public const uint GameAutoSaved = 702;
 
-    public const uint GameSaved = 70;
-    public const uint GameLoaded = 71;
-    public const uint GameAutoSaved = 72;
+    public const uint WallPurchased = 800;
+    public const uint NetWatchDispatched = 900;
 
-    public const uint HookBridgeInstalled = 90;
-    public const uint HookBridgeTriggered = 91;
+    public const uint CustomEmployeeHired = 1000;
+    public const uint CustomEmployeeFired = 1001;
+
+    public const uint HookBridgeInstalled = 1100;
+    public const uint HookBridgeTriggered = 1101;
 }

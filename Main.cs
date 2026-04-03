@@ -10,7 +10,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 // Namespace AssetExporter muss zu deiner AssemblyInfo passen
-[assembly: MelonInfo(typeof(AssetExporter.Main), "Frikadelle Modding Framework", DataCenterModLoader.ReleaseVersion.Current, "mleem97")]
+[assembly: MelonInfo(typeof(AssetExporter.Main), "Frikadelle Modding Framework", FrikaMF.ReleaseVersion.Current, "mleem97")]
 [assembly: MelonGame(null, null)]
 
 namespace AssetExporter
@@ -23,6 +23,14 @@ namespace AssetExporter
         private readonly Il2CppGameplayIndexService gameplayIndexService = new Il2CppGameplayIndexService();
         private readonly RuntimeHookService runtimeHookService = new RuntimeHookService();
         private readonly GameSignalSnapshotService gameSignalSnapshotService = new GameSignalSnapshotService();
+    #if DEBUG
+        private FrameworkDependencyTestMod frameworkDependencyTestMod;
+        private Texture2D debugOverlayBackgroundTexture;
+        private int debugHooksAvailable;
+        private int debugHookEventsAvailable;
+        private int debugNotYetImplemented;
+        private bool debugOverlayStatsInitialized;
+    #endif
 
         public override void OnInitializeMelon()
         {
@@ -32,17 +40,23 @@ namespace AssetExporter
 
             MelonLogger.Msg("Frikadelle Modding Framework geladen.");
 #if DEBUG
-            MelonLogger.Msg("Debug-Modus aktiv: F8 Export | F9 UI-Pfad | F10 NotUsed | F11 Katalog+Index | F12 Hooks installieren.");
+            MelonLogger.Msg("Debug-Modus aktiv: F6 Healthcheck | F7 Testmutation | F8 Export | F9 UI-Pfad | F10 NotUsed | F11 Katalog+Index | F12 Hooks installieren.");
 #else
             MelonLogger.Msg("Release-Modus aktiv: nur Game-Kommunikation/Framework-Basis, keine Dev-Exports/Hooks.");
 #endif
             MelonLogger.Msg("Projekt: https://github.com/mleem97/FrikaModFramework");
-            ModFramework.Events.Publish(new ModInitializedEvent(DateTime.UtcNow, DataCenterModLoader.ReleaseVersion.Current));
+            ModFramework.Events.Publish(new ModInitializedEvent(DateTime.UtcNow, FrikaMF.ReleaseVersion.Current));
 
             RunAutoHookCommandIfRequested();
 
 #if DEBUG
             ModFramework.Events.Subscribe<HookTriggeredEvent>(OnHookTriggered);
+            frameworkDependencyTestMod = new FrameworkDependencyTestMod(runtimeHookService);
+            frameworkDependencyTestMod.Initialize();
+            RefreshDebugOverlayStats(forceHookScan: true);
+            if (HasArg(Environment.GetCommandLineArgs(), "--ffm-testmod-auto"))
+                frameworkDependencyTestMod.RunHealthcheck();
+
             ExportAllGameSignalsOnStartup();
 #endif
         }
@@ -52,9 +66,16 @@ namespace AssetExporter
             ModFramework.Events.Publish(new ModTickEvent(DateTime.UtcNow));
 
 #if DEBUG
+            frameworkDependencyTestMod?.Tick();
+
             if (Keyboard.current != null && Keyboard.current.f8Key.wasPressedThisFrame)
             {
                 ExportAllResources();
+            }
+
+            if (Keyboard.current != null && Keyboard.current.f6Key.wasPressedThisFrame)
+            {
+                RefreshDebugOverlayStats(forceHookScan: true);
             }
 
             if (Keyboard.current != null && Keyboard.current.f9Key.wasPressedThisFrame)
@@ -80,6 +101,73 @@ namespace AssetExporter
             }
 #endif
         }
+
+#if DEBUG
+        public override void OnGUI()
+        {
+            EnsureDebugOverlayAssets();
+
+            if (!debugOverlayStatsInitialized)
+                RefreshDebugOverlayStats(forceHookScan: true);
+
+            string notUsedState = exportBetaNotUsed ? "ON" : "OFF";
+            string overlayText =
+                $"Hooks Available: {debugHooksAvailable:D6}\n" +
+                $"HookEvents Available: {debugHookEventsAvailable:D6}\n" +
+                $"Not yet Implemented Hook/Events: {debugNotYetImplemented:D6}\n" +
+                $"FRIKAMF v{FrikaMF.ReleaseVersion.Current}\n" +
+                "F6: Healthcheck   F7: +1 Money   F8: Export   F9: UI Path   " +
+                $"F10: NotUsed [{notUsedState}]   F11: Catalog/Index   F12: Hooks";
+
+            const float marginX = 10f;
+            const float topY = 10f;
+            const float height = 94f;
+            float width = Mathf.Max(320f, Screen.width - (marginX * 2f));
+            var boxRect = new Rect(marginX, topY, width, height);
+
+            GUI.DrawTexture(boxRect, debugOverlayBackgroundTexture, ScaleMode.StretchToFill);
+            GUI.Label(boxRect, "  " + overlayText);
+        }
+
+        private void EnsureDebugOverlayAssets()
+        {
+            if (debugOverlayBackgroundTexture == null)
+            {
+                debugOverlayBackgroundTexture = new Texture2D(1, 1, TextureFormat.RGBA32, false);
+                debugOverlayBackgroundTexture.SetPixel(0, 0, new Color(0.05f, 0.08f, 0.12f, 0.78f));
+                debugOverlayBackgroundTexture.Apply();
+            }
+        }
+
+        private void RefreshDebugOverlayStats(bool forceHookScan)
+        {
+            try
+            {
+                if (forceHookScan || !debugOverlayStatsInitialized)
+                {
+                    HookScanResult hookScanResult = runtimeHookService.ScanCandidates(100000);
+                    debugHooksAvailable = hookScanResult.Candidates.Count;
+                }
+
+                int eventCount = 0;
+                var eventFields = typeof(FrikaMF.EventIds).GetFields(BindingFlags.Public | BindingFlags.Static);
+                for (int index = 0; index < eventFields.Length; index++)
+                {
+                    FieldInfo field = eventFields[index];
+                    if (field.IsLiteral && field.FieldType == typeof(uint))
+                        eventCount++;
+                }
+
+                debugHookEventsAvailable = eventCount;
+                debugNotYetImplemented = Math.Max(0, debugHooksAvailable - debugHookEventsAvailable);
+                debugOverlayStatsInitialized = true;
+            }
+            catch (Exception ex)
+            {
+                MelonLogger.Warning($"Debug overlay stats update failed: {ex.Message}");
+            }
+        }
+#endif
 
         private void ExportAllGameSignalsOnStartup()
         {
@@ -293,9 +381,10 @@ namespace AssetExporter
                 {
                     settingLines.Add($"{GetGameObjectPath(obj)} | activeSelf={obj.activeSelf} | activeInHierarchy={obj.activeInHierarchy} | layer={obj.layer} | tag={obj.tag} | scene={obj.scene.name}");
 
-                    Component[] components = obj.GetComponents<Component>();
-                    foreach (Component component in components)
+                    Component[] components = GetComponentsSafe(obj);
+                    for (int componentIndex = 0; componentIndex < components.Length; componentIndex++)
                     {
+                        Component component = components[componentIndex];
                         if (component == null) continue;
                         string typeName = component.GetType().FullName;
                         if (!string.IsNullOrWhiteSpace(typeName))
@@ -322,8 +411,9 @@ namespace AssetExporter
                     if (renderer != null)
                     {
                         Material[] materials = renderer.sharedMaterials;
-                        foreach (Material material in materials)
+                        for (int materialIndex = 0; materialIndex < materials.Length; materialIndex++)
                         {
+                            Material material = materials[materialIndex];
                             if (material == null) continue;
 
                             if (TryRegister(exportedMaterials, $"mat:{material.name}"))
@@ -332,8 +422,9 @@ namespace AssetExporter
                             }
 
                             string[] texturePropertyNames = material.GetTexturePropertyNames();
-                            foreach (string propertyName in texturePropertyNames)
+                            for (int texturePropertyIndex = 0; texturePropertyIndex < texturePropertyNames.Length; texturePropertyIndex++)
                             {
+                                string propertyName = texturePropertyNames[texturePropertyIndex];
                                 Texture texture = material.GetTexture(propertyName);
                                 if (texture is Texture2D tex2D)
                                 {
@@ -380,8 +471,10 @@ namespace AssetExporter
 
                 HashSet<string> exportedBeta = new HashSet<string>();
 
-                foreach (Mesh mesh in Resources.FindObjectsOfTypeAll<Mesh>())
+                Mesh[] loadedMeshes = Resources.FindObjectsOfTypeAll<Mesh>();
+                for (int meshIndex = 0; meshIndex < loadedMeshes.Length; meshIndex++)
                 {
+                    Mesh mesh = loadedMeshes[meshIndex];
                     if (mesh == null) continue;
                     if (usedMeshIds.Contains(mesh.GetInstanceID())) continue;
                     if (!IsCandidateNotUsedMesh(mesh)) continue;
@@ -390,8 +483,10 @@ namespace AssetExporter
                     notUsedMeshCount++;
                 }
 
-                foreach (Texture2D tex in Resources.FindObjectsOfTypeAll<Texture2D>())
+                Texture2D[] loadedTextures = Resources.FindObjectsOfTypeAll<Texture2D>();
+                for (int textureIndex = 0; textureIndex < loadedTextures.Length; textureIndex++)
                 {
+                    Texture2D tex = loadedTextures[textureIndex];
                     if (tex == null) continue;
                     if (usedTextureIds.Contains(tex.GetInstanceID())) continue;
                     if (!IsCandidateNotUsedTexture(tex)) continue;
@@ -433,15 +528,49 @@ namespace AssetExporter
                 if (!scene.IsValid() || !scene.isLoaded) continue;
 
                 GameObject[] roots = scene.GetRootGameObjects();
-                foreach (GameObject root in roots)
+                for (int rootIndex = 0; rootIndex < roots.Length; rootIndex++)
                 {
+                    GameObject root = roots[rootIndex];
                     if (root == null) continue;
 
-                    Transform[] allTransforms = root.GetComponentsInChildren<Transform>(includeInactive);
-                    foreach (Transform t in allTransforms)
+                    Queue<Transform> queue = new Queue<Transform>();
+                    queue.Enqueue(root.transform);
+
+                    while (queue.Count > 0)
                     {
-                        if (t != null && t.gameObject != null)
-                            yield return t.gameObject;
+                        Transform current = queue.Dequeue();
+                        if (current == null || current.gameObject == null)
+                            continue;
+
+                        GameObject currentObject = current.gameObject;
+                        if (includeInactive || currentObject.activeInHierarchy)
+                            yield return currentObject;
+
+                        int childCount;
+                        try
+                        {
+                            childCount = current.childCount;
+                        }
+                        catch
+                        {
+                            childCount = 0;
+                        }
+
+                        for (int childIndex = 0; childIndex < childCount; childIndex++)
+                        {
+                            Transform child;
+                            try
+                            {
+                                child = current.GetChild(childIndex);
+                            }
+                            catch
+                            {
+                                continue;
+                            }
+
+                            if (child != null)
+                                queue.Enqueue(child);
+                        }
                     }
                 }
             }
@@ -601,18 +730,30 @@ namespace AssetExporter
             sb.Append("g ").Append(safeName).Append("\n");
 
             // Nutze die expliziten Unity-Typen um Konflikte mit System.Numerics zu vermeiden
-            foreach (UnityEngine.Vector3 v in mesh.vertices)
-                sb.Append(string.Format("v {0} {1} {2}\n", v.x, v.y, v.z).Replace(",", "."));
+            UnityEngine.Vector3[] vertices = mesh.vertices;
+            for (int vertexIndex = 0; vertexIndex < vertices.Length; vertexIndex++)
+            {
+                UnityEngine.Vector3 vertex = vertices[vertexIndex];
+                sb.Append(string.Format("v {0} {1} {2}\n", vertex.x, vertex.y, vertex.z).Replace(",", "."));
+            }
 
             sb.Append("\n");
 
-            foreach (UnityEngine.Vector3 v in mesh.normals)
-                sb.Append(string.Format("vn {0} {1} {2}\n", v.x, v.y, v.z).Replace(",", "."));
+            UnityEngine.Vector3[] normals = mesh.normals;
+            for (int normalIndex = 0; normalIndex < normals.Length; normalIndex++)
+            {
+                UnityEngine.Vector3 normal = normals[normalIndex];
+                sb.Append(string.Format("vn {0} {1} {2}\n", normal.x, normal.y, normal.z).Replace(",", "."));
+            }
 
             sb.Append("\n");
 
-            foreach (UnityEngine.Vector2 v in mesh.uv)
-                sb.Append(string.Format("vt {0} {1}\n", v.x, v.y).Replace(",", "."));
+            UnityEngine.Vector2[] uvs = mesh.uv;
+            for (int uvIndex = 0; uvIndex < uvs.Length; uvIndex++)
+            {
+                UnityEngine.Vector2 uv = uvs[uvIndex];
+                sb.Append(string.Format("vt {0} {1}\n", uv.x, uv.y).Replace(",", "."));
+            }
 
             for (int i = 0; i < mesh.subMeshCount; i++)
             {
@@ -639,6 +780,64 @@ namespace AssetExporter
             }
 
             return filePath;
+        }
+
+        private static Component[] GetComponentsSafe(GameObject gameObject)
+        {
+            if (gameObject == null)
+                return Array.Empty<Component>();
+
+            try
+            {
+                return gameObject.GetComponents<Component>() ?? Array.Empty<Component>();
+            }
+            catch (Exception ex) when (IsSpanInteropMethodMissing(ex))
+            {
+                MelonLogger.Warning($"Unity6/Il2Cpp Span fallback aktiv für Objekt '{gameObject.name}'.");
+            }
+            catch
+            {
+            }
+
+            try
+            {
+                MethodInfo getComponentsByType = typeof(GameObject).GetMethod("GetComponents", new[] { typeof(Type) });
+                if (getComponentsByType == null)
+                    return Array.Empty<Component>();
+
+                object raw = getComponentsByType.Invoke(gameObject, new object[] { typeof(Component) });
+                if (raw is not Array rawArray)
+                    return Array.Empty<Component>();
+
+                Component[] managedComponents = new Component[rawArray.Length];
+                for (int index = 0; index < rawArray.Length; index++)
+                    managedComponents[index] = rawArray.GetValue(index) as Component;
+
+                return managedComponents;
+            }
+            catch
+            {
+                return Array.Empty<Component>();
+            }
+        }
+
+        private static bool IsSpanInteropMethodMissing(Exception exception)
+        {
+            Exception current = exception;
+            while (current != null)
+            {
+                string message = current.Message ?? string.Empty;
+                if (message.Contains("GetPinnableReference", StringComparison.OrdinalIgnoreCase)
+                    && message.Contains("ReadOnlySpan", StringComparison.OrdinalIgnoreCase)
+                    && message.Contains("Method not found", StringComparison.OrdinalIgnoreCase))
+                {
+                    return true;
+                }
+
+                current = current.InnerException;
+            }
+
+            return false;
         }
     }
 }

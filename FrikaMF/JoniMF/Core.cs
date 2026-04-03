@@ -5,10 +5,10 @@ using System.IO;
 using HarmonyLib;
 using UnityEngine;
 
-[assembly: MelonInfo(typeof(DataCenterModLoader.Core), "DataCenterModLoader", DataCenterModLoader.ReleaseVersion.Current, "DataCenterModding")]
+[assembly: MelonInfo(typeof(FrikaMF.Core), "FrikadelleModdingFramework", FrikaMF.ReleaseVersion.Current, "DataCenterModding")]
 [assembly: MelonGame("Waseku", "Data Center")]
 
-namespace DataCenterModLoader;
+namespace FrikaMF;
 
 // file-based crash logger, never throws
 public static class CrashLog
@@ -22,7 +22,7 @@ public static class CrashLog
         {
             _logPath = Path.Combine(gameRoot, "dc_modloader_debug.log");
             var header =
-                $"===== DataCenterModLoader Debug Log ====={Environment.NewLine}" +
+                $"===== FrikaMF Debug Log ====={Environment.NewLine}" +
                 $"Started: {DateTime.Now:yyyy-MM-dd HH:mm:ss.fff}{Environment.NewLine}" +
                 $"========================================={Environment.NewLine}";
             File.WriteAllText(_logPath, header);
@@ -73,7 +73,9 @@ public class Core : MelonMod
 
     private FFIBridge _ffiBridge;
     private string _modsPath;
+    private string _legacyNativeModsPath;
     private string _streamingModsPath;
+    private string _frameworkDiagnosticsPath;
 
     public override void OnInitializeMelon()
     {
@@ -82,62 +84,78 @@ public class Core : MelonMod
             Instance = this;
 
             CrashLog.Init(MelonEnvironment.GameRootDirectory);
-            CrashLog.Log("step: CrashLog initialized");
+            FrameworkLog.Initialize(LoggerInstance);
+            FrameworkLog.Info("core", $"Booting FrikadelleModdingFramework v{ReleaseVersion.Current}");
+            FrameworkLog.Info("core", "Runtime bridge: Rust FFI enabled");
 
             _modsPath = Path.Combine(MelonEnvironment.GameRootDirectory, "Mods", "RustMods");
+            _legacyNativeModsPath = Path.Combine(MelonEnvironment.GameRootDirectory, "Mods", "native");
             _streamingModsPath = Path.Combine(MelonEnvironment.GameRootDirectory, "Data Center_Data", "StreamingAssets", "Mods");
-
-            LoggerInstance.Msg("╔══════════════════════════════════════════╗");
-            LoggerInstance.Msg($"║   Data Center Modloader v{ReleaseVersion.Current}    ║");
-            LoggerInstance.Msg("║   Rust FFI Bridge Active                ║");
-            LoggerInstance.Msg("╚══════════════════════════════════════════╝");
+            _frameworkDiagnosticsPath = Path.Combine(MelonEnvironment.GameRootDirectory, "Mods", "FrikaMF", "Diagnostics");
 
             if (!Directory.Exists(_modsPath))
             {
                 Directory.CreateDirectory(_modsPath);
-                LoggerInstance.Msg($"Created Mods/RustMods directory: {_modsPath}");
+                FrameworkLog.Info("paths", $"Created Rust mod directory: {_modsPath}");
+            }
+
+            if (Directory.Exists(_legacyNativeModsPath))
+            {
+                FrameworkLog.Warn("paths", $"Legacy native path detected: {_legacyNativeModsPath}");
+                FrameworkLog.Warn("paths", "Please migrate Rust mods to Mods/RustMods (auto fallback is enabled)");
+
+                bool preferredHasDll = Directory.GetFiles(_modsPath, "*.dll", SearchOption.AllDirectories).Length > 0;
+                bool legacyHasDll = Directory.GetFiles(_legacyNativeModsPath, "*.dll", SearchOption.AllDirectories).Length > 0;
+                if (!preferredHasDll && legacyHasDll)
+                {
+                    _modsPath = _legacyNativeModsPath;
+                    FrameworkLog.Warn("paths", "Using legacy native path because Mods/RustMods has no DLLs");
+                }
+            }
+            else
+            {
+                FrameworkLog.Debug("paths", $"Using Rust mod directory: {_modsPath}");
             }
 
             if (!Directory.Exists(_streamingModsPath))
             {
                 Directory.CreateDirectory(_streamingModsPath);
-                LoggerInstance.Msg($"Created StreamingAssets/Mods directory: {_streamingModsPath}");
+                FrameworkLog.Info("paths", $"Created StreamingAssets mod directory: {_streamingModsPath}");
             }
             else
             {
-                LoggerInstance.Msg($"Using StreamingAssets/Mods directory: {_streamingModsPath}");
+                FrameworkLog.Debug("paths", $"Using StreamingAssets mod directory: {_streamingModsPath}");
             }
 
-            CrashLog.Log("step: creating FFIBridge");
+            FrameworkLog.Debug("core", "Creating FFI bridge instance");
             _ffiBridge = new FFIBridge(LoggerInstance, _modsPath);
 
-            CrashLog.Log("step: initializing EventDispatcher");
+            FrameworkLog.Debug("core", "Initializing event dispatcher");
             EventDispatcher.Initialize(_ffiBridge, LoggerInstance);
 
-            CrashLog.Log("step: applying Harmony patches");
+            ExportRuntimeAssemblyHooks();
+
+            FrameworkLog.Debug("harmony", "Applying assembly patches");
             try
             {
                 HarmonyInstance.PatchAll(typeof(Core).Assembly);
-                LoggerInstance.Msg("Harmony patches applied.");
-                CrashLog.Log("step: Harmony patches applied successfully");
+                FrameworkLog.Info("harmony", "Harmony patches applied successfully");
             }
             catch (Exception ex)
             {
-                LoggerInstance.Error($"Failed to apply Harmony patches: {ex.Message}");
-                LoggerInstance.Msg("Continuing without full event support.");
-                CrashLog.LogException("Harmony patching", ex);
+                FrameworkLog.Exception("harmony", "Failed to apply Harmony patches", ex);
+                FrameworkLog.Warn("harmony", "Continuing without full event support");
             }
 
             RunHookerCommandIfRequested();
 
-            CrashLog.Log("step: loading all mods");
+            FrameworkLog.Debug("ffi", "Scanning and loading native Rust mods");
             _ffiBridge.LoadAllMods();
-            LoggerInstance.Msg("Modloader initialization complete.");
-            CrashLog.Log("step: OnInitializeMelon complete");
+            FrameworkLog.Info("core", "Initialization complete");
         }
         catch (Exception ex)
         {
-            CrashLog.LogException("OnInitializeMelon", ex);
+            FrameworkLog.Exception("core", "OnInitializeMelon failed", ex);
             throw;
         }
     }
@@ -150,7 +168,7 @@ public class Core : MelonMod
         }
         catch (Exception ex)
         {
-            CrashLog.LogException("OnSceneWasLoaded", ex);
+            FrameworkLog.Exception("scene", "OnSceneWasLoaded failed", ex);
         }
     }
 
@@ -162,7 +180,7 @@ public class Core : MelonMod
         }
         catch (Exception ex)
         {
-            CrashLog.LogException("OnUpdate", ex);
+            FrameworkLog.Exception("loop", "OnUpdate failed", ex);
         }
 
 
@@ -176,7 +194,7 @@ public class Core : MelonMod
         }
         catch (Exception ex)
         {
-            CrashLog.LogException("OnFixedUpdate", ex);
+            FrameworkLog.Exception("loop", "OnFixedUpdate failed", ex);
         }
     }
 
@@ -184,15 +202,14 @@ public class Core : MelonMod
     {
         try
         {
-            LoggerInstance.Msg("Shutting down modloader...");
-            CrashLog.Log("step: OnApplicationQuit starting");
+            FrameworkLog.Info("core", "Shutdown started");
             _ffiBridge?.Shutdown();
             _ffiBridge?.Dispose();
-            CrashLog.Log("step: OnApplicationQuit complete");
+            FrameworkLog.Info("core", "Shutdown complete");
         }
         catch (Exception ex)
         {
-            CrashLog.LogException("OnApplicationQuit", ex);
+            FrameworkLog.Exception("core", "OnApplicationQuit failed", ex);
         }
     }
 
@@ -214,16 +231,16 @@ public class Core : MelonMod
 
             if (!string.IsNullOrWhiteSpace(catalogPath))
             {
-                LoggerInstance.Msg($"Hooker command: install from catalog ({catalogPath}), max={maxHooks}");
+                FrameworkLog.Info("hooker", $"Command detected: install from catalog '{catalogPath}', max={maxHooks}");
                 result = Hooker.InstallFromCatalog(catalogPath, maxHooks);
             }
             else
             {
-                LoggerInstance.Msg($"Hooker command: scan install, max={maxHooks}");
+                FrameworkLog.Info("hooker", $"Command detected: scan install, max={maxHooks}");
                 result = Hooker.InstallByScan(maxHooks);
             }
 
-            LoggerInstance.Msg($"Hooker result: scanned={result.Scanned}, installed={result.Installed}, failed={result.Failed}");
+            FrameworkLog.Info("hooker", $"Result: scanned={result.Scanned}, installed={result.Installed}, failed={result.Failed}");
 
             if (result.Errors.Count > 0)
             {
@@ -231,13 +248,34 @@ public class Core : MelonMod
                 Directory.CreateDirectory(diagnosticsPath);
                 string errorFile = Path.Combine(diagnosticsPath, "hooker-install-errors.txt");
                 File.WriteAllLines(errorFile, result.Errors);
-                LoggerInstance.Warning($"Hooker error log written: {errorFile}");
+                FrameworkLog.Warn("hooker", $"Error log written: {errorFile}");
             }
         }
         catch (Exception ex)
         {
-            LoggerInstance.Warning($"Hooker command failed: {ex.Message}");
-            CrashLog.LogException("RunHookerCommandIfRequested", ex);
+            FrameworkLog.Exception("hooker", "Hooker command failed", ex);
+        }
+    }
+
+    private void ExportRuntimeAssemblyHooks()
+    {
+        try
+        {
+            Directory.CreateDirectory(_frameworkDiagnosticsPath);
+            string outputFile = Path.Combine(_frameworkDiagnosticsPath, "assembly-hooks.txt");
+            AssemblyHookDumpResult dump = AssemblyHookDumpService.ExportAssemblyCSharpDump(outputFile);
+
+            if (!dump.Success)
+            {
+                FrameworkLog.Warn("hooks", "Assembly-CSharp not yet available; wrote empty runtime dump file");
+                return;
+            }
+
+            FrameworkLog.Info("hooks", $"Runtime hook dump exported: {dump.OutputPath} (types={dump.TypeCount}, methods={dump.MethodCount})");
+        }
+        catch (Exception ex)
+        {
+            FrameworkLog.Exception("hooks", "Failed to export assembly-hooks runtime dump", ex);
         }
     }
 

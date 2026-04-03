@@ -1,4 +1,4 @@
-namespace DataCenterModLoader;
+namespace FrikaMF;
 
 public static class ReleaseVersion
 {

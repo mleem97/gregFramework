@@ -5,8 +5,8 @@
     <ImplicitUsings>disable</ImplicitUsings>
     <Nullable>disable</Nullable>
     <PlatformTarget>x64</PlatformTarget>
-    <AssemblyName>DataCenterModLoader</AssemblyName>
-    <RootNamespace>DataCenterModLoader</RootNamespace>
+    <AssemblyName>FrikaModdingFramework</AssemblyName>
+    <RootNamespace>FrikaMF</RootNamespace>
     <Description>MelonLoader mod that provides a Rust FFI bridge for Data Center</Description>
     <NoWarn>CS1701;CS1702</NoWarn>
     <ReferencePath>$(MelonLoaderDir)\net6;$(MelonLoaderDir)\Il2CppAssemblies</ReferencePath>
@@ -61,19 +61,28 @@
     <Reference Include="UnityEngine.InputLegacyModule">
       <HintPath>$(MelonLoaderDir)\Il2CppAssemblies\UnityEngine.InputLegacyModule.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.IMGUIModule">
+      <HintPath>$(MelonLoaderDir)\Il2CppAssemblies\UnityEngine.IMGUIModule.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>$(MelonLoaderDir)\Il2CppAssemblies\UnityEngine.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.TextRenderingModule">
+      <HintPath>$(MelonLoaderDir)\Il2CppAssemblies\UnityEngine.TextRenderingModule.dll</HintPath>
     </Reference>
   </ItemGroup>
 
   <ItemGroup>
     <Compile Remove="il2cpp-unpack\**\*.cs" />
     <Compile Remove="References\il2cpp-unpack\**\*.cs" />
+    <Compile Remove="_tmp\**\*.cs" />
+    <Compile Remove=".bridge-sync\**\*.cs" />
     <Compile Remove="**\obj\**\*.cs" />
     <Compile Remove="**\bin\**\*.cs" />
-    <Compile Remove="HexLabelMod\**\*.cs" />
     <None Include="il2cpp-unpack\**\*.cs" />
     <None Include="References\il2cpp-unpack\**\*.cs" />
+    <None Include="_tmp\**\*.cs" />
+    <None Include=".bridge-sync\**\*.cs" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(CI)' == 'true'">
