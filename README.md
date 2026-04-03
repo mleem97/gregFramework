@@ -26,6 +26,17 @@
 - Rust/native plugins: `Data Center/Mods/RustMods`
 - Content packs: `Data Center/Data Center_Data/StreamingAssets/Mods`
 
+## Other projects we are working on
+
+- `DataCenter_DHCPSwitches`: <https://github.com/mleem97/DataCenter_DHCPSwitches>
+
+## Cross-language extension model (`FFM.Langserver.Compat`)
+
+- Drop-in compatibility adapters are discovered from: `Data Center/Mods/FFM.Langserver.Compat`
+- Goal: allow language-specific runtimes (for example Rust, Python, Lua, Delphi, etc.) to register hook claims without hard-coding language support in the framework.
+- The framework writes runtime diagnostics to `Data Center/FrikaFM/ffm-langserver-compat-status.json`.
+- If multiple adapters claim the same hook target, the framework logs a conflict warning so mod authors can coordinate claims.
+
 ## Important notes
 
 - This project is unofficial and not affiliated with the game developer.

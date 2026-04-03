@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,10 +14,10 @@ using MelonLoader.Utils;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-[assembly: MelonInfo(typeof(HexLabelMod.HexLabelMelon), "HexLabelMod", "1.0.0", "mleem97")]
+[assembly: MelonInfo(typeof(FMF.HexLabelMod.HexLabelMelon), "FMF HexLabel Mod", "00.01.0008", "mleem97")]
 [assembly: MelonGame("Waseku", "Data Center")]
 
-namespace HexLabelMod;
+namespace FMF.HexLabelMod;
 
 public sealed class HexLabelMelon : MelonMod
 {
@@ -35,9 +36,17 @@ public sealed class HexLabelMelon : MelonMod
     private bool _startupWaitMessageShown;
     private bool _liveReloadEnabled;
     private bool _liveReloadAllowed;
+    private bool _frameworkAvailable;
 
     public override void OnInitializeMelon()
     {
+        _frameworkAvailable = IsFrameworkLoaded();
+        if (!_frameworkAvailable)
+        {
+            LoggerInstance.Error("FMF HexLabel Mod requires FrikaModdingFramework. Load `FrikaModdingFramework.dll` first.");
+            return;
+        }
+
         _config = HexPositionConfig.CreateDefault();
         _isFullyInitialized = false;
         _liveReloadEnabled = false;
@@ -81,6 +90,9 @@ public sealed class HexLabelMelon : MelonMod
 
     public override void OnUpdate()
     {
+        if (!_frameworkAvailable)
+            return;
+
         if (!_isFullyInitialized)
         {
             _startupWaitTimer += Time.deltaTime;
@@ -121,6 +133,17 @@ public sealed class HexLabelMelon : MelonMod
 
         _scanTimer = 0f;
         TryApplyToAllSpinners();
+    }
+
+    private static bool IsFrameworkLoaded()
+    {
+        var assemblies = AppDomain.CurrentDomain.GetAssemblies();
+        return assemblies.Any(assembly =>
+        {
+            var name = assembly.GetName().Name ?? string.Empty;
+            return string.Equals(name, "FrikaModdingFramework", StringComparison.OrdinalIgnoreCase)
+                || string.Equals(name, "FrikaMF", StringComparison.OrdinalIgnoreCase);
+        });
     }
 
     private void HandleLiveReloadToggleHotkey()

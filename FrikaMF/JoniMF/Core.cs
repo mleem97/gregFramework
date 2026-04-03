@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using HarmonyLib;
 using UnityEngine;
 
-[assembly: MelonInfo(typeof(DataCenterModLoader.Core), "RustBridge", "0.1.0", "Joniii")]
+[assembly: MelonInfo(typeof(DataCenterModLoader.Core), "RustBridge", FrikaMF.ReleaseVersion.Current, "Joniii")]
 [assembly: MelonGame("Waseku", "Data Center")]
 
 namespace DataCenterModLoader;
@@ -114,6 +114,7 @@ public class Core : MelonMod
 
     private FFIBridge _ffiBridge;
     private MultiplayerBridge _mpBridge;
+    private FfmLangserverCompatRuntime _langserverCompatRuntime;
     private string _modsPath;
     private bool _globalExceptionHooksInstalled;
 
@@ -142,6 +143,9 @@ public class Core : MelonMod
             CrashLog.Log("step: creating FFIBridge");
             _ffiBridge = new FFIBridge(LoggerInstance, _modsPath);
 
+            CrashLog.Log("step: initializing FFM.Langserver.Compat runtime");
+            _langserverCompatRuntime = FfmLangserverCompatRuntime.Initialize(LoggerInstance);
+
             InstallGlobalExceptionHooks();
 
             CrashLog.Log("step: initializing EventDispatcher");
@@ -153,6 +157,7 @@ public class Core : MelonMod
                 HarmonyInstance.PatchAll(typeof(Core).Assembly);
                 LoggerInstance.Msg("Harmony patches applied.");
                 CrashLog.Log("step: Harmony patches applied successfully");
+                _langserverCompatRuntime?.DetectHarmonyConflicts(HarmonyInstance?.Id ?? string.Empty);
             }
             catch (Exception ex)
             {
