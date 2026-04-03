@@ -1,15 +1,19 @@
-## [0.2.0](https://github.com/mleem97/FrikaModFramework/compare/v0.1.5...v0.2.0) (2026-04-03)
+<!-- markdownlint-disable MD004 MD024 -->
+
+# Changelog
+
+All notable changes to this project are documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
+This project uses framework release versions in `XX.XX.XXXX` format.
+
+## [0.2.0] - 2026-04-03
 
 
 ### Features
 
 * **modding:** add StreamingAssets modpack scaffold and docs ([819c883](https://github.com/mleem97/FrikaModFramework/commit/819c883524c30145d94aabe439acdba01d517cd3))
 * **runtime:** migrate JoniMF bridge and automate hook installation ([0dc8f1b](https://github.com/mleem97/FrikaModFramework/commit/0dc8f1b7e94d6f1ba19066829c5773d9a7d3e352))
-
-All notable changes to this project are documented in this file.
-
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
-This project uses framework release versions in `XX.XX.XXXX` format.
 
 ## [Unreleased]
 
@@ -67,7 +71,8 @@ This project uses framework release versions in `XX.XX.XXXX` format.
 - Add initial `FrikaMF` project and core mod code.
 - Extend export structure and beta export functionality.
 
-[Unreleased]: https://github.com/mleem97/FrikaModFramework/compare/v00.01.0006...HEAD
+[Unreleased]: https://github.com/mleem97/FrikaModFramework/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/mleem97/FrikaModFramework/compare/v0.1.5...v0.2.0
 [00.01.0006]: https://github.com/mleem97/FrikaModFramework/compare/v00.01.0005...v00.01.0006
 [0.1.5]: https://github.com/mleem97/FrikaModFramework/compare/v0.1.4...v0.1.5
 [0.1.4]: https://github.com/mleem97/FrikaModFramework/compare/v0.1.3...v0.1.4
