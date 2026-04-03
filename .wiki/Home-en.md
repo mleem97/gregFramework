@@ -1,0 +1,35 @@
+---
+title: Home EN
+description: Entry point for all FrikaMF audiences in English.
+sidebar_position: 110
+tags:
+  - audience:enduser
+  - audience:moddev
+  - audience:contributor
+  - audience:sponsor
+  - audience:gamedev
+---
+
+## FrikaModdingFramework (FrikaMF)
+
+FrikaMF is an unofficial, community-driven modding framework for the Unity IL2CPP game `Data Center`.
+
+> Important: You do not need both languages. Choose **Rust** or **C#** — the framework handles communication.
+
+`Unofficial` · `Community-driven` · `No affiliation with WASEKU`
+
+## Audience shortcuts
+
+- Use mods: [End-User (Release) EN](End-User-Release-en)
+- Build mods: [Mod-Developer (Debug) EN](Mod-Developer-Debug-en)
+- Contribute: [Contributors (Debug) EN](Contributors-Debug-en)
+- Sponsor: [Sponsors EN](Sponsors-en)
+- Game developer note: [Letter to WASEKU EN](Letter-to-WASEKU-en)
+
+## Shared references
+
+- [Glossary EN](Glossary-en)
+- [Changelog & Versions EN](Changelog-Versions-en)
+- [Known Incompatibilities EN](Known-Incompatibilities-en)
+- [License & Legal EN](License-Legal-en)
+- Hook source of truth: [`HOOKS.md`](HOOKS)

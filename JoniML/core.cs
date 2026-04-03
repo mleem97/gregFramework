@@ -5,7 +5,7 @@ using System.IO;
 using HarmonyLib;
 using UnityEngine;
 
-[assembly: MelonInfo(typeof(DataCenterModLoader.Core), "RustBridge", "0.1.0", "Joniii")]
+[assembly: MelonInfo(typeof(DataCenterModLoader.Core), "DataCenterModLoader", "0.1.0", "DataCenterModding")]
 [assembly: MelonGame("Waseku", "Data Center")]
 
 namespace DataCenterModLoader;
@@ -22,7 +22,7 @@ public static class CrashLog
         {
             _logPath = Path.Combine(gameRoot, "dc_modloader_debug.log");
             var header =
-                $"===== RustBridge Debug Log ====={Environment.NewLine}" +
+                $"===== DataCenterModLoader Debug Log ====={Environment.NewLine}" +
                 $"Started: {DateTime.Now:yyyy-MM-dd HH:mm:ss.fff}{Environment.NewLine}" +
                 $"========================================={Environment.NewLine}";
             File.WriteAllText(_logPath, header);
@@ -72,7 +72,6 @@ public class Core : MelonMod
     public static Core Instance { get; private set; }
 
     private FFIBridge _ffiBridge;
-    private MultiplayerBridge _mpBridge;
     private string _modsPath;
 
     public override void OnInitializeMelon()
@@ -87,8 +86,8 @@ public class Core : MelonMod
             _modsPath = Path.Combine(MelonEnvironment.GameRootDirectory, "Mods", "RustMods");
 
             LoggerInstance.Msg("╔══════════════════════════════════════════╗");
-            LoggerInstance.Msg("║   Rust Bridge v0.1.0                     ║");
-            LoggerInstance.Msg("║   Rust FFI Bridge Active                 ║");
+            LoggerInstance.Msg("║   Data Center Modloader v0.1.0          ║");
+            LoggerInstance.Msg("║   Rust FFI Bridge Active                ║");
             LoggerInstance.Msg("╚══════════════════════════════════════════╝");
 
             if (!Directory.Exists(_modsPath))
@@ -117,12 +116,10 @@ public class Core : MelonMod
                 CrashLog.LogException("Harmony patching", ex);
             }
 
+            RunHookerCommandIfRequested();
+
             CrashLog.Log("step: loading all mods");
             _ffiBridge.LoadAllMods();
-
-            CrashLog.Log("step: creating MultiplayerBridge");
-            _mpBridge = new MultiplayerBridge(LoggerInstance);
-
             LoggerInstance.Msg("Modloader initialization complete.");
             CrashLog.Log("step: OnInitializeMelon complete");
         }
@@ -138,13 +135,6 @@ public class Core : MelonMod
         try
         {
             _ffiBridge?.OnSceneLoaded(sceneName);
-            _mpBridge?.OnSceneLoaded(sceneName);
-
-            // Initialize extra technician hiring (safe to call multiple times)
-            TechnicianHiring.Initialize();
-
-            // Re-register salaries for previously hired custom employees
-            CustomEmployeeManager.ReregisterSalariesIfNeeded();
         }
         catch (Exception ex)
         {
@@ -157,7 +147,6 @@ public class Core : MelonMod
         try
         {
             _ffiBridge?.OnUpdate(Time.deltaTime);
-            _mpBridge?.OnUpdate(Time.deltaTime);
         }
         catch (Exception ex)
         {
@@ -179,25 +168,12 @@ public class Core : MelonMod
         }
     }
 
-    public override void OnGUI()
-    {
-        try
-        {
-            _mpBridge?.DrawGUI();
-        }
-        catch (Exception ex)
-        {
-            CrashLog.LogException("OnGUI", ex);
-        }
-    }
-
     public override void OnApplicationQuit()
     {
         try
         {
             LoggerInstance.Msg("Shutting down modloader...");
             CrashLog.Log("step: OnApplicationQuit starting");
-            _mpBridge?.Shutdown();
             _ffiBridge?.Shutdown();
             _ffiBridge?.Dispose();
             CrashLog.Log("step: OnApplicationQuit complete");
@@ -206,5 +182,84 @@ public class Core : MelonMod
         {
             CrashLog.LogException("OnApplicationQuit", ex);
         }
+    }
+
+    private void RunHookerCommandIfRequested()
+    {
+        try
+        {
+            string[] args = Environment.GetCommandLineArgs();
+            bool autoScan = HasArg(args, "--hooker-auto");
+            bool installAll = HasArg(args, "--hooker-all");
+            string catalogPath = GetArgValue(args, "--hooker-catalog=");
+
+            if (!autoScan && string.IsNullOrWhiteSpace(catalogPath))
+                return;
+
+            int defaultMax = installAll ? int.MaxValue : 500;
+            int maxHooks = GetIntArgValue(args, "--hooker-max=", defaultMax);
+            HookerInstallResult result;
+
+            if (!string.IsNullOrWhiteSpace(catalogPath))
+            {
+                LoggerInstance.Msg($"Hooker command: install from catalog ({catalogPath}), max={maxHooks}");
+                result = Hooker.InstallFromCatalog(catalogPath, maxHooks);
+            }
+            else
+            {
+                LoggerInstance.Msg($"Hooker command: scan install, max={maxHooks}");
+                result = Hooker.InstallByScan(maxHooks);
+            }
+
+            LoggerInstance.Msg($"Hooker result: scanned={result.Scanned}, installed={result.Installed}, failed={result.Failed}");
+
+            if (result.Errors.Count > 0)
+            {
+                string diagnosticsPath = Path.Combine(MelonEnvironment.GameRootDirectory, "Mods", "ExportedAssets", "Diagnostics");
+                Directory.CreateDirectory(diagnosticsPath);
+                string errorFile = Path.Combine(diagnosticsPath, "hooker-install-errors.txt");
+                File.WriteAllLines(errorFile, result.Errors);
+                LoggerInstance.Warning($"Hooker error log written: {errorFile}");
+            }
+        }
+        catch (Exception ex)
+        {
+            LoggerInstance.Warning($"Hooker command failed: {ex.Message}");
+            CrashLog.LogException("RunHookerCommandIfRequested", ex);
+        }
+    }
+
+    private static bool HasArg(string[] args, string value)
+    {
+        for (int i = 0; i < args.Length; i++)
+        {
+            if (string.Equals(args[i], value, StringComparison.OrdinalIgnoreCase))
+                return true;
+        }
+
+        return false;
+    }
+
+    private static string GetArgValue(string[] args, string prefix)
+    {
+        for (int i = 0; i < args.Length; i++)
+        {
+            string arg = args[i];
+            if (!arg.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
+                continue;
+
+            return arg.Substring(prefix.Length).Trim('"');
+        }
+
+        return string.Empty;
+    }
+
+    private static int GetIntArgValue(string[] args, string prefix, int fallback)
+    {
+        string raw = GetArgValue(args, prefix);
+        if (string.IsNullOrWhiteSpace(raw))
+            return fallback;
+
+        return int.TryParse(raw, out int value) && value > 0 ? value : fallback;
     }
 }
