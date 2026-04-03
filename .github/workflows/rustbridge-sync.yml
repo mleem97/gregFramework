@@ -16,7 +16,7 @@ on:
           - staged
           - overwrite
       useHostedRunner:
-        description: Use hosted windows runner (manual fallback)
+        description: Use hosted runner (manual fallback)
         required: false
         type: boolean
         default: false
@@ -33,6 +33,8 @@ jobs:
       - self-hosted
       - windows
       - x64
+      - fmf-windows-runner
+    timeout-minutes: 25
     if: github.event_name != 'workflow_dispatch' || github.event.inputs.useHostedRunner != 'true'
 
     steps:
@@ -80,7 +82,8 @@ jobs:
           base: master
 
   sync-hosted-fallback:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
     if: github.event_name == 'workflow_dispatch' && github.event.inputs.useHostedRunner == 'true'
 
     steps:
@@ -126,3 +129,30 @@ jobs:
             rustbridge
             safe-sync
           base: master
+
+  notify-status:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    if: always()
+    needs:
+      - sync-self-hosted
+      - sync-hosted-fallback
+    env:
+      OVERALL_STATUS: ${{ contains(join(needs.*.result, ','), 'failure') && 'failure' || contains(join(needs.*.result, ','), 'cancelled') && 'cancelled' || 'success' }}
+      DISCORD_WEBHOOK: ${{ vars.DISCORD_WEBHOOK }}
+      TELEGRAM_WEBHOOK: ${{ vars.TELEGRAM_WEBHOOK }}
+    steps:
+      - name: Telegram notification (optional)
+        if: env.TELEGRAM_WEBHOOK != ''
+        continue-on-error: true
+        shell: bash
+        run: |
+          MSG="[${{ github.repository }}] ${{ github.workflow }} -> ${OVERALL_STATUS} (run #${{ github.run_number }})\nBranch: ${{ github.ref_name }}\nActor: ${{ github.actor }}\n${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          curl -sS -X POST "$TELEGRAM_WEBHOOK" -H "Content-Type: application/json" -d "{\"text\":\"${MSG//$'\n'/\\n}\"}" >/dev/null
+
+      - name: Discord notification (fallback + default)
+        if: env.DISCORD_WEBHOOK != ''
+        shell: bash
+        run: |
+          CONTENT="**${{ github.workflow }}**: ${OVERALL_STATUS}\nRepo: \\`${{ github.repository }}\\`\nBranch: \\`${{ github.ref_name }}\\`\nActor: \\`${{ github.actor }}\\`\nRun: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          curl -sS -X POST "$DISCORD_WEBHOOK" -H "Content-Type: application/json" -d "{\"content\":\"${CONTENT//$'\n'/\\n}\"}" >/dev/null

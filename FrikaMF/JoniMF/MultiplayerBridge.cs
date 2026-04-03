@@ -222,13 +222,13 @@ public class MultiplayerBridge
             if (kb != null && (kb.f9Key.wasPressedThisFrame || kb.f10Key.wasPressedThisFrame || kb.f11Key.wasPressedThisFrame))
             {
                 _logger.Warning("[MP Bridge] dc_multiplayer.dll is not loaded — multiplayer keybinds (F9/F10/F11) are unavailable.");
-                _logger.Warning("[MP Bridge] Make sure dc_multiplayer.dll is in your Mods/native folder and has been loaded.");
+                _logger.Warning("[MP Bridge] Make sure dc_multiplayer.dll is in your Mods/RustMods folder and has been loaded.");
 
                 try
                 {
                     var ui = StaticUIElements.instance;
                     if (ui != null)
-                        ui.AddMeesageInField("Multiplayer: dc_multiplayer.dll not loaded! Check Mods/native folder.");
+                        ui.AddMeesageInField("Multiplayer: dc_multiplayer.dll not loaded! Check Mods/RustMods folder.");
                 }
                 catch { }
             }
