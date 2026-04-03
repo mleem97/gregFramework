@@ -1,6 +1,10 @@
-# Changelog
+## [0.2.0](https://github.com/mleem97/FrikaModFramework/compare/v0.1.5...v0.2.0) (2026-04-03)
 
-<!-- markdownlint-disable MD024 -->
+
+### Features
+
+* **modding:** add StreamingAssets modpack scaffold and docs ([819c883](https://github.com/mleem97/FrikaModFramework/commit/819c883524c30145d94aabe439acdba01d517cd3))
+* **runtime:** migrate JoniMF bridge and automate hook installation ([0dc8f1b](https://github.com/mleem97/FrikaModFramework/commit/0dc8f1b7e94d6f1ba19066829c5773d9a7d3e352))
 
 All notable changes to this project are documented in this file.
 

@@ -1,5 +1,5 @@
 {
-  "version": "0.1.4",
+  "version": "0.2.0",
   "scripts": {
     "hooker:new": "pwsh -ExecutionPolicy Bypass -File .\\scripts\\New-HookerBridge.ps1",
     "modpack:new": "pwsh -ExecutionPolicy Bypass -File .\\scripts\\New-StreamingAssetModPack.ps1",
