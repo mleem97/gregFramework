@@ -45,6 +45,7 @@
 - [Framework Features & Use Cases](Framework-Features-Use-Cases)
 - [FFI Bridge Reference](FFI-Bridge-Reference)
 - [Web UI Bridge (DC2WEB)](Web-UI-Bridge)
+- [Web UI Bridge (DC2WEB) EN](Web-UI-Bridge-en)
 - [Modding Guide](Modding-Guide)
 - [Device Reference](Device-Reference)
 - [Asset Export](AssetExport)

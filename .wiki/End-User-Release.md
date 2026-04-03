@@ -132,6 +132,16 @@ Technisch ja, praktisch bringt es ohne abhängigen Mod kaum Mehrwert.
 - Ausschnitt aus `MelonLoader/Latest.log`
 - Schritte zur Reproduktion
 
+## Relevante Querverweise
+
+- [Home](Home)
+- [Mod-Developer (Debug)](Mod-Developer-Debug)
+- [Contributors (Debug)](Contributors-Debug)
+- [Framework Features & Use Cases](Framework-Features-Use-Cases)
+- [FFI Bridge Reference](FFI-Bridge-Reference)
+- [Web UI Bridge (DC2WEB)](Web-UI-Bridge)
+- [Bekannte Inkompatibilitäten](Bekannte-Inkompatibilitaeten)
+
 ## Minimalbeispiel (nur zur Einordnung)
 
 > Du musst diesen Code **nicht** schreiben. Er zeigt nur, dass FrikaMF Mods in beiden Sprachen ermöglicht.

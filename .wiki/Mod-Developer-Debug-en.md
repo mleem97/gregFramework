@@ -10,6 +10,8 @@ tags:
 
 You only need one track: **Rust** or **C#**. FrikaMF bridges runtime communication.
 
+Full framework capability catalog with setup guides: [`Framework Features & Use Cases`](Framework-Features-Use-Cases).
+
 ## Rust vs C# decision guide
 
 | Criteria | 🔷 C# Track | 🦀 Rust Track |
@@ -19,6 +21,19 @@ You only need one track: **Rust** or **C#**. FrikaMF bridges runtime communicati
 | Native-level control | Medium | High |
 | Safety model | Medium | High |
 | Recommended for | Most gameplay mods | Performance/ABI-heavy systems |
+
+## Lua/Python/Web FFI status
+
+- Rust FFI in framework core: **implemented**.
+- Built-in Lua runtime host: **not implemented**.
+- Built-in Python runtime host: **not implemented**.
+- Built-in generic HTTP/WebSocket FFI transport: **not implemented**.
+
+Recommended approach:
+
+- Run Lua/Python as a sidecar process and connect through your C# or Rust mod boundary.
+- Use framework events as stable inputs and framework APIs as safe outputs.
+- Keep Unity/IL2CPP object access in C# or Rust layers.
 
 ## Architecture
 
@@ -78,6 +93,12 @@ pub extern "C" fn mod_init(_api_table: *mut core::ffi::c_void) -> bool {
 ## Why many IL2CPP interop methods look empty
 
 Interop assemblies often contain metadata-facing stubs; real implementation lives in native IL2CPP binaries.
+
+## Web FFI vs Web UI (important)
+
+- `DC2WebBridge` provides Unity-side UI adaptation/styling.
+- It is not a generic network FFI transport bus.
+- For Web FFI, implement your own HTTP/WebSocket gateway with validation and rate limits.
 
 ## Cross-track example
 

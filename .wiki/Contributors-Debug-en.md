@@ -10,6 +10,8 @@ tags:
 
 This page is for contributors working on FrikaMF itself.
 
+For the complete and maintainable feature matrix with implementation use cases, see [`Framework Features & Use Cases`](Framework-Features-Use-Cases).
+
 ## Dev setup
 
 ```powershell
@@ -44,6 +46,21 @@ dotnet build .\FrikaMF.csproj /p:GameDir="C:\Path\To\Data Center"
 - `b###` compiler-generated members are unstable.
 - Coroutine state-machine types (`d##`) are unstable.
 - Prefer Postfix first unless behavior blocking is required.
+
+## Lua/Python/Web FFI contributor notes
+
+Current core status:
+
+- Rust native FFI bridge: implemented.
+- Built-in Lua runtime host: not implemented.
+- Built-in Python runtime host: not implemented.
+- Built-in generic HTTP/WebSocket FFI transport: not implemented.
+
+Contribution guidance:
+
+- Treat Lua/Python as sidecar integration work unless core runtime hosting is explicitly added.
+- Keep Unity and IL2CPP access constrained to C#/Rust boundaries.
+- If adding transport, define strict command schemas, authentication for non-local access, and rate limits.
 
 ## CI behavior
 

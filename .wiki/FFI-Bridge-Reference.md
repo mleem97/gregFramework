@@ -12,6 +12,20 @@ This page documents the currently implemented FFI surface between the C# framewo
 - `FrikaMF/JoniMF/EventIds.cs`
 - `FrikaMF/JoniMF/Core.cs`
 
+## Language/runtime support status
+
+- Native Rust DLL integration: supported and implemented.
+- Embedded Lua runtime in framework core: not implemented.
+- Embedded Python runtime in framework core: not implemented.
+- Embedded HTTP/WebSocket transport layer for generic FFI: not implemented.
+
+Recommended integration model for Lua/Python today:
+
+- Run language runtime out-of-process (sidecar).
+- Use C# or Rust mod component as boundary adapter.
+- Convert incoming framework events to sidecar messages.
+- Apply sidecar decisions through `GameAPITable` and existing safe wrapper calls.
+
 ## Runtime loading model
 
 - Native mods are discovered under `Data Center/Mods/RustMods/**/*.dll`.
@@ -147,3 +161,11 @@ Implementation detail:
 2. Accept and parse `GameAPITable` according to `ApiVersion`.
 3. Implement `mod_on_event` to consume normalized gameplay events.
 4. Optionally implement frame and lifecycle callbacks (`mod_update`, `mod_fixed_update`, `mod_on_scene_loaded`, `mod_shutdown`).
+
+## Related links
+
+- [Framework Features & Use Cases](Framework-Features-Use-Cases)
+- [Modding Guide](Modding-Guide)
+- [Architecture](Architecture)
+- [Web UI Bridge (DC2WEB)](Web-UI-Bridge)
+- [Web UI Bridge (DC2WEB) EN](Web-UI-Bridge-en)

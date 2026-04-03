@@ -100,6 +100,22 @@ Aktuelle technische Grenze:
 
 Details: [`Web UI Bridge (DC2WEB)`](Web-UI-Bridge)
 
+## Lua/Python/Web FFI Contributor Notes
+
+Current core status:
+
+- Rust native FFI bridge: implemented.
+- Built-in Lua runtime host: not implemented.
+- Built-in Python runtime host: not implemented.
+- Built-in generic HTTP/WebSocket FFI transport: not implemented.
+
+Contribution guidance:
+
+- Treat Lua/Python support as sidecar integration work, not as existing core runtime features.
+- Keep Unity and IL2CPP access in C# or Rust boundaries; do not expose raw Unity objects over external transport.
+- If adding web transport, define strict command schemas, authentication for non-local access, and rate limits.
+- Document every added transport/ABI contract in `Framework-Features-Use-Cases` and `FFI-Bridge-Reference`.
+
 ## CI-Pipeline (warum Builds in CI anders sind)
 
 - CI läuft ohne lokale Spielinstallation.
