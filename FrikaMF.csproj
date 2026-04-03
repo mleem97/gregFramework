@@ -68,10 +68,12 @@
 
   <ItemGroup>
     <Compile Remove="il2cpp-unpack\**\*.cs" />
+    <Compile Remove="References\il2cpp-unpack\**\*.cs" />
     <Compile Remove="**\obj\**\*.cs" />
     <Compile Remove="**\bin\**\*.cs" />
     <Compile Remove="HexLabelMod\**\*.cs" />
     <None Include="il2cpp-unpack\**\*.cs" />
+    <None Include="References\il2cpp-unpack\**\*.cs" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(CI)' == 'true'">
