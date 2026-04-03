@@ -1,36 +1,31 @@
 # Modding Guide
 
-This guide reflects the current workflow for extending the project.
+Last updated: 2026-04-03
 
-## Start Points
+This guide describes the practical workflow for extending `FrikaModFramework` safely.
 
-- Read `README_MODDING.md` for framework usage
-- Review `FrikaMF/JoniMF/HarmonyPatches.cs` and dispatcher files
-- Use `.wiki/Architecture.md` to understand project split
+## Read this first
 
-## Rust Plugin Development
+- `README_MODDING.md` for end-to-end usage details.
+- `.wiki/Architecture.md` for boundaries and responsibilities.
+- `HOOKS.md` for currently verified hook targets.
 
-If you want to write plugins in Rust, use the Rust bridge project:
+## Development loop
 
-- `https://github.com/Joniii11/DataCenter-RustBridge`
+1. Build framework in `Debug` while developing.
+2. Deploy DLLs to game `Mods` folder.
+3. Launch game and confirm load in `MelonLoader/Latest.log`.
+4. Verify behavior and diagnostics output.
+5. Promote to `Release` once stable.
 
-## Typical Workflow
+## Hooks and events pipeline
 
-1. Build framework or standalone mod project in `Release` for runtime use.
-1. Copy C# DLL output into the game `Mods` folder.
-1. Put Rust plugins (optional) into `Mods/RustMods`.
-1. Put custom object packs into `Data Center_Data/StreamingAssets/Mods/<PackName>`.
-1. Launch game and verify in `MelonLoader/Latest.log`.
-1. Iterate on code and config values.
+1. Add or update a hook patch in `FrikaMF/JoniMF/HarmonyPatches.cs`.
+2. Register/confirm event IDs in `FrikaMF/JoniMF/EventIds.cs`.
+3. Emit payload via `FrikaMF/JoniMF/EventDispatcher.cs`.
+4. Consume in native plugin through `mod_on_event(eventId, dataPtr, dataLen)`.
 
-## Hooks and Events Workflow
-
-1. Add a patch in `FrikaMF/JoniMF/HarmonyPatches.cs`.
-2. Add or reuse an ID in `FrikaMF/JoniMF/EventIds.cs`.
-3. Dispatch via `FrikaMF/JoniMF/EventDispatcher.cs` with the correct payload shape.
-4. Receive events in Rust through `mod_on_event(eventId, dataPtr, dataLen)`.
-
-### C# patch example
+### Minimal C# patch example
 
 ```csharp
 [HarmonyPatch(typeof(Server), nameof(Server.PowerButton))]
@@ -43,20 +38,27 @@ internal static class ServerPowerButtonPatch
 }
 ```
 
-### Rust event receiver example
+### Minimal Rust listener example
 
 ```rust
 #[no_mangle]
-pub extern "C" fn mod_on_event(event_id: u32, data_ptr: *const u8, data_len: u32) {
+pub extern "C" fn mod_on_event(event_id: u32, _data_ptr: *const u8, _data_len: u32) {
     if event_id == 10 {
         println!("Server power event received");
     }
 }
 ```
 
-## Game-Object Packs (StreamingAssets/Mods)
+## How to stay update-resilient
 
-Use one folder per object pack. Example structure:
+- Prefer hooking deterministic gameplay methods over generic Unity internals.
+- Keep hook behavior small and fail-safe (`try/catch` in high-risk paths).
+- Use runtime method exports to re-check hook candidates after each game update.
+- Treat `HOOKS.md` as a verified contract: mark only confirmed targets as verified.
+
+## Content packs (`StreamingAssets/Mods`)
+
+Use one folder per pack:
 
 ```text
 Data Center_Data/StreamingAssets/Mods/MyServerPack/
@@ -67,20 +69,13 @@ Data Center_Data/StreamingAssets/Mods/MyServerPack/
   icon.png
 ```
 
-### Scaffold command
+Scaffold helper:
 
 ```powershell
 pwsh -ExecutionPolicy Bypass -File .\scripts\New-StreamingAssetModPack.ps1 -GamePath "C:\Program Files (x86)\Steam\steamapps\common\Data Center" -ModName "MyServerPack"
 ```
 
-### Event payload examples
-
-- `FireSimple(eventId)`: no payload.
-- `FireValueChanged(...)`: 3x `float` payload (`old`, `new`, `delta`).
-- `FireMonthEnded(int)`: single integer payload.
-- `FireCustomEmployeeHired(string)`: UTF-8 string payload with null terminator.
-
-## Build and Deploy Fast Loop
+## Fast deploy loop
 
 ```powershell
 . .\scripts\Invoke-DataCenterModDeploy.ps1
@@ -89,17 +84,18 @@ Invoke-Deploy --all
 
 Use `-WhatIf` for dry-run validation.
 
-## Hex Label Mod Notes
+## Event payload notes
 
-- Project path: `FrikaMF.csproj`
-- Build mode: release-only
-- Config file: `hexposition.cfg` in game `UserData`
-- Hotkey handling: Input System-based implementation
+- `FireSimple(eventId)`: no payload.
+- `FireValueChanged(...)`: `old/new/delta` as `float` values.
+- Typed helpers exist for structured payloads (shop, save/load, employees, etc.).
 
-## Best Practices
+## Contributor expectations
 
-- Keep features in dedicated services/classes.
-- Prefer event-driven hooks over broad invasive patches.
-- Add configuration defaults and fallback behavior.
-- Validate changes with a focused project build before wider checks.
-- Keep dispatched event contracts stable once used externally.
+- Keep event contracts stable once external mods depend on them.
+- Update docs and hook verification notes together with code changes.
+- Use Conventional Commits (`feat:`, `fix:`, `docs:`, `chore:`).
+
+## Rust plugin reference
+
+- `https://github.com/Joniii11/DataCenter-RustBridge`

@@ -1,120 +1,55 @@
 # Setup
 
-This page describes the current local setup for `FrikaModFramework`.
+Last updated: 2026-04-03
 
-## Requirements
+This page documents the current development and runtime setup for `FrikaModFramework`.
 
-- `Data Center` installed
+## Prerequisites
+
+- `Data Center` installed locally
 - `MelonLoader` installed for the game
 - `.NET 6 SDK`
-- Optional: decompiled sources in `il2cpp-unpack`
+- Optional but recommended: decompiled sources under `il2cpp-unpack`
 
-Before building the framework for the first time, start the game once with MelonLoader so required generated assemblies and runtime metadata are present.
+Before the first framework build, run the game once with MelonLoader. This generates runtime metadata required for stable development.
 
-## Repository Structure (current)
-
-- `FrikaMF.csproj` and `FrikaMF.sln` for the framework mod
-- `.wiki/` for project wiki pages
-
-## Build Commands
-
-Use PowerShell from repository root:
+## Quick setup (maintainer path)
 
 ```powershell
-dotnet build .\FrikaMF.csproj -c Debug
-dotnet build .\FrikaMF.csproj -c Release
-```
-
-Preferred command shells by platform:
-
-- Windows: `PowerShell` (preferred), `cmd` (supported)
-- Linux: `bash` / `sh` (preferred)
-
-Optional package-run wrappers (only if `npm` or `pnpm` is installed):
-
-```powershell
-# PowerShell / cmd
-npm run wiki:sync
-pnpm wiki:sync
-
-npm run release:prepare:minor
-pnpm release:prepare:minor
-```
-
-```bash
-# bash / sh
-npm run wiki:sync
-pnpm wiki:sync
-
-npm run release:prepare:minor
-pnpm release:prepare:minor
-```
-
-Direct script execution remains the default recommendation for maintainers.
-
-## GitHub Runner Strategy (DLL builds)
-
-The repository workflows are configured so DLL builds can run on a local self-hosted runner with game-specific resources.
-
-- Preferred runner labels for build jobs:
-- `self-hosted`
-- `windows`
-- `x64`
-- Workflow behavior:
-- `.github/workflows/dotnet-ci.yml`: uses self-hosted runner by default.
-- `.github/workflows/rustbridge-sync.yml`: uses self-hosted runner by default.
-- Both workflows provide manual `workflow_dispatch` fallback to hosted Windows via `useHostedRunner=true`.
-
-Recommended for local runner setup:
-
-```powershell
-# run in your self-hosted runner working copy
-dotnet --info
 dotnet restore .\FrikaMF.csproj
+dotnet build .\FrikaMF.csproj -c Debug -nologo
 dotnet build .\FrikaMF.csproj -c Release -nologo
 ```
 
-Optional deploy helper:
+Optional deploy shortcut:
 
 ```powershell
 . .\scripts\Invoke-DataCenterModDeploy.ps1
-Invoke-Deploy --1   # framework only
-Invoke-Deploy --2   # HexLabelMod only
-Invoke-Deploy --all # both
+Invoke-Deploy --all
 ```
 
-Local release upload (maintainer flow):
+## Runtime folder layout (important)
 
-```powershell
-. .\scripts\Publish-LocalRelease.ps1
-$env:GITHUB_TOKEN = "<github_token_with_repo_scope>"
-Publish-LocalRelease -Tag "vX.Y.Z"
-```
+- C# framework/mod DLLs: `Data Center/Mods`
+- Rust/native plugin DLLs: `Data Center/Mods/RustMods`
+- Content/object packs: `Data Center/Data Center_Data/StreamingAssets/Mods/<PackName>`
 
-## Runtime Placement
+## Build outputs
 
-- Copy framework output (`FrikaModdingFramework.dll`) into game `Mods` folder
-- Copy `HexLabelMod.dll` into game `Mods` folder
+- Framework: `bin/Release/net6.0/FrikaModdingFramework.dll`
+- Label mod (optional): `HexLabelMod/bin/Release/net6.0/HexLabelMod.dll`
 
-## Rust Mod Placement (separate from C# Mods)
+Install by copying those DLLs into the game `Mods` folder, then verify load in `MelonLoader/Latest.log`.
 
-- Rust/native plugins go to: `Data Center/Mods/RustMods`
-- C# mods stay in: `Data Center/Mods`
+## Content pack scaffold
 
-## Game-Object Content Placement (no extra mod required)
-
-To add custom game objects that are grouped with their assets/config:
-
-- Use: `Data Center/Data Center_Data/StreamingAssets/Mods/<YourPack>`
-- Keep files of one object pack together in one folder.
-
-### Scaffold command
+Create a new object/content pack folder:
 
 ```powershell
 pwsh -ExecutionPolicy Bypass -File .\scripts\New-StreamingAssetModPack.ps1 -GamePath "C:\Program Files (x86)\Steam\steamapps\common\Data Center" -ModName "MyServerPack"
 ```
 
-This creates:
+Generated baseline files:
 
 - `config.json`
 - `model.obj`
@@ -122,10 +57,34 @@ This creates:
 - `texture.png`
 - `icon.png`
 
-Then replace placeholders with real assets and align `config.json` with current `ExampleMod` schema.
+## Release/versioning workflow
 
-## Notes
+Framework releases use `XX.XX.XXXX` format and `FrikaMF/JoniMF/ReleaseVersion.cs` as source of truth.
 
-- `HexLabelMod` is configured for release-only builds.
-- Keep game paths in `.csproj` aligned with your local Steam installation.
-- Validate load state through `MelonLoader/Latest.log`.
+Use only:
+
+```powershell
+pwsh -ExecutionPolicy Bypass -File .\scripts\Update-ReleaseMetadata.ps1 -Bump major
+pwsh -ExecutionPolicy Bypass -File .\scripts\Update-ReleaseMetadata.ps1 -Bump medium
+pwsh -ExecutionPolicy Bypass -File .\scripts\Update-ReleaseMetadata.ps1 -Bump minor
+```
+
+For local release uploads:
+
+```powershell
+pwsh -ExecutionPolicy Bypass -File .\scripts\Publish-LocalRelease.ps1
+```
+
+## Wiki maintenance
+
+Wiki source is stored in `.wiki/` and synced via:
+
+```powershell
+pwsh -ExecutionPolicy Bypass -File .\scripts\Sync-Wiki.ps1
+```
+
+## Troubleshooting
+
+- If DLL does not load: inspect `MelonLoader/Latest.log` first.
+- If diagnostics are missing: verify game folder write permission.
+- If hook install fails: check diagnostics output and `HOOKS.md` verification status.

@@ -1,44 +1,46 @@
-# Start Page
+# FrikaModFramework Wiki
 
-Welcome to the project wiki.
+Last updated: 2026-04-03
 
-## Overview
+Welcome to the official wiki for `FrikaModFramework`.
 
-- Purpose: Practical documentation for building and extending the framework.
-- Repository: `mleem97/FrikaModFramework`
-- Core runtime bridge code: `FrikaMF/JoniMF/`
-- Native game-object content root: `Data Center_Data/StreamingAssets/Mods`
+## What this project provides
 
-## Suggested Next Pages
+- A MelonLoader-based runtime framework for `Data Center`.
+- Stable C# hook points and normalized event dispatch for mod authors.
+- A native bridge interface for Rust plugin integration.
+- Optional diagnostics and hook catalog exports to reduce update pain after game patches.
 
-- `Setup.md` for local environment setup
-- `Architecture.md` for project structure
-- `Modding-Guide.md` for workflow and examples
+## Start here (new contributors)
 
-## How to Help
+1. Open [Setup](Setup) and complete prerequisites.
+2. Build once and verify mod load in `MelonLoader/Latest.log`.
+3. Read [Architecture](Architecture) to understand runtime boundaries.
+4. Follow [Modding Guide](Modding-Guide) for hooks/events workflow.
+5. Use [Device Reference](Device-Reference) for gameplay device details and current known limits.
 
-- Add/validate hook candidates in `FrikaMF/JoniMF/HarmonyPatches.cs`.
-- Extend event IDs and typed payload dispatch.
-- Improve docs and examples for first-time mod developers.
-- Report reproducible issues with logs from `MelonLoader/Latest.log`.
+## Common goals
 
-## Rust Plugin Reference
+- Add new gameplay hooks in `FrikaMF/JoniMF/HarmonyPatches.cs`.
+- Expand event coverage in `FrikaMF/JoniMF/EventIds.cs` and `FrikaMF/JoniMF/EventDispatcher.cs`.
+- Extend game-callable API table in `FrikaMF/JoniMF/GameApi.cs`.
+- Improve docs with verified, reproducible device and hook information.
 
-- `https://github.com/Joniii11/DataCenter-RustBridge`
+## Required references
 
-## Notes
+- Repository: `https://github.com/mleem97/FrikaModFramework`
+- Rust bridge reference: `https://github.com/Joniii11/DataCenter-RustBridge`
+- Verified hook table: `HOOKS.md` (repo root)
 
-- Keep pages concise and practical.
-- Link related pages to improve navigation.
+## Wiki sync
 
-## Wiki Sync Automation
+Use repo-local source pages under `.wiki/`, then sync them to the GitHub wiki:
 
-- Changes in `.wiki/**` on `master` are auto-synced to the GitHub wiki via workflow.
-- Manual sync is still available and preferred for controlled maintenance:
 - PowerShell: `pwsh -ExecutionPolicy Bypass -File .\scripts\Sync-Wiki.ps1`
 - cmd: `powershell -ExecutionPolicy Bypass -File .\scripts\Sync-Wiki.ps1`
 - bash/sh: `pwsh -ExecutionPolicy Bypass -File ./scripts/Sync-Wiki.ps1`
 
-- Optional wrappers if package managers are installed:
+Optional wrappers:
+
 - `npm run wiki:sync`
 - `pnpm wiki:sync`
