@@ -31,10 +31,42 @@ The game now supports adding custom objects to the store through mod content pac
 - Asset bundle or file-based import pipeline
 - Store registration and runtime validation hooks
 
+## Patch Intelligence (v1.0.40)
+
+Confirmed from latest patch notes:
+
+- Modding first draft is now game-native:
+  - Content location: `Data Center_Data/StreamingAssets/Mods`
+  - Structure: one mod per folder
+  - Inputs: `.obj` files + config (see `ExampleMod` in game files)
+  - Result: custom objects appear in shop and are now save/load compatible
+- QoL change: SFP modules can be inserted directly from SFP box.
+- Stats migration:
+  - Old stat key `STAT_TOTALCABLELENGTH` is broken in base game
+  - Replacement key is `STAT_TOTALCABLELENGTH2`
+- Steam stats integrity:
+  - Money-per-second is rounded before sending to Steam stats.
+
+### Implications for This Framework
+
+- Prefer integration with native `StreamingAssets/Mods` pipeline before adding heavy Harmony-based store injection.
+- Add schema discovery and validation based on `ExampleMod` as P0.
+- Treat stat IDs as versioned contracts and migrate framework mappings to `STAT_TOTALCABLELENGTH2`.
+- Keep numeric stat/event payload normalization (rounding) in telemetry bridge paths.
+
+### Candidate Modding Domains from Recent Updates
+
+- Device ecosystem is expanding quickly (SFP/QSFP modules, switches, patch panels, rack systems).
+- Feature candidates for content packs:
+  - Additional switches and server variants
+  - Additional rack/rackmount object sets
+  - Fiber/network component variants (where supported by game-side schema)
+- World/space-related changes exist across updates; expansion support should be treated as capability-gated and validated against current runtime APIs.
+
 ## Strategic Goals
 
 1. Deliver a reliable custom-object pipeline from file to in-game store.
-2. Keep compatibility stable across game updates (v1.0.39+ and future patches).
+2. Keep compatibility stable across game updates (v1.0.40+ and future patches).
 3. Provide clear authoring docs so mod creators can build without reverse engineering.
 4. Maintain safe, testable extension points in `Assembly-CSharp` hook surface.
 
