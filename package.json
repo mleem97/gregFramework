@@ -1,3 +1,12 @@
 {
-  "version": "0.1.4"
+  "version": "0.1.4",
+  "scripts": {
+    "hooker:new": "pwsh -ExecutionPolicy Bypass -File .\\scripts\\New-HookerBridge.ps1",
+    "modpack:new": "pwsh -ExecutionPolicy Bypass -File .\\scripts\\New-StreamingAssetModPack.ps1",
+    "release:prepare:major": "pwsh -ExecutionPolicy Bypass -File .\\scripts\\Update-ReleaseMetadata.ps1 -Bump major",
+    "release:prepare:medium": "pwsh -ExecutionPolicy Bypass -File .\\scripts\\Update-ReleaseMetadata.ps1 -Bump medium",
+    "release:prepare:minor": "pwsh -ExecutionPolicy Bypass -File .\\scripts\\Update-ReleaseMetadata.ps1 -Bump minor",
+    "release:publish": "pwsh -ExecutionPolicy Bypass -File .\\scripts\\Publish-LocalRelease.ps1",
+    "wiki:sync": "pwsh -ExecutionPolicy Bypass -File .\\scripts\\Sync-Wiki.ps1"
+  }
 }

@@ -1,11 +1,30 @@
 Set-StrictMode -Version Latest
 
-$script:RepoRoot =
-if (-not [string]::IsNullOrWhiteSpace($PSScriptRoot)) {
-    Split-Path -Parent $PSScriptRoot
+$script:ScriptRoot = if (-not [string]::IsNullOrWhiteSpace($PSScriptRoot)) {
+    $PSScriptRoot
+}
+elseif (-not [string]::IsNullOrWhiteSpace($PSCommandPath)) {
+    Split-Path -Parent $PSCommandPath
 }
 else {
     (Get-Location).Path
+}
+
+$script:RepoRoot = Split-Path -Parent $script:ScriptRoot
+$script:ReleaseVersionFile = Join-Path $script:RepoRoot 'FrikaMF\JoniMF\ReleaseVersion.cs'
+
+function Get-CurrentReleaseVersion {
+    if (-not (Test-Path -LiteralPath $script:ReleaseVersionFile)) {
+        throw "Release version file not found: $script:ReleaseVersionFile"
+    }
+
+    $content = Get-Content -LiteralPath $script:ReleaseVersionFile -Raw -ErrorAction Stop
+    $match = [regex]::Match($content, 'Current\s*=\s*"(?<version>\d{2}\.\d{2}\.\d{4})"')
+    if (-not $match.Success) {
+        throw 'Could not read release version from ReleaseVersion.cs.'
+    }
+
+    return $match.Groups['version'].Value
 }
 
 function Get-GitHubHeaders {
@@ -18,7 +37,7 @@ function Get-GitHubHeaders {
         Authorization          = "Bearer $Token"
         Accept                 = 'application/vnd.github+json'
         'X-GitHub-Api-Version' = '2022-11-28'
-        'User-Agent'           = 'DataCenter-AEMod-local-release-uploader'
+        'User-Agent'           = 'FrikaModFramework-local-release-uploader'
     }
 }
 
@@ -126,14 +145,14 @@ function Upload-ReleaseAsset {
 function Publish-LocalRelease {
     [CmdletBinding()]
     param(
-        [Parameter(Mandatory = $true)]
+        [Parameter()]
         [string]$Tag,
 
         [Parameter()]
         [string]$Owner = 'mleem97',
 
         [Parameter()]
-        [string]$Repo = 'DataCenter-AEMod',
+        [string]$Repo = 'FrikaModFramework',
 
         [Parameter()]
         [string]$Configuration = 'Release',
@@ -148,19 +167,28 @@ function Publish-LocalRelease {
         [string]$ReleaseName,
 
         [Parameter()]
-        [string]$ReleaseBody = 'Local build upload (contains game-dependent DLL outputs).'
+        [string]$ReleaseBody = 'Local build upload (contains game-dependent DLL outputs).',
+
+        [Parameter()]
+        [string]$FrameworkAssetPrefix = 'FrikaModdingFramework-v'
     )
 
     if ([string]::IsNullOrWhiteSpace($Token)) {
         throw 'Missing GitHub token. Set GITHUB_TOKEN or pass -Token.'
     }
 
-    if ([string]::IsNullOrWhiteSpace($ReleaseName)) {
-        $ReleaseName = $Tag
-    }
-
     Push-Location $script:RepoRoot
     try {
+        $version = Get-CurrentReleaseVersion
+
+        if ([string]::IsNullOrWhiteSpace($Tag)) {
+            $Tag = "v$version"
+        }
+
+        if ([string]::IsNullOrWhiteSpace($ReleaseName)) {
+            $ReleaseName = "FrikaModdingFramework v$version"
+        }
+
         if (-not $SkipBuild) {
             dotnet build .\FrikaMF.csproj -c $Configuration -p:TreatWarningsAsErrors=true -nologo
             if ($LASTEXITCODE -ne 0) {
@@ -184,10 +212,19 @@ function Publish-LocalRelease {
             throw "Missing HexLabel DLL: $hexDll"
         }
 
+        $releaseArtifactsDir = Join-Path $script:RepoRoot ("artifacts\release\$Tag")
+        if (-not (Test-Path -LiteralPath $releaseArtifactsDir)) {
+            New-Item -Path $releaseArtifactsDir -ItemType Directory -Force | Out-Null
+        }
+
+        $frameworkReleaseName = "$FrameworkAssetPrefix$version.dll"
+        $frameworkReleasePath = Join-Path $releaseArtifactsDir $frameworkReleaseName
+        Copy-Item -LiteralPath $frameworkDll -Destination $frameworkReleasePath -Force
+
         $headers = Get-GitHubHeaders -Token $Token
         $release = Get-OrCreateRelease -Owner $Owner -Repo $Repo -Tag $Tag -Name $ReleaseName -Body $ReleaseBody -Headers $headers
 
-        Upload-ReleaseAsset -Release $release -FilePath $frameworkDll -Headers $headers
+        Upload-ReleaseAsset -Release $release -FilePath $frameworkReleasePath -Headers $headers
         Upload-ReleaseAsset -Release $release -FilePath $hexDll -Headers $headers
 
         Write-Host "[Release] Uploaded assets to https://github.com/$Owner/$Repo/releases/tag/$Tag"
