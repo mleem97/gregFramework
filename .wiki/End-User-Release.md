@@ -10,6 +10,8 @@ tags:
 
 Diese Seite ist für Spieler gedacht, die **keine Mods entwickeln**, sondern FrikaMF nur als Abhängigkeit für andere Mods nutzen.
 
+Für einen vollständigen Überblick aller Framework-Funktionen und Use-Case-Flows siehe [`Framework Features & Use Cases`](Framework-Features-Use-Cases).
+
 ## Was du installierst
 
 - `FrikaModdingFramework.dll` ist ein Laufzeit-Framework für `Data Center`.

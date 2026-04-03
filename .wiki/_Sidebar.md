@@ -42,6 +42,7 @@
 - [HOOKS (Quelle der Wahrheit)](HOOKS)
 - [Setup](Setup)
 - [Architecture](Architecture)
+- [Framework Features & Use Cases](Framework-Features-Use-Cases)
 - [FFI Bridge Reference](FFI-Bridge-Reference)
 - [Web UI Bridge (DC2WEB)](Web-UI-Bridge)
 - [Modding Guide](Modding-Guide)

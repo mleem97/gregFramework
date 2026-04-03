@@ -10,6 +10,8 @@ tags:
 
 Diese Seite ist für Entwickler, die direkt am `FrikaModdingFramework` arbeiten.
 
+Für die vollständige, laufend zu pflegende Feature-Matrix mit Implementierungs-Use-Cases siehe [`Framework Features & Use Cases`](Framework-Features-Use-Cases).
+
 ## Dev-Setup
 
 ### Voraussetzungen

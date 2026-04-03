@@ -10,6 +10,8 @@ tags:
 
 Diese Seite richtet sich an Entwickler, die eigene Mods auf Basis von FrikaMF bauen.
 
+Vollständiger Framework-Funktionskatalog inkl. Use-Case-Anleitungen: [`Framework Features & Use Cases`](Framework-Features-Use-Cases).
+
 ## Kurz gesagt
 
 - Du musst **nicht** beide Sprachen lernen.
