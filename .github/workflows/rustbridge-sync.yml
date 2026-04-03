@@ -139,8 +139,8 @@ jobs:
       - sync-hosted-fallback
     env:
       OVERALL_STATUS: ${{ contains(join(needs.*.result, ','), 'failure') && 'failure' || contains(join(needs.*.result, ','), 'cancelled') && 'cancelled' || 'success' }}
-      DISCORD_WEBHOOK: ${{ vars.DISCORD_WEBHOOK }}
-      TELEGRAM_WEBHOOK: ${{ vars.TELEGRAM_WEBHOOK }}
+      DISCORD_WEBHOOK: ${{ vars['DISCORD_WEBHOOK'] }}
+      TELEGRAM_WEBHOOK: ${{ vars['TELEGRAM_WEBHOOK'] }}
     steps:
       - name: Telegram notification (optional)
         if: env.TELEGRAM_WEBHOOK != ''
