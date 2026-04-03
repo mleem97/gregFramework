@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-[assembly: MelonInfo(typeof(FMF.UIReplacementMod.Main), "FMF UI Replacement", "00.01.0008", "mleem97")]
+[assembly: MelonInfo(typeof(FMF.UIReplacementMod.Main), "FMF UI Replacement", "00.01.0009", "mleem97")]
 [assembly: MelonGame("Waseku", "Data Center")]
 
 namespace FMF.UIReplacementMod;

@@ -97,12 +97,14 @@ Main outputs:
 
 - `bin/Debug/net6.0/FrikaModdingFramework.dll`
 - `bin/Release/net6.0/FrikaModdingFramework.dll`
-- `HexLabelMod/bin/Release/net6.0/HexLabelMod.dll`
+- `StandaloneMods/FMF.HexLabelMod/bin/Release/net6.0/FMF.HexLabelMod.dll`
+- `StandaloneMods/FMF.UIReplacementMod/bin/Release/net6.0/FMF.UIReplacementMod.dll`
+- `StandaloneMods/FMF.JoniMLCompatMod/bin/Release/net6.0/FMF.JoniMLCompatMod.dll`
 
 Install into game:
 
 1. Copy framework DLL to game `Mods` folder.
-2. Optionally copy `HexLabelMod.dll` to game `Mods` folder.
+2. Optionally copy standalone mod DLLs from `StandaloneMods/*/bin/Release/net6.0` to game `Mods` folder.
 3. Start game and verify in `MelonLoader/Latest.log`.
 
 ## Automatic hook installation

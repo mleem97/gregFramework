@@ -13,6 +13,21 @@ This project uses framework release versions in `XX.XX.XXXX` format.
 
 - Maintain Keep a Changelog structure and release metadata automation.
 
+## [00.01.0009] - 2026-04-04
+
+### Added
+
+- Add standalone-mod focused wiki pages for Docusaurus-ready structure (`StandaloneMods`, `Release-Assets-and-Templates`, `Repository-Status-2026-04-04`, `Community-Thanks`).
+- Add community contribution templates (`.github/ISSUE_TEMPLATE/*`, `.github/pull_request_template.md`, `.github/DISCUSSION_TEMPLATE/ideas.yml`).
+- Add release bundle templates under `Templates/*` for standalone mods, UI workflow, and `FFM.Langserver.Compat` adapters.
+
+### Changed
+
+- Normalize legacy changelog version history to `XX.XX.XXXX` format down to initial release.
+- Extend release workflow to upload a full modding bundle ZIP with templates, scripts, docs, and UI runtime assets.
+- Update roadmap/tasklist/modding guide to reflect current standalone architecture and compatibility goals.
+- Add explicit community thanks in repository and wiki documentation.
+
 ## [00.01.0008] - 2026-04-04
 
 ### Added
@@ -41,14 +56,14 @@ This project uses framework release versions in `XX.XX.XXXX` format.
 
 - Automate release versioning, changelog updates, and artifact naming.
 
-## [0.2.0] - 2026-04-03
+## [00.02.0000] - 2026-04-03
 
 ### Features
 
 - **modding:** add StreamingAssets modpack scaffold and docs ([819c883](https://github.com/mleem97/FrikaModFramework/commit/819c883524c30145d94aabe439acdba01d517cd3))
 - **runtime:** migrate JoniMF bridge and automate hook installation ([0dc8f1b](https://github.com/mleem97/FrikaModFramework/commit/0dc8f1b7e94d6f1ba19066829c5773d9a7d3e352))
 
-## [0.1.5] - 2026-04-02
+## [00.01.0005] - 2026-04-02
 
 ### Added
 
@@ -60,47 +75,48 @@ This project uses framework release versions in `XX.XX.XXXX` format.
 - Expand README, modding guide, and wiki with contribution, build, and hooks/events usage guidance.
 - Switch to local DLL upload flow for GitHub releases (game-dependent refs stay local).
 
-## [0.1.4] - 2026-04-01
+## [00.01.0004] - 2026-04-01
 
 ### Fixed
 
 - Use compatible MelonInfo signature to restore mod loading.
 
-## [0.1.3] - 2026-04-01
+## [00.01.0003] - 2026-04-01
 
 ### Fixed
 
 - Switch repository slug from underscore to hyphen.
 - Update melon author/url and repository badge links.
 
-## [0.1.2] - 2026-04-01
+## [00.01.0002] - 2026-04-01
 
 ### Fixed
 
 - Use Il2Cpp list for EventSystem raycast results.
 
-## [0.1.1] - 2026-04-01
+## [00.01.0001] - 2026-04-01
 
 ### Fixed
 
 - Remove duplicate CI compile include for `Main.CI.cs`.
 
-## [0.1.0] - 2026-04-01
+## [00.01.0000] - 2026-04-01
 
 ### Added
 
 - Add initial `FrikaMF` project and core mod code.
 - Extend export structure and beta export functionality.
 
-[Unreleased]: https://github.com/mleem97/FrikaModFramework/compare/v00.01.0008...HEAD
+[Unreleased]: https://github.com/mleem97/FrikaModFramework/compare/v00.01.0009...HEAD
+[00.01.0009]: https://github.com/mleem97/FrikaModFramework/compare/v00.01.0008...v00.01.0009
 [00.01.0008]: https://github.com/mleem97/FrikaModFramework/compare/v00.01.0007...v00.01.0008
 [00.01.0007]: https://github.com/mleem97/FrikaModFramework/compare/v00.01.0006...v00.01.0007
 [00.01.0006]: https://github.com/mleem97/FrikaModFramework/compare/v00.01.0005...v00.01.0006
-[0.2.0]: https://github.com/mleem97/FrikaModFramework/compare/v0.1.5...v0.2.0
-[0.1.5]: https://github.com/mleem97/FrikaModFramework/compare/v0.1.4...v0.1.5
-[0.1.4]: https://github.com/mleem97/FrikaModFramework/compare/v0.1.3...v0.1.4
-[0.1.3]: https://github.com/mleem97/FrikaModFramework/compare/v0.1.2...v0.1.3
-[0.1.2]: https://github.com/mleem97/FrikaModFramework/compare/v0.1.1...v0.1.2
-[0.1.1]: https://github.com/mleem97/FrikaModFramework/compare/v0.1.0...v0.1.1
-[0.1.0]: https://github.com/mleem97/FrikaModFramework/compare/3b2b394e6151a389abb9006c36890f3ec97f6346...v0.1.0
+[00.02.0000]: https://github.com/mleem97/FrikaModFramework/compare/v00.01.0005...v00.02.0000
+[00.01.0005]: https://github.com/mleem97/FrikaModFramework/compare/v00.01.0004...v00.01.0005
+[00.01.0004]: https://github.com/mleem97/FrikaModFramework/compare/v00.01.0003...v00.01.0004
+[00.01.0003]: https://github.com/mleem97/FrikaModFramework/compare/v00.01.0002...v00.01.0003
+[00.01.0002]: https://github.com/mleem97/FrikaModFramework/compare/v00.01.0001...v00.01.0002
+[00.01.0001]: https://github.com/mleem97/FrikaModFramework/compare/v00.01.0000...v00.01.0001
+[00.01.0000]: https://github.com/mleem97/FrikaModFramework/compare/3b2b394e6151a389abb9006c36890f3ec97f6346...v00.01.0000
 

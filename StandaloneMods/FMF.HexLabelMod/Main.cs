@@ -14,7 +14,7 @@ using MelonLoader.Utils;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-[assembly: MelonInfo(typeof(FMF.HexLabelMod.HexLabelMelon), "FMF HexLabel Mod", "00.01.0008", "mleem97")]
+[assembly: MelonInfo(typeof(FMF.HexLabelMod.HexLabelMelon), "FMF HexLabel Mod", "00.01.0009", "mleem97")]
 [assembly: MelonGame("Waseku", "Data Center")]
 
 namespace FMF.HexLabelMod;

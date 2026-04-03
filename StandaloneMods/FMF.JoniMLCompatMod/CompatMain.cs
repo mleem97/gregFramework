@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using MelonLoader;
 
-[assembly: MelonInfo(typeof(FMF.JoniMLCompatMod.CompatMain), "FMF JoniML Compat Mod", "00.01.0008", "mleem97")]
+[assembly: MelonInfo(typeof(FMF.JoniMLCompatMod.CompatMain), "FMF JoniML Compat Mod", "00.01.0009", "mleem97")]
 [assembly: MelonGame("Waseku", "Data Center")]
 
 namespace FMF.JoniMLCompatMod;

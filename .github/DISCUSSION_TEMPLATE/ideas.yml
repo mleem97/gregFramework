@@ -1,0 +1,20 @@
+title: "Idea: "
+labels:
+  - idea
+body:
+  - type: markdown
+    attributes:
+      value: Share your idea for FrikaModFramework, standalone mods, templates, or tooling.
+  - type: textarea
+    id: idea
+    attributes:
+      label: Idea
+      description: What should be improved?
+    validations:
+      required: true
+  - type: textarea
+    id: value
+    attributes:
+      label: Why is this valuable?
+    validations:
+      required: true
