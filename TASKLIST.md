@@ -61,6 +61,75 @@
 - Definition of Done:
   - Event contract delta is documented for the release cycle.
 
+## Epic L1 — v1.0.40 Native Modding Intake (P0)
+
+## L1.1 Validate native content root and layout
+
+- Status: `todo`
+- Priority: `P0`
+- Area: game runtime integration
+- Tasks:
+  - Validate path `Data Center_Data/StreamingAssets/Mods` on local install.
+  - Confirm one-mod-per-folder loading behavior.
+  - Confirm framework docs match exact runtime path conventions.
+- Definition of Done:
+  - Path and folder contract verified in runtime and documented.
+
+## L1.2 Reverse-map `ExampleMod` schema
+
+- Status: `todo`
+- Priority: `P0`
+- Tasks:
+  - Extract all config keys and required file names from `ExampleMod`.
+  - Identify required `.obj` naming and any optional assets.
+  - Record shop visibility and save/load persistence requirements.
+- Definition of Done:
+  - Schema table and minimal valid sample contract are documented.
+
+## L1.3 Build content-pack validator against native contract
+
+- Status: `todo`
+- Priority: `P0`
+- Area: `FrikaMF` tooling/validation
+- Tasks:
+  - Add validator rules for folder structure + required config keys + `.obj` existence.
+  - Emit clear diagnostics per content pack.
+- Definition of Done:
+  - Invalid packs are rejected early with actionable error output.
+
+## L1.4 Migrate cable stat mapping
+
+- Status: `todo`
+- Priority: `P0`
+- Area: stats/event bridge
+- Tasks:
+  - Replace references to `STAT_TOTALCABLELENGTH` with `STAT_TOTALCABLELENGTH2` where applicable.
+  - Add compatibility note in release/changelog workflow.
+- Definition of Done:
+  - No active code path emits old stat key for cable length.
+
+## L1.5 Normalize Steam stat payloads
+
+- Status: `todo`
+- Priority: `P0`
+- Area: telemetry dispatch
+- Tasks:
+  - Ensure money-per-second values are rounded before stat transmission.
+  - Add regression test/checklist step for numeric normalization.
+- Definition of Done:
+  - Stat payload rounding behavior is enforced and documented.
+
+## L1.6 Probe new modding domains (racks/switches/servers/world)
+
+- Status: `todo`
+- Priority: `P1`
+- Tasks:
+  - Validate whether native mod schema supports additional racks/switches/servers.
+  - Validate world/space expansion capabilities and limits in current version.
+  - Capture unsupported areas as explicit non-goals or hook candidates.
+- Definition of Done:
+  - Capability matrix includes supported/unsupported mod domains with evidence.
+
 ## Epic A — Capability Audit (P0)
 
 ## A1. Locate store registration pipeline
