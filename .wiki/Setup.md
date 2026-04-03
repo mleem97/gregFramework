@@ -9,6 +9,8 @@ This page describes the current local setup for `FrikaModFramework`.
 - `.NET 6 SDK`
 - Optional: decompiled sources in `il2cpp-unpack`
 
+Before building the framework for the first time, start the game once with MelonLoader so required generated assemblies and runtime metadata are present.
+
 ## Repository Structure (current)
 
 - `FrikaMF.csproj` and `FrikaMF.sln` for the framework mod
@@ -46,6 +48,34 @@ Publish-LocalRelease -Tag "vX.Y.Z"
 
 - Copy framework output (`DataCenterModLoader.dll`) into game `Mods` folder
 - Copy `HexLabelMod.dll` into game `Mods` folder
+
+## Rust Mod Placement (separate from C# Mods)
+
+- Rust/native plugins go to: `Data Center/Mods/RustMods`
+- C# mods stay in: `Data Center/Mods`
+
+## Game-Object Content Placement (no extra mod required)
+
+To add custom game objects that are grouped with their assets/config:
+
+- Use: `Data Center/Data Center_Data/StreamingAssets/Mods/<YourPack>`
+- Keep files of one object pack together in one folder.
+
+### Scaffold command
+
+```powershell
+pwsh -ExecutionPolicy Bypass -File .\scripts\New-StreamingAssetModPack.ps1 -GamePath "C:\Program Files (x86)\Steam\steamapps\common\Data Center" -ModName "MyServerPack"
+```
+
+This creates:
+
+- `config.json`
+- `model.obj`
+- `model.mtl`
+- `texture.png`
+- `icon.png`
+
+Then replace placeholders with real assets and align `config.json` with current `ExampleMod` schema.
 
 ## Notes
 

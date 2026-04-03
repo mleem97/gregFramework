@@ -10,11 +10,19 @@ This page documents the current high-level architecture.
 ## `FrikaMF` Responsibilities
 
 - Runtime integration with MelonLoader and IL2CPP
-- Runtime event bridge (`JoniML/EventIds.cs`, `JoniML/EventDispatcher.cs`)
-- Harmony hook sources (`JoniML/HarmonyPatches.cs`)
-- Native plugin loading and event forwarding (`JoniML/FfiBridge.cs`)
-- API function table for external mods (`JoniML/GameApi.cs`)
+- Runtime event bridge (`FrikaMF/JoniMF/EventIds.cs`, `FrikaMF/JoniMF/EventDispatcher.cs`)
+- Harmony hook sources (`FrikaMF/JoniMF/HarmonyPatches.cs`)
+- Native plugin loading and event forwarding (`FrikaMF/JoniMF/FfiBridge.cs`)
+- API function table for external mods (`FrikaMF/JoniMF/GameApi.cs`)
 - Optional tooling around runtime discovery and debugging
+
+## Runtime Content/Code Separation
+
+- C# framework/mod DLLs: `Data Center/Mods`
+- Rust/native plugin DLLs: `Data Center/Mods/RustMods`
+- Game object content packs: `Data Center/Data Center_Data/StreamingAssets/Mods`
+
+This enables users to add new object packs (for example server/switch assets) without additional helper mods, as long as the game-side `ExampleMod` schema is respected.
 
 ## `HexLabelMod` Responsibilities
 

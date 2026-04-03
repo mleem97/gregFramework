@@ -104,16 +104,18 @@ This includes:
 
 ## Building Your Own Mod on Top
 
+Before first build/use: run the game once with MelonLoader so generated assemblies and runtime metadata are available.
+
 ### 1) Add or adjust hook sources
 
-- Hook definitions live in `JoniML/HarmonyPatches.cs`.
+- Hook definitions live in `FrikaMF/JoniMF/HarmonyPatches.cs`.
 - Prefer deterministic, low-noise methods in `Assembly-CSharp`.
 - Wrap all patch logic in safe `try/catch` blocks.
 
 ### 2) Emit events
 
-- Event IDs live in `JoniML/EventIds.cs`.
-- Dispatch helpers live in `JoniML/EventDispatcher.cs`.
+- Event IDs live in `FrikaMF/JoniMF/EventIds.cs`.
+- Dispatch helpers live in `FrikaMF/JoniMF/EventDispatcher.cs`.
 - Use:
 	- `FireSimple(eventId)` for signal-only events,
 	- `FireValueChanged(eventId, oldValue, newValue, delta)` for numeric changes,
@@ -121,16 +123,65 @@ This includes:
 
 ### 3) Consume events in native Rust mods
 
-- Native plugin loading/forwarding is implemented in `JoniML/FfiBridge.cs`.
+- Native plugin loading/forwarding is implemented in `FrikaMF/JoniMF/FfiBridge.cs`.
 - Your plugin receives events via optional `mod_on_event(eventId, dataPtr, dataLen)`.
+- Place Rust plugin DLLs in `Data Center/Mods/RustMods`.
 - Use the Rust bridge project for ABI and helper crates:
 	- `https://github.com/Joniii11/DataCenter-RustBridge`
 
 ### 4) Extend game callable APIs
 
-- C# export table is in `JoniML/GameApi.cs`.
-- Runtime game access helpers are in `JoniML/GameHooks.cs`.
+- C# export table is in `FrikaMF/JoniMF/GameApi.cs`.
+- Runtime game access helpers are in `FrikaMF/JoniMF/GameHooks.cs`.
 - Keep additions append-only to avoid ABI breakage.
+
+## StreamingAssets Game-Object Packs (recommended)
+
+Goal: keep object-related data together in one folder and avoid requiring extra helper mods.
+
+Use native game content packs under:
+
+- `Data Center/Data Center_Data/StreamingAssets/Mods/<PackName>`
+
+Typical files:
+
+- `config.json`
+- `model.obj`
+- `model.mtl`
+- `texture.png`
+- `icon.png`
+
+Scaffold command:
+
+```powershell
+pwsh -ExecutionPolicy Bypass -File .\scripts\New-StreamingAssetModPack.ps1 -GamePath "C:\Program Files (x86)\Steam\steamapps\common\Data Center" -ModName "MyServerPack"
+```
+
+Then align `config.json` with the current in-game `ExampleMod` schema for your version.
+
+### Minimal C# patch example
+
+```csharp
+[HarmonyPatch(typeof(Server), nameof(Server.PowerButton))]
+internal static class ServerPowerPatch
+{
+	private static void Postfix(Server __instance)
+	{
+		EventDispatcher.FireServerPowered(__instance.isOn);
+	}
+}
+```
+
+### Minimal Rust event receiver example
+
+```rust
+#[no_mangle]
+pub extern "C" fn mod_on_event(event_id: u32, _data_ptr: *const u8, _data_len: u32) {
+	if event_id == 10 {
+		println!("Server power changed");
+	}
+}
+```
 
 ## Local Release Upload
 
@@ -162,6 +213,40 @@ Publish-LocalRelease -Tag "v0.1.5"
 - If the mod is not loaded, check `MelonLoader/Latest.log` first.
 - If diagnostics are missing, verify write permissions for the game directory.
 - If hook installation fails, inspect `hook-install-errors.txt` in diagnostics output.
+
+## Automatic Hook Installation (No Manual Per-Hook Work)
+
+You can auto-install runtime hooks via launch options, so you do not have to add each hook manually.
+
+- Scan current `Assembly-CSharp` candidates and install (default max = `250`):
+	- `--ffm-hooks-auto`
+- Install all discovered scan candidates (very broad):
+	- `--ffm-hooks-auto --ffm-hooks-all`
+- Set explicit scan limit:
+	- `--ffm-hooks-auto --ffm-hooks-max=1500`
+- Install from an exported catalog file (`assembly-hooks.txt`):
+	- `--ffm-hooks-catalog="C:\\path\\to\\assembly-hooks.txt"`
+	- Optional limit: `--ffm-hooks-max=5000`
+
+All installation errors are written to diagnostics (`hook-install-errors.txt`).
+
+### One-Command `hooker.cs` scaffold
+
+If you want to create a bridge scaffold file in one command:
+
+```powershell
+pwsh -ExecutionPolicy Bypass -File .\scripts\New-HookerBridge.ps1
+```
+
+This ensures `FrikaMF/JoniMF/Hooker.cs` exists (without overwriting an existing implementation).
+
+### Runtime Hooker command flags (game launch options)
+
+- `--hooker-auto`
+- `--hooker-auto --hooker-all`
+- `--hooker-auto --hooker-max=1500`
+- `--hooker-catalog="C:\path\to\assembly-hooks.txt"`
+- `--hooker-catalog="C:\path\to\assembly-hooks.txt" --hooker-max=5000`
 
 ---
 

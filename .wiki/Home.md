@@ -6,7 +6,8 @@ Welcome to the project wiki.
 
 - Purpose: Practical documentation for building and extending the framework.
 - Repository: `mleem97/FrikaModFramework`
-- Core runtime bridge code: `JoniML/`
+- Core runtime bridge code: `FrikaMF/JoniMF/`
+- Native game-object content root: `Data Center_Data/StreamingAssets/Mods`
 
 ## Suggested Next Pages
 
@@ -16,7 +17,7 @@ Welcome to the project wiki.
 
 ## How to Help
 
-- Add/validate hook candidates in `JoniML/HarmonyPatches.cs`.
+- Add/validate hook candidates in `FrikaMF/JoniMF/HarmonyPatches.cs`.
 - Extend event IDs and typed payload dispatch.
 - Improve docs and examples for first-time mod developers.
 - Report reproducible issues with logs from `MelonLoader/Latest.log`.

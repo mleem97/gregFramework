@@ -27,6 +27,37 @@ dotnet build .\HexLabelMod\HexLabelMod.csproj -c Release
 2. Copy `HexLabelMod/bin/Release/net6.0/HexLabelMod.dll` to `Data Center/Mods`.
 3. Start the game and verify load in `MelonLoader/Latest.log`.
 
+Before first build/use: run the game once with MelonLoader so required generated assemblies and runtime metadata exist.
+
+### Folder separation (important)
+
+- C# mods: `Data Center/Mods`
+- Rust/native plugins: `Data Center/Mods/RustMods`
+- Game-object content packs: `Data Center/Data Center_Data/StreamingAssets/Mods`
+
+### New game objects without extra helper mods
+
+You can place object packs directly in `StreamingAssets/Mods` and keep all related data together in one folder.
+
+Example:
+
+```text
+Data Center_Data/StreamingAssets/Mods/ExampleServerPack/
+	config.json
+	model.obj
+	model.mtl
+	texture.png
+	icon.png
+```
+
+Scaffold command:
+
+```powershell
+pwsh -ExecutionPolicy Bypass -File .\scripts\New-StreamingAssetModPack.ps1 -GamePath "C:\Program Files (x86)\Steam\steamapps\common\Data Center" -ModName "ExampleServerPack"
+```
+
+This aligns with the game's native `ExampleMod` approach and your framework goal: object data stays together in `StreamingAssets/Mods/<PackName>`.
+
 ### Deploy helper command
 
 ```powershell
@@ -182,9 +213,9 @@ Contributions are always welcome! If you'd like to help improve the tool, please
 
 ### Where help is needed most
 
-- **Hooks & events:** Expand stable hook coverage in `JoniML/HarmonyPatches.cs`.
-- **Event transport:** Add strongly typed payloads in `JoniML/EventDispatcher.cs`.
-- **Game API bridge:** Extend `JoniML/GameApi.cs` and `JoniML/GameHooks.cs` safely.
+- **Hooks & events:** Expand stable hook coverage in `FrikaMF/JoniMF/HarmonyPatches.cs`.
+- **Event transport:** Add strongly typed payloads in `FrikaMF/JoniMF/EventDispatcher.cs`.
+- **Game API bridge:** Extend `FrikaMF/JoniMF/GameApi.cs` and `FrikaMF/JoniMF/GameHooks.cs` safely.
 - **Docs & examples:** Improve `.wiki/Modding-Guide.md` with practical recipes.
 
 ### Contribution Guidelines
@@ -200,18 +231,27 @@ Contributions are always welcome! If you'd like to help improve the tool, please
 The project exposes two practical extension paths:
 
 1. **C# side hooks/events**
-	- Hook game methods in `JoniML/HarmonyPatches.cs`.
+	- Hook game methods in `FrikaMF/JoniMF/HarmonyPatches.cs`.
 	- Emit events through `EventDispatcher` (`FireSimple`, `FireValueChanged`, and typed helpers).
 2. **Rust native plugins**
-	- Place Rust plugin DLLs in `Data Center/Mods/native`.
+	- Place Rust plugin DLLs in `Data Center/Mods/RustMods`.
 	- Implement optional exports like `mod_init`, `mod_update`, `mod_on_event`.
 	- Use the Rust bridge reference: `https://github.com/Joniii11/DataCenter-RustBridge`.
 
+### Codemod/Hook bridge example
+
+Use the built-in hooker launch flags to avoid manually wiring thousands of hooks:
+
+```text
+--hooker-auto
+--hooker-catalog="C:\path\to\assembly-hooks.txt" --hooker-max=5000
+```
+
 ### Current event ID source
 
-- Event constants are defined in `JoniML/EventIds.cs`.
-- Event dispatch implementation is in `JoniML/EventDispatcher.cs`.
-- Runtime forwarding to native plugins happens via `JoniML/FfiBridge.cs`.
+- Event constants are defined in `FrikaMF/JoniMF/EventIds.cs`.
+- Event dispatch implementation is in `FrikaMF/JoniMF/EventDispatcher.cs`.
+- Runtime forwarding to native plugins happens via `FrikaMF/JoniMF/FfiBridge.cs`.
 
 ---
 
