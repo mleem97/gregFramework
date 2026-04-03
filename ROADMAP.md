@@ -8,13 +8,13 @@ This roadmap defines what is already possible in the framework today and what sh
 
 ## Already Possible (Verified in Repository)
 
-- Framework migration and modular structure (`FrikaMF`, `JoniML`, `HexLabelMod`) are in place.
+- Framework migration and modular structure (`FrikaMF`, `FrikaMF/JoniMF`, `HexLabelMod`) are in place.
 - Runtime hook/event bridge exists:
-  - Harmony patch layer (`JoniML/HarmonyPatches.cs`)
-  - Event IDs (`JoniML/EventIds.cs`)
-  - Dispatch transport (`JoniML/EventDispatcher.cs`)
-- Native plugin bridge exists (`JoniML/FfiBridge.cs`) with event forwarding support.
-- C# API bridge exists (`JoniML/GameApi.cs`, `JoniML/GameHooks.cs`) for runtime game access.
+  - Harmony patch layer (`FrikaMF/JoniMF/HarmonyPatches.cs`)
+  - Event IDs (`FrikaMF/JoniMF/EventIds.cs`)
+  - Dispatch transport (`FrikaMF/JoniMF/EventDispatcher.cs`)
+- Native plugin bridge exists (`FrikaMF/JoniMF/FfiBridge.cs`) with event forwarding support.
+- C# API bridge exists (`FrikaMF/JoniMF/GameApi.cs`, `FrikaMF/JoniMF/GameHooks.cs`) for runtime game access.
 - Local release flow exists and is aligned with local game DLL constraints (`scripts/Publish-LocalRelease.ps1`).
 
 ## Partially Available / Needs Validation
@@ -80,8 +80,8 @@ Each time game libraries are re-exported, run this intake gate before feature wo
    - `dotnet build .\\FrikaMF.csproj -c Release -p:TreatWarningsAsErrors=true -nologo`
    - `dotnet build .\\HexLabelMod\\HexLabelMod.csproj -c Release -nologo`
 
-1. Revalidate hook points in `JoniML/HarmonyPatches.cs` against `Assembly-CSharp` method signatures.
-1. Compare event surface (`JoniML/EventIds.cs` + dispatch callsites) for added/removed gameplay events.
+1. Revalidate hook points in `FrikaMF/JoniMF/HarmonyPatches.cs` against `Assembly-CSharp` method signatures.
+1. Compare event surface (`FrikaMF/JoniMF/EventIds.cs` + dispatch callsites) for added/removed gameplay events.
 1. Update changelog compatibility note and release checklist before tagging.
 
 ### Intake Exit Criteria

@@ -43,7 +43,7 @@
 
 - Status: `todo`
 - Priority: `P0`
-- Area: `JoniML/HarmonyPatches.cs`
+- Area: `FrikaMF/JoniMF/HarmonyPatches.cs`
 - Tasks:
   - Verify targeted game methods still exist and signatures match.
   - Log hook drift and required patch updates.
@@ -54,7 +54,7 @@
 
 - Status: `todo`
 - Priority: `P0`
-- Area: `JoniML/EventIds.cs`, `JoniML/EventDispatcher.cs`
+- Area: `FrikaMF/JoniMF/EventIds.cs`, `FrikaMF/JoniMF/EventDispatcher.cs`
 - Tasks:
   - Confirm existing event IDs still map to valid game behavior.
   - Identify candidate new events from changed gameplay methods.
@@ -136,7 +136,7 @@
 
 - Status: `todo`
 - Priority: `P0`
-- Area: `JoniML` / hook discovery
+- Area: `FrikaMF/JoniMF` / hook discovery
 - Tasks:
   - Find `Assembly-CSharp` methods that populate store inventory/items.
   - Identify when mod folder content is scanned/loaded.
@@ -169,7 +169,7 @@
 
 - Status: `todo`
 - Priority: `P0`
-- Area: `FrikaMF` / `JoniML`
+- Area: `FrikaMF` / `FrikaMF/JoniMF`
 - Tasks:
   - Implement loader to parse mod object manifests.
   - Keep parse errors isolated per object pack.
@@ -191,7 +191,7 @@
 
 - Status: `todo`
 - Priority: `P0`
-- Area: `JoniML/HarmonyPatches.cs`
+- Area: `FrikaMF/JoniMF/HarmonyPatches.cs`
 - Tasks:
   - Patch store init/update phase.
   - Inject validated custom objects into store list.
