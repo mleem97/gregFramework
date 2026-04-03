@@ -88,7 +88,7 @@
 - Most recent CHANGELOG entries:
 	- `00.01.0006` (2026-04-03): automated release versioning/changelog/artifact naming.
 	- `0.1.5` (2026-04-02): runtime bridge/hook-event migration and docs/release-flow updates.
-- `HOOKS.md`: `[UNVERIFIED — file not present]`.
+- `.wiki/HOOKS.md`: verified hook table location.
 
 ## Game Assembly Hooks (Assembly-CSharp)
 
@@ -350,6 +350,6 @@
 - Rust crate layout, crate-type declarations, and actual `#[no_mangle] extern "C"` implementations are not present in this repository snapshot.
 
 ## Verification Workflow Requirements
-- Before implementing hook-sensitive features, confirm member names/signatures/tokens in dnSpy and record results in `HOOKS.md`.
-- Keep `HOOKS.md` entries version-scoped (game build + date + verifier).
+- Before implementing hook-sensitive features, confirm member names/signatures/tokens in dnSpy and record results in `.wiki/HOOKS.md`.
+- Keep `.wiki/HOOKS.md` entries version-scoped (game build + date + verifier).
 - Any instruction section using `[UNVERIFIED — requires dnSpy confirmation]` must be resolved before shipping gameplay-affecting patches.

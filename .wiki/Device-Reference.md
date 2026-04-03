@@ -16,7 +16,7 @@ Feedback from users/contributors highlighted that device documentation was too l
 
 ## Verified device-related targets (current)
 
-Source of truth for verification status: `HOOKS.md`.
+Source of truth for verification status: `.wiki/HOOKS.md`.
 
 ### SetIP
 
@@ -108,7 +108,7 @@ Use this format when adding or updating device docs:
   1. `<Step 1>`
   2. `<Step 2>`
 - Source evidence:
-  - `HOOKS.md` entry
+  - `.wiki/HOOKS.md` entry
   - runtime dump excerpt (`assembly-hooks.txt`)
 ```
 

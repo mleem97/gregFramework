@@ -5,8 +5,13 @@
 - [Architecture](Architecture)
 - [Modding Guide](Modding-Guide)
 - [Device Reference](Device-Reference)
+- [Verified Hooks](HOOKS)
+- [Asset Export Notes](AssetExport)
+- [UI Reference](ui)
+- [MelonLoader Notes](MelonLoader)
+- [Roadmap](ROADMAP)
+- [Task List](TASKLIST)
 - [Contributing](https://github.com/mleem97/FrikaModFramework/blob/master/CONTRIBUTING.md)
-- [Verified Hooks](https://github.com/mleem97/FrikaModFramework/blob/master/HOOKS.md)
 
 ## External
 

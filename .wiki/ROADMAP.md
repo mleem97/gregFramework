@@ -1,3 +1,5 @@
+<!-- markdownlint-disable MD024 -->
+
 # Data Center Mod Support Roadmap
 
 ## Purpose
@@ -88,7 +90,7 @@ Each time game libraries are re-exported, run this intake gate before feature wo
 - Both release builds pass.
 - Hook map drift is documented and resolved.
 - Event surface changes are documented.
-- `TASKLIST.md` intake items are updated with status for this export cycle.
+- `.wiki/TASKLIST.md` intake items are updated with status for this export cycle.
 
 ## Phase Plan
 

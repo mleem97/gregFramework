@@ -21,6 +21,21 @@ dotnet build .\FrikaMF.csproj -c Debug -nologo
 dotnet build .\FrikaMF.csproj -c Release -nologo
 ```
 
+If your game is not installed in the default path, set the game directory explicitly:
+
+```powershell
+dotnet build .\FrikaMF.csproj -c Debug -p:GameDir="D:\Games\Data Center"
+```
+
+Alternative via environment variable:
+
+```powershell
+$env:DATA_CENTER_GAME_DIR = "D:\Games\Data Center"
+dotnet build .\FrikaMF.csproj -c Debug
+```
+
+Important: after installing MelonLoader, launch the game once so `MelonLoader\Il2CppAssemblies` is generated.
+
 Optional deploy shortcut:
 
 ```powershell
@@ -87,4 +102,4 @@ pwsh -ExecutionPolicy Bypass -File .\scripts\Sync-Wiki.ps1
 
 - If DLL does not load: inspect `MelonLoader/Latest.log` first.
 - If diagnostics are missing: verify game folder write permission.
-- If hook install fails: check diagnostics output and `HOOKS.md` verification status.
+- If hook install fails: check diagnostics output and `.wiki/HOOKS.md` verification status.

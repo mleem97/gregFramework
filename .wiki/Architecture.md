@@ -43,7 +43,7 @@ This isolates volatile game internals from plugin-facing contracts.
 ## Diagnostics and verification
 
 - Runtime dump exports and diagnostics are generated under framework diagnostics paths.
-- Verified hook targets are tracked in `HOOKS.md`.
+- Verified hook targets are tracked in `.wiki/HOOKS.md`.
 - Post-update workflow should always include re-verifying critical hooks before shipping.
 
 ## Design rules

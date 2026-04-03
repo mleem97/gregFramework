@@ -6,9 +6,9 @@ This guide describes the practical workflow for extending `FrikaModFramework` sa
 
 ## Read this first
 
-- `README_MODDING.md` for end-to-end usage details.
 - `.wiki/Architecture.md` for boundaries and responsibilities.
-- `HOOKS.md` for currently verified hook targets.
+- `.wiki/HOOKS.md` for currently verified hook targets.
+- `.wiki/Setup.md` for environment and deployment basics.
 
 ## Development loop
 
@@ -54,7 +54,7 @@ pub extern "C" fn mod_on_event(event_id: u32, _data_ptr: *const u8, _data_len: u
 - Prefer hooking deterministic gameplay methods over generic Unity internals.
 - Keep hook behavior small and fail-safe (`try/catch` in high-risk paths).
 - Use runtime method exports to re-check hook candidates after each game update.
-- Treat `HOOKS.md` as a verified contract: mark only confirmed targets as verified.
+- Treat `.wiki/HOOKS.md` as a verified contract: mark only confirmed targets as verified.
 
 ## Content packs (`StreamingAssets/Mods`)
 
@@ -83,6 +83,45 @@ Invoke-Deploy --all
 ```
 
 Use `-WhatIf` for dry-run validation.
+
+## Build and installation details
+
+Build from repository root:
+
+```powershell
+dotnet build .\FrikaMF.csproj -c Debug
+dotnet build .\FrikaMF.csproj -c Release
+```
+
+Main outputs:
+
+- `bin/Debug/net6.0/FrikaModdingFramework.dll`
+- `bin/Release/net6.0/FrikaModdingFramework.dll`
+- `HexLabelMod/bin/Release/net6.0/HexLabelMod.dll`
+
+Install into game:
+
+1. Copy framework DLL to game `Mods` folder.
+2. Optionally copy `HexLabelMod.dll` to game `Mods` folder.
+3. Start game and verify in `MelonLoader/Latest.log`.
+
+## Automatic hook installation
+
+You can auto-install runtime hooks via launch options:
+
+- `--ffm-hooks-auto`
+- `--ffm-hooks-auto --ffm-hooks-all`
+- `--ffm-hooks-auto --ffm-hooks-max=1500`
+- `--ffm-hooks-catalog="C:\\path\\to\\assembly-hooks.txt"`
+- `--ffm-hooks-catalog="C:\\path\\to\\assembly-hooks.txt" --ffm-hooks-max=5000`
+
+Hook install errors are written to diagnostics (`hook-install-errors.txt`).
+
+## Troubleshooting
+
+- If mod is not loaded, inspect `MelonLoader/Latest.log`.
+- If diagnostics are missing, verify write permissions in game directory.
+- If hook installation fails, inspect diagnostics outputs and hook catalog source.
 
 ## Event payload notes
 

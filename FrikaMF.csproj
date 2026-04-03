@@ -14,9 +14,74 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <GameDir>C:\Program Files (x86)\Steam\steamapps\common\Data Center</GameDir>
-    <MelonLoaderDir>$(GameDir)\MelonLoader</MelonLoaderDir>
+    <DefaultSteamGamePath>Program Files (x86)\Steam\steamapps\common\Data Center</DefaultSteamGamePath>
+    <LibrarySteamGamePath>SteamLibrary\steamapps\common\Data Center</LibrarySteamGamePath>
+
+    <GameDir Condition="'$(GameDir)' == '' and '$(DATA_CENTER_GAME_DIR)' != ''">$(DATA_CENTER_GAME_DIR)</GameDir>
+
+    <GameDirAutoDetected Condition="'$(GameDir)' == '' and Exists('C:\$(DefaultSteamGamePath)')">C:\$(DefaultSteamGamePath)</GameDirAutoDetected>
+    <GameDirAutoDetected Condition="'$(GameDir)' == '' and '$(GameDirAutoDetected)' == '' and Exists('C:\$(LibrarySteamGamePath)')">C:\$(LibrarySteamGamePath)</GameDirAutoDetected>
+
+    <GameDirAutoDetected Condition="'$(GameDir)' == '' and '$(GameDirAutoDetected)' == '' and Exists('D:\$(DefaultSteamGamePath)')">D:\$(DefaultSteamGamePath)</GameDirAutoDetected>
+    <GameDirAutoDetected Condition="'$(GameDir)' == '' and '$(GameDirAutoDetected)' == '' and Exists('D:\$(LibrarySteamGamePath)')">D:\$(LibrarySteamGamePath)</GameDirAutoDetected>
+    <GameDirAutoDetected Condition="'$(GameDir)' == '' and '$(GameDirAutoDetected)' == '' and Exists('E:\$(DefaultSteamGamePath)')">E:\$(DefaultSteamGamePath)</GameDirAutoDetected>
+    <GameDirAutoDetected Condition="'$(GameDir)' == '' and '$(GameDirAutoDetected)' == '' and Exists('E:\$(LibrarySteamGamePath)')">E:\$(LibrarySteamGamePath)</GameDirAutoDetected>
+    <GameDirAutoDetected Condition="'$(GameDir)' == '' and '$(GameDirAutoDetected)' == '' and Exists('F:\$(DefaultSteamGamePath)')">F:\$(DefaultSteamGamePath)</GameDirAutoDetected>
+    <GameDirAutoDetected Condition="'$(GameDir)' == '' and '$(GameDirAutoDetected)' == '' and Exists('F:\$(LibrarySteamGamePath)')">F:\$(LibrarySteamGamePath)</GameDirAutoDetected>
+    <GameDirAutoDetected Condition="'$(GameDir)' == '' and '$(GameDirAutoDetected)' == '' and Exists('G:\$(DefaultSteamGamePath)')">G:\$(DefaultSteamGamePath)</GameDirAutoDetected>
+    <GameDirAutoDetected Condition="'$(GameDir)' == '' and '$(GameDirAutoDetected)' == '' and Exists('G:\$(LibrarySteamGamePath)')">G:\$(LibrarySteamGamePath)</GameDirAutoDetected>
+    <GameDirAutoDetected Condition="'$(GameDir)' == '' and '$(GameDirAutoDetected)' == '' and Exists('H:\$(DefaultSteamGamePath)')">H:\$(DefaultSteamGamePath)</GameDirAutoDetected>
+    <GameDirAutoDetected Condition="'$(GameDir)' == '' and '$(GameDirAutoDetected)' == '' and Exists('H:\$(LibrarySteamGamePath)')">H:\$(LibrarySteamGamePath)</GameDirAutoDetected>
+    <GameDirAutoDetected Condition="'$(GameDir)' == '' and '$(GameDirAutoDetected)' == '' and Exists('I:\$(DefaultSteamGamePath)')">I:\$(DefaultSteamGamePath)</GameDirAutoDetected>
+    <GameDirAutoDetected Condition="'$(GameDir)' == '' and '$(GameDirAutoDetected)' == '' and Exists('I:\$(LibrarySteamGamePath)')">I:\$(LibrarySteamGamePath)</GameDirAutoDetected>
+    <GameDirAutoDetected Condition="'$(GameDir)' == '' and '$(GameDirAutoDetected)' == '' and Exists('J:\$(DefaultSteamGamePath)')">J:\$(DefaultSteamGamePath)</GameDirAutoDetected>
+    <GameDirAutoDetected Condition="'$(GameDir)' == '' and '$(GameDirAutoDetected)' == '' and Exists('J:\$(LibrarySteamGamePath)')">J:\$(LibrarySteamGamePath)</GameDirAutoDetected>
+    <GameDirAutoDetected Condition="'$(GameDir)' == '' and '$(GameDirAutoDetected)' == '' and Exists('K:\$(DefaultSteamGamePath)')">K:\$(DefaultSteamGamePath)</GameDirAutoDetected>
+    <GameDirAutoDetected Condition="'$(GameDir)' == '' and '$(GameDirAutoDetected)' == '' and Exists('K:\$(LibrarySteamGamePath)')">K:\$(LibrarySteamGamePath)</GameDirAutoDetected>
+    <GameDirAutoDetected Condition="'$(GameDir)' == '' and '$(GameDirAutoDetected)' == '' and Exists('L:\$(DefaultSteamGamePath)')">L:\$(DefaultSteamGamePath)</GameDirAutoDetected>
+    <GameDirAutoDetected Condition="'$(GameDir)' == '' and '$(GameDirAutoDetected)' == '' and Exists('L:\$(LibrarySteamGamePath)')">L:\$(LibrarySteamGamePath)</GameDirAutoDetected>
+    <GameDirAutoDetected Condition="'$(GameDir)' == '' and '$(GameDirAutoDetected)' == '' and Exists('M:\$(DefaultSteamGamePath)')">M:\$(DefaultSteamGamePath)</GameDirAutoDetected>
+    <GameDirAutoDetected Condition="'$(GameDir)' == '' and '$(GameDirAutoDetected)' == '' and Exists('M:\$(LibrarySteamGamePath)')">M:\$(LibrarySteamGamePath)</GameDirAutoDetected>
+    <GameDirAutoDetected Condition="'$(GameDir)' == '' and '$(GameDirAutoDetected)' == '' and Exists('N:\$(DefaultSteamGamePath)')">N:\$(DefaultSteamGamePath)</GameDirAutoDetected>
+    <GameDirAutoDetected Condition="'$(GameDir)' == '' and '$(GameDirAutoDetected)' == '' and Exists('N:\$(LibrarySteamGamePath)')">N:\$(LibrarySteamGamePath)</GameDirAutoDetected>
+    <GameDirAutoDetected Condition="'$(GameDir)' == '' and '$(GameDirAutoDetected)' == '' and Exists('O:\$(DefaultSteamGamePath)')">O:\$(DefaultSteamGamePath)</GameDirAutoDetected>
+    <GameDirAutoDetected Condition="'$(GameDir)' == '' and '$(GameDirAutoDetected)' == '' and Exists('O:\$(LibrarySteamGamePath)')">O:\$(LibrarySteamGamePath)</GameDirAutoDetected>
+    <GameDirAutoDetected Condition="'$(GameDir)' == '' and '$(GameDirAutoDetected)' == '' and Exists('P:\$(DefaultSteamGamePath)')">P:\$(DefaultSteamGamePath)</GameDirAutoDetected>
+    <GameDirAutoDetected Condition="'$(GameDir)' == '' and '$(GameDirAutoDetected)' == '' and Exists('P:\$(LibrarySteamGamePath)')">P:\$(LibrarySteamGamePath)</GameDirAutoDetected>
+    <GameDirAutoDetected Condition="'$(GameDir)' == '' and '$(GameDirAutoDetected)' == '' and Exists('Q:\$(DefaultSteamGamePath)')">Q:\$(DefaultSteamGamePath)</GameDirAutoDetected>
+    <GameDirAutoDetected Condition="'$(GameDir)' == '' and '$(GameDirAutoDetected)' == '' and Exists('Q:\$(LibrarySteamGamePath)')">Q:\$(LibrarySteamGamePath)</GameDirAutoDetected>
+    <GameDirAutoDetected Condition="'$(GameDir)' == '' and '$(GameDirAutoDetected)' == '' and Exists('R:\$(DefaultSteamGamePath)')">R:\$(DefaultSteamGamePath)</GameDirAutoDetected>
+    <GameDirAutoDetected Condition="'$(GameDir)' == '' and '$(GameDirAutoDetected)' == '' and Exists('R:\$(LibrarySteamGamePath)')">R:\$(LibrarySteamGamePath)</GameDirAutoDetected>
+    <GameDirAutoDetected Condition="'$(GameDir)' == '' and '$(GameDirAutoDetected)' == '' and Exists('S:\$(DefaultSteamGamePath)')">S:\$(DefaultSteamGamePath)</GameDirAutoDetected>
+    <GameDirAutoDetected Condition="'$(GameDir)' == '' and '$(GameDirAutoDetected)' == '' and Exists('S:\$(LibrarySteamGamePath)')">S:\$(LibrarySteamGamePath)</GameDirAutoDetected>
+    <GameDirAutoDetected Condition="'$(GameDir)' == '' and '$(GameDirAutoDetected)' == '' and Exists('T:\$(DefaultSteamGamePath)')">T:\$(DefaultSteamGamePath)</GameDirAutoDetected>
+    <GameDirAutoDetected Condition="'$(GameDir)' == '' and '$(GameDirAutoDetected)' == '' and Exists('T:\$(LibrarySteamGamePath)')">T:\$(LibrarySteamGamePath)</GameDirAutoDetected>
+    <GameDirAutoDetected Condition="'$(GameDir)' == '' and '$(GameDirAutoDetected)' == '' and Exists('U:\$(DefaultSteamGamePath)')">U:\$(DefaultSteamGamePath)</GameDirAutoDetected>
+    <GameDirAutoDetected Condition="'$(GameDir)' == '' and '$(GameDirAutoDetected)' == '' and Exists('U:\$(LibrarySteamGamePath)')">U:\$(LibrarySteamGamePath)</GameDirAutoDetected>
+    <GameDirAutoDetected Condition="'$(GameDir)' == '' and '$(GameDirAutoDetected)' == '' and Exists('V:\$(DefaultSteamGamePath)')">V:\$(DefaultSteamGamePath)</GameDirAutoDetected>
+    <GameDirAutoDetected Condition="'$(GameDir)' == '' and '$(GameDirAutoDetected)' == '' and Exists('V:\$(LibrarySteamGamePath)')">V:\$(LibrarySteamGamePath)</GameDirAutoDetected>
+    <GameDirAutoDetected Condition="'$(GameDir)' == '' and '$(GameDirAutoDetected)' == '' and Exists('W:\$(DefaultSteamGamePath)')">W:\$(DefaultSteamGamePath)</GameDirAutoDetected>
+    <GameDirAutoDetected Condition="'$(GameDir)' == '' and '$(GameDirAutoDetected)' == '' and Exists('W:\$(LibrarySteamGamePath)')">W:\$(LibrarySteamGamePath)</GameDirAutoDetected>
+    <GameDirAutoDetected Condition="'$(GameDir)' == '' and '$(GameDirAutoDetected)' == '' and Exists('X:\$(DefaultSteamGamePath)')">X:\$(DefaultSteamGamePath)</GameDirAutoDetected>
+    <GameDirAutoDetected Condition="'$(GameDir)' == '' and '$(GameDirAutoDetected)' == '' and Exists('X:\$(LibrarySteamGamePath)')">X:\$(LibrarySteamGamePath)</GameDirAutoDetected>
+    <GameDirAutoDetected Condition="'$(GameDir)' == '' and '$(GameDirAutoDetected)' == '' and Exists('Y:\$(DefaultSteamGamePath)')">Y:\$(DefaultSteamGamePath)</GameDirAutoDetected>
+    <GameDirAutoDetected Condition="'$(GameDir)' == '' and '$(GameDirAutoDetected)' == '' and Exists('Y:\$(LibrarySteamGamePath)')">Y:\$(LibrarySteamGamePath)</GameDirAutoDetected>
+    <GameDirAutoDetected Condition="'$(GameDir)' == '' and '$(GameDirAutoDetected)' == '' and Exists('Z:\$(DefaultSteamGamePath)')">Z:\$(DefaultSteamGamePath)</GameDirAutoDetected>
+    <GameDirAutoDetected Condition="'$(GameDir)' == '' and '$(GameDirAutoDetected)' == '' and Exists('Z:\$(LibrarySteamGamePath)')">Z:\$(LibrarySteamGamePath)</GameDirAutoDetected>
+
+    <GameDir Condition="'$(GameDir)' == '' and '$(GameDirAutoDetected)' != ''">$(GameDirAutoDetected)</GameDir>
+    <GameDir Condition="'$(GameDir)' == ''">C:\$(DefaultSteamGamePath)</GameDir>
+    <MelonLoaderDir Condition="'$(MelonLoaderDir)' == ''">$(GameDir)\MelonLoader</MelonLoaderDir>
   </PropertyGroup>
+
+  <Target Name="ValidateLocalGameReferences" BeforeTargets="ResolveReferences" Condition="'$(CI)' != 'true'">
+    <Error
+      Condition="!Exists('$(MelonLoaderDir)\net6\MelonLoader.dll')"
+      Text="Missing MelonLoader net6 assemblies at '$(MelonLoaderDir)\net6'. Set /p:GameDir='C:\path\to\Data Center' (or environment variable DATA_CENTER_GAME_DIR), then run the game once with MelonLoader installed." />
+    <Error
+      Condition="!Exists('$(MelonLoaderDir)\Il2CppAssemblies\Assembly-CSharp.dll')"
+      Text="Missing IL2CPP assemblies at '$(MelonLoaderDir)\Il2CppAssemblies'. Start the game once after installing MelonLoader so interop assemblies are generated." />
+  </Target>
 
   <ItemGroup Condition="Exists('$(MelonLoaderDir)\net6\MelonLoader.dll')">
     <Reference Include="0Harmony">
@@ -95,7 +160,7 @@
     <None Include=".github\workflows\dotnet-ci.yml" />
   </ItemGroup>
 
-  <ItemGroup>
+  <ItemGroup Condition="Exists('$(MelonLoaderDir)\net6\MelonLoader.dll')">
     <Reference Include="AsmResolver">
       <HintPath>$(MelonLoaderDir)\net6\AsmResolver.dll</HintPath>
     </Reference>

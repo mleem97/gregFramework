@@ -224,7 +224,7 @@
 - Status: `todo`
 - Priority: `P1`
 - Files:
-  - `README_MODDING.md`
+  - `.wiki/Modding-Guide.md`
   - `.wiki/Modding-Guide.md`
 - Tasks:
   - Add step-by-step object creation tutorial.

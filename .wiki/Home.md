@@ -30,7 +30,7 @@ Welcome to the official wiki for `FrikaModFramework`.
 
 - Repository: `https://github.com/mleem97/FrikaModFramework`
 - Rust bridge reference: `https://github.com/Joniii11/DataCenter-RustBridge`
-- Verified hook table: `HOOKS.md` (repo root)
+- Verified hook table: `.wiki/HOOKS.md`
 
 ## Wiki sync
 
