@@ -1,0 +1,33 @@
+name: Wiki Sync
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+on:
+  push:
+    branches: [ "master" ]
+    paths:
+      - ".wiki/**"
+      - "scripts/Sync-Wiki.ps1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync-wiki:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Sync .wiki to GitHub wiki repo
+        shell: pwsh
+        run: |
+          pwsh -ExecutionPolicy Bypass -File .\scripts\Sync-Wiki.ps1 `
+            -GitHubToken "${{ secrets.GITHUB_TOKEN }}" `
+            -GitHubActor "${{ github.actor }}"

@@ -1,0 +1,128 @@
+name: RustBridge Sync
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: Sync mode for the bridge import
+        required: true
+        default: staged
+        type: choice
+        options:
+          - report
+          - staged
+          - overwrite
+      useHostedRunner:
+        description: Use hosted windows runner (manual fallback)
+        required: false
+        type: boolean
+        default: false
+  schedule:
+    - cron: '21 4 * * 1'
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  sync-self-hosted:
+    runs-on:
+      - self-hosted
+      - windows
+      - x64
+    if: github.event_name != 'workflow_dispatch' || github.event.inputs.useHostedRunner != 'true'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run RustBridge sync script
+        shell: pwsh
+        run: |
+          $mode = "${{ github.event.inputs.mode }}"
+          if ([string]::IsNullOrWhiteSpace($mode)) {
+            $mode = 'staged'
+          }
+
+          pwsh -ExecutionPolicy Bypass -File .\scripts\Sync-RustBridge.ps1 -Mode $mode
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          branch: chore/rustbridge-sync
+          branch-suffix: timestamp
+          delete-branch: true
+          title: 'chore(rustbridge): staged upstream sync updates'
+          commit-message: 'chore(rustbridge): stage upstream sync updates'
+          body: |
+            ## RustBridge Sync
+
+            This PR is generated from `scripts/Sync-RustBridge.ps1` in safe sync mode.
+
+            - Existing files are **not overwritten** in `staged` mode.
+            - Review candidates are provided as `.upstream.cs` files in `.bridge-sync/staged/JoniMF`.
+            - Full import details are in `.bridge-sync/reports/rustbridge-sync-report.md`.
+
+            If direct replacement is required, run manual sync with:
+
+            ```powershell
+            pwsh -ExecutionPolicy Bypass -File .\scripts\Sync-RustBridge.ps1 -Mode overwrite -AllowOverwrite
+            ```
+          labels: |
+            automation
+            rustbridge
+            safe-sync
+          base: master
+
+  sync-hosted-fallback:
+    runs-on: windows-latest
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.useHostedRunner == 'true'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run RustBridge sync script
+        shell: pwsh
+        run: |
+          $mode = "${{ github.event.inputs.mode }}"
+          if ([string]::IsNullOrWhiteSpace($mode)) {
+            $mode = 'staged'
+          }
+
+          pwsh -ExecutionPolicy Bypass -File .\scripts\Sync-RustBridge.ps1 -Mode $mode
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          branch: chore/rustbridge-sync
+          branch-suffix: timestamp
+          delete-branch: true
+          title: 'chore(rustbridge): staged upstream sync updates'
+          commit-message: 'chore(rustbridge): stage upstream sync updates'
+          body: |
+            ## RustBridge Sync
+
+            This PR is generated from `scripts/Sync-RustBridge.ps1` in safe sync mode.
+
+            - Existing files are **not overwritten** in `staged` mode.
+            - Review candidates are provided as `.upstream.cs` files in `.bridge-sync/staged/JoniMF`.
+            - Full import details are in `.bridge-sync/reports/rustbridge-sync-report.md`.
+
+            If direct replacement is required, run manual sync with:
+
+            ```powershell
+            pwsh -ExecutionPolicy Bypass -File .\scripts\Sync-RustBridge.ps1 -Mode overwrite -AllowOverwrite
+            ```
+          labels: |
+            automation
+            rustbridge
+            safe-sync
+          base: master

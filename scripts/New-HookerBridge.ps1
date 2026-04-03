@@ -18,7 +18,7 @@ $stub = @"
 using System;
 using System.Collections.Generic;
 
-namespace DataCenterModLoader;
+namespace FrikaMF;
 
 public static class Hooker
 {

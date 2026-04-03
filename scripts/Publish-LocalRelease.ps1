@@ -194,22 +194,12 @@ function Publish-LocalRelease {
             if ($LASTEXITCODE -ne 0) {
                 throw "FrikaMF build failed with exit code $LASTEXITCODE"
             }
-
-            dotnet build .\HexLabelMod\HexLabelMod.csproj -c $Configuration -nologo
-            if ($LASTEXITCODE -ne 0) {
-                throw "HexLabelMod build failed with exit code $LASTEXITCODE"
-            }
         }
 
-        $frameworkDll = Join-Path $script:RepoRoot ("bin\$Configuration\net6.0\DataCenterModLoader.dll")
-        $hexDll = Join-Path $script:RepoRoot ("HexLabelMod\bin\$Configuration\net6.0\HexLabelMod.dll")
+        $frameworkDll = Join-Path $script:RepoRoot ("bin\$Configuration\net6.0\FrikaModdingFramework.dll")
 
         if (-not (Test-Path -LiteralPath $frameworkDll)) {
             throw "Missing framework DLL: $frameworkDll"
-        }
-
-        if (-not (Test-Path -LiteralPath $hexDll)) {
-            throw "Missing HexLabel DLL: $hexDll"
         }
 
         $releaseArtifactsDir = Join-Path $script:RepoRoot ("artifacts\release\$Tag")
@@ -225,7 +215,6 @@ function Publish-LocalRelease {
         $release = Get-OrCreateRelease -Owner $Owner -Repo $Repo -Tag $Tag -Name $ReleaseName -Body $ReleaseBody -Headers $headers
 
         Upload-ReleaseAsset -Release $release -FilePath $frameworkReleasePath -Headers $headers
-        Upload-ReleaseAsset -Release $release -FilePath $hexDll -Headers $headers
 
         Write-Host "[Release] Uploaded assets to https://github.com/$Owner/$Repo/releases/tag/$Tag"
     }

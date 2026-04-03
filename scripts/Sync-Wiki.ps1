@@ -9,6 +9,12 @@ param(
     [string]$CommitMessage = 'docs(wiki): sync wiki content from repository .wiki folder',
 
     [Parameter()]
+    [string]$GitHubToken,
+
+    [Parameter()]
+    [string]$GitHubActor,
+
+    [Parameter()]
     [switch]$SkipPush
 )
 
@@ -37,6 +43,17 @@ if ($null -eq $gitCmd) {
     throw 'git is required but was not found in PATH.'
 }
 
+$cloneUrl = $WikiRepoUrl
+if (-not [string]::IsNullOrWhiteSpace($GitHubToken)) {
+    if ($WikiRepoUrl -notmatch '^https://') {
+        throw 'GitHubToken auth currently requires an https WikiRepoUrl.'
+    }
+
+    $tokenUser = if (-not [string]::IsNullOrWhiteSpace($GitHubActor)) { $GitHubActor } else { 'x-access-token' }
+    $encodedToken = [System.Uri]::EscapeDataString($GitHubToken)
+    $cloneUrl = $WikiRepoUrl -replace '^https://', ("https://$tokenUser:$encodedToken@")
+}
+
 $tempRoot = Join-Path ([System.IO.Path]::GetTempPath()) ('FrikaWikiSync_' + [guid]::NewGuid().ToString('N'))
 $targetPath = Join-Path $tempRoot 'wiki'
 
@@ -44,7 +61,7 @@ try {
     New-Item -ItemType Directory -Path $tempRoot -Force | Out-Null
 
     Write-Host "[WikiSync] Cloning wiki repository: $WikiRepoUrl"
-    & git clone $WikiRepoUrl $targetPath
+    & git clone $cloneUrl $targetPath
     if ($LASTEXITCODE -ne 0) {
         throw "Failed to clone wiki repository: $WikiRepoUrl"
     }

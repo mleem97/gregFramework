@@ -138,26 +138,63 @@ function Update-Changelog {
     $previousTag = "v$PreviousVersion"
 
     $entry = @"
-## [$NewVersion](https://github.com/mleem97/FrikaModFramework/compare/$previousTag...$newTag) ($today)
+## [$NewVersion] - $today
 
-### Changes
+### Changed
 
-* $Summary
+- $Summary
 
 "@
 
     $changelog = Get-Content -LiteralPath $script:ChangelogFile -Raw -ErrorAction Stop
-    $headerPattern = '(?s)^(# Changelog\r?\n\r?\n<!-- markdownlint-disable MD024 -->\r?\n\r?\n)'
     if ($changelog -match [regex]::Escape("## [$NewVersion]")) {
         Write-Host "[ReleaseMeta] CHANGELOG already contains version $NewVersion. Skipping entry creation."
         return
     }
 
-    if (-not [regex]::IsMatch($changelog, $headerPattern)) {
-        throw 'CHANGELOG header format changed and could not be patched safely.'
+    $requiredHeader = @"
+# Changelog
+
+<!-- markdownlint-disable MD024 -->
+
+All notable changes to this project are documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
+This project uses framework release versions in `XX.XX.XXXX` format.
+
+## [Unreleased]
+
+### Changed
+
+- Initial unreleased section.
+
+"@
+
+    if ($changelog -notmatch '(?m)^## \[Unreleased\]\s*$') {
+        $changelog = $requiredHeader + $changelog.TrimStart()
     }
 
-    $updated = [regex]::Replace($changelog, $headerPattern, ('$1' + $entry), 1)
+    $releaseLinkLine = "[${NewVersion}]: https://github.com/mleem97/FrikaModFramework/compare/$previousTag...$newTag"
+    $unreleasedLinkLine = "[Unreleased]: https://github.com/mleem97/FrikaModFramework/compare/$newTag...HEAD"
+
+    $insertPattern = '(?s)(^## \[Unreleased\]\s*\r?\n(?:.*?\r?\n){0,30}?\r?\n)'
+    if (-not [regex]::IsMatch($changelog, $insertPattern)) {
+        throw 'Unable to find [Unreleased] section in CHANGELOG.md.'
+    }
+
+    $updated = [regex]::Replace($changelog, $insertPattern, ('$1' + "`r`n" + $entry), 1)
+
+    if ($updated -match '(?m)^\[Unreleased\]:') {
+        $updated = [regex]::Replace($updated, '(?m)^\[Unreleased\]:.*$', $unreleasedLinkLine, 1)
+    }
+    else {
+        $updated = $updated.TrimEnd() + "`r`n" + $unreleasedLinkLine + "`r`n"
+    }
+
+    if ($updated -notmatch [regex]::Escape($releaseLinkLine)) {
+        $updated = $updated.TrimEnd() + "`r`n" + $releaseLinkLine + "`r`n"
+    }
+
     Set-Content -LiteralPath $script:ChangelogFile -Value $updated -NoNewline -Encoding utf8
 }
 

@@ -9,13 +9,18 @@ on:
   pull_request:
     branches: [ "master" ]
   workflow_dispatch:
+    inputs:
+      useHostedRunner:
+        description: "Use hosted windows runner for build job (manual fallback)"
+        required: false
+        type: boolean
+        default: false
 
 permissions:
   contents: write
 
 jobs:
-  versioning-and-changelog:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+  changelog-keep-a-changelog-check:
     runs-on: ubuntu-latest
 
     steps:
@@ -24,17 +29,64 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Generate version and changelog (Conventional Commits)
-        uses: TriPSs/conventional-changelog-action@v5
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          preset: conventionalcommits
-          output-file: CHANGELOG.md
-          git-message: "chore(release): {version}"
-          tag-prefix: v
+      - name: Validate CHANGELOG format (Keep a Changelog)
+        shell: pwsh
+        run: |
+          $changelogPath = 'CHANGELOG.md'
+          if (-not (Test-Path -LiteralPath $changelogPath)) {
+            throw 'CHANGELOG.md is missing.'
+          }
 
-  build:
+          $content = Get-Content -LiteralPath $changelogPath -Raw -ErrorAction Stop
+
+          if ($content -notmatch '(?m)^# Changelog\s*$') {
+            throw 'Missing "# Changelog" header.'
+          }
+
+          if ($content -notmatch 'Keep a Changelog') {
+            throw 'Missing Keep a Changelog reference line.'
+          }
+
+          if ($content -notmatch '(?m)^## \[Unreleased\]\s*$') {
+            throw 'Missing "## [Unreleased]" section.'
+          }
+
+          if ($content -notmatch '(?m)^## \[[^\]]+\] - \d{4}-\d{2}-\d{2}\s*$') {
+            throw 'No release entries matching "## [version] - YYYY-MM-DD" were found.'
+          }
+
+          Write-Host 'Keep a Changelog validation passed.'
+
+  build-self-hosted:
+    runs-on:
+      - self-hosted
+      - windows
+      - x64
+    if: github.event_name != 'workflow_dispatch' || github.event.inputs.useHostedRunner != 'true'
+
+    strategy:
+      fail-fast: false
+      matrix:
+        configuration: [Debug, Prod]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 6.0.x
+
+      - name: Restore dependencies
+        run: dotnet restore FrikaMF.csproj
+
+      - name: Build (${{ matrix.configuration }})
+        run: dotnet build FrikaMF.csproj --configuration ${{ matrix.configuration }} --no-restore
+
+  build-hosted-fallback:
     runs-on: windows-latest
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.useHostedRunner == 'true'
 
     strategy:
       fail-fast: false

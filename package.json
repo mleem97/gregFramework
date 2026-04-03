@@ -7,6 +7,7 @@
     "release:prepare:medium": "pwsh -ExecutionPolicy Bypass -File .\\scripts\\Update-ReleaseMetadata.ps1 -Bump medium",
     "release:prepare:minor": "pwsh -ExecutionPolicy Bypass -File .\\scripts\\Update-ReleaseMetadata.ps1 -Bump minor",
     "release:publish": "pwsh -ExecutionPolicy Bypass -File .\\scripts\\Publish-LocalRelease.ps1",
-    "wiki:sync": "pwsh -ExecutionPolicy Bypass -File .\\scripts\\Sync-Wiki.ps1"
+    "wiki:sync": "pwsh -ExecutionPolicy Bypass -File .\\scripts\\Sync-Wiki.ps1",
+    "rustbridge:sync": "pwsh -ExecutionPolicy Bypass -File .\\scripts\\Sync-RustBridge.ps1 -Mode staged"
   }
 }

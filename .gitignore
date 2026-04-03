@@ -14,6 +14,7 @@
 *.rar
 *.7z
 *.zip
+_tmp/
 [Ii]l2[Cc]pp-[Uu]npack/
 il2cpp-unpack/
 AssetUnpack.md

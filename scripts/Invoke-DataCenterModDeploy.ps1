@@ -60,7 +60,7 @@ function Invoke-DataCenterModDeploy {
     [CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'Medium')]
     param(
         [Parameter()]
-        [string]$ProjectPath = (Join-Path $script:DeployScriptRoot "..\HexLabelMod\HexLabelMod.csproj"),
+        [string]$ProjectPath = (Join-Path $script:DeployScriptRoot "..\FrikaMF.csproj"),
 
         [Parameter()]
         [ValidateSet('Debug', 'Release')]
@@ -186,8 +186,8 @@ function Invoke-Deploy {
     [CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'Medium')]
     param(
         [Parameter(Position = 0)]
-        [ValidateSet('--1', '--2', '--all', '1', '2', 'all', 'Frika', 'Hex')]
-        [string]$Target = '--2',
+        [ValidateSet('--1', '--all', '1', 'all', 'Frika')]
+        [string]$Target = '--1',
 
         [Parameter()]
         [ValidateSet('Debug', 'Release')]
@@ -212,22 +212,11 @@ function Invoke-Deploy {
     $isAll = $Target -in @('--all', 'all')
     $useFrika = $Target -in @('--1', '1', 'Frika')
 
-    $projectPaths = if ($isAll) {
-        @(
-            (Join-Path $script:DeployScriptRoot '..\FrikaMF.csproj'),
-            (Join-Path $script:DeployScriptRoot '..\HexLabelMod\HexLabelMod.csproj')
-        )
-    }
-    elseif ($useFrika) {
-        @((Join-Path $script:DeployScriptRoot '..\FrikaMF.csproj'))
-    }
-    else {
-        @((Join-Path $script:DeployScriptRoot '..\HexLabelMod\HexLabelMod.csproj'))
-    }
+    $projectPaths = @((Join-Path $script:DeployScriptRoot '..\FrikaMF.csproj'))
 
     $projectPaths = @($projectPaths)
 
-    Write-Host "[Deploy] Target selected: $(if ($isAll) { 'All (--all)' } elseif ($useFrika) { 'Frika (--1)' } else { 'Hex (--2)' })"
+    Write-Host "[Deploy] Target selected: $(if ($isAll) { 'All (--all => FrikaMF)' } else { 'Frika (--1)' })"
 
     $failedTargets = @()
 
