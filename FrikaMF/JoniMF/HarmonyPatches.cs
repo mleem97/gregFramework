@@ -425,10 +425,65 @@ internal static class Patch_HRSystem_OnEnable
         {
             CrashLog.Log("HRSystem.OnEnable: injecting custom employees");
             CustomEmployeeManager.InjectIntoHRSystem(__instance);
+            bool handledByWeb = DC2WebBridge.TryApplyOrReplace(__instance.gameObject, "HRSystem");
+            if (!handledByWeb)
+                UiModernizer.TryModernize(__instance.gameObject, "HRSystem.OnEnable");
         }
         catch (Exception ex)
         {
             CrashLog.LogException("HRSystem.OnEnable custom employee injection", ex);
+        }
+    }
+}
+
+[HarmonyPatch(typeof(MainMenu), nameof(MainMenu.Start))]
+internal static class Patch_MainMenu_Start
+{
+    internal static void Postfix(MainMenu __instance)
+    {
+        try
+        {
+            bool handledByWeb = DC2WebBridge.TryApplyOrReplace(__instance.gameObject, "MainMenu");
+            if (!handledByWeb)
+                UiModernizer.TryModernize(__instance.gameObject, "MainMenu.Start");
+        }
+        catch (Exception ex)
+        {
+            CrashLog.LogException("MainMenu.Start ui modernize", ex);
+        }
+    }
+}
+
+[HarmonyPatch(typeof(MainMenu), nameof(MainMenu.Settings))]
+internal static class Patch_MainMenu_Settings
+{
+    internal static void Postfix(MainMenu __instance)
+    {
+        try
+        {
+            ModSettingsMenuBridge.OnSettingsOpened(__instance);
+        }
+        catch (Exception ex)
+        {
+            CrashLog.LogException("MainMenu.Settings mod menu", ex);
+        }
+    }
+}
+
+[HarmonyPatch(typeof(ComputerShop), nameof(ComputerShop.InteractOnClick))]
+internal static class Patch_ComputerShop_InteractOnClick
+{
+    internal static void Postfix(ComputerShop __instance)
+    {
+        try
+        {
+            bool handledByWeb = DC2WebBridge.TryApplyOrReplace(__instance.gameObject, "ComputerShop");
+            if (!handledByWeb)
+                UiModernizer.TryModernize(__instance.gameObject, "ComputerShop.InteractOnClick");
+        }
+        catch (Exception ex)
+        {
+            CrashLog.LogException("ComputerShop.InteractOnClick ui modernize", ex);
         }
     }
 }

@@ -73,6 +73,31 @@ Für C-ABI Datenstrukturen nur blittable Felder verwenden (z. B. `int`, `float`,
 - Coroutine-Compiler-Typen (`d##`/Iterator-State): ebenfalls instabil.
 - Prefix bei mutierenden Methoden kann Seiteneffekte blockieren; Postfix oft sicherer.
 
+## DC2WEB Contributor-Hinweise
+
+Neue Komponenten:
+
+- `FrikaMF/JoniMF/DC2WebBridge.cs`
+- `FrikaMF/JoniMF/ModSettingsMenuBridge.cs`
+
+Hook-Fluss:
+
+- `MainMenu.Settings` öffnet Settings-Auswahl (Game vs Mod)
+- `MainMenu.Start`, `HRSystem.OnEnable`, `ComputerShop.InteractOnClick` triggern Web-/UI-Anwendung
+
+Erweiterungspunkte:
+
+- `IDc2WebFrameworkAdapter` für weitere Frameworks
+- `Dc2WebAppDescriptor` für komplexere App-Bundles
+- `Dc2WebImageAsset` für Asset-Pipelines (SVG-first)
+
+Aktuelle technische Grenze:
+
+- Kein eingebetteter Browser/DOM/JS-Engine-Laufzeitstack.
+- React/TS/JS laufen über Übersetzungsadapter auf Unity-UI-Profile.
+
+Details: [`Web UI Bridge (DC2WEB)`](Web-UI-Bridge)
+
 ## CI-Pipeline (warum Builds in CI anders sind)
 
 - CI läuft ohne lokale Spielinstallation.

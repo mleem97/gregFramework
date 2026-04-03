@@ -157,6 +157,26 @@ Bei IL2CPP-Interop-Assemblies sind viele Methoden nur **Stubs/Brücken**. Der ec
 - `FrikaMF/JoniMF/GameApi.cs`: API-Tabelle Richtung Rust
 - `FrikaMF/JoniMF/GameHooks.cs`: sichere Wrapper für Spielsicht
 
+## Web UI im Framework (DC2WEB)
+
+- Kern: `FrikaMF/JoniMF/DC2WebBridge.cs`
+- Menü-Integration: `FrikaMF/JoniMF/ModSettingsMenuBridge.cs`
+- Settings-Hook: `MainMenu.Settings` → Auswahl `Game Settings` / `Mod Settings`
+
+Unterstützte Quellen:
+
+- Basic: `HTML`, `CSS`
+- Styling-Frameworks: `TailwindCSS`, `SASS`/`SCSS`
+- Script-Styles: `JS`, `TS`
+- React-orientierte Quellen: `React JSX/TSX` (Adapter-Übersetzung)
+
+Unterstützte Bildtypen:
+
+- SVG (bevorzugt, zur Laufzeit rasterisiert)
+- PNG, JPG/JPEG, BMP, GIF, TGA
+
+Details: [`Web UI Bridge (DC2WEB)`](Web-UI-Bridge)
+
 ## Praxisregel: Prefix oder Postfix?
 
 - **Prefix**: wenn du Verhalten blockieren/überschreiben musst (`return false`).

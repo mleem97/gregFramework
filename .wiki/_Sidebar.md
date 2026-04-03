@@ -42,6 +42,8 @@
 - [HOOKS (Quelle der Wahrheit)](HOOKS)
 - [Setup](Setup)
 - [Architecture](Architecture)
+- [FFI Bridge Reference](FFI-Bridge-Reference)
+- [Web UI Bridge (DC2WEB)](Web-UI-Bridge)
 - [Modding Guide](Modding-Guide)
 - [Device Reference](Device-Reference)
 - [Asset Export](AssetExport)

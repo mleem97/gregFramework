@@ -139,6 +139,7 @@ public class Core : MelonMod
         {
             _ffiBridge?.OnSceneLoaded(sceneName);
             _mpBridge?.OnSceneLoaded(sceneName);
+            ModSettingsMenuBridge.OnSceneLoaded(sceneName);
 
             // Initialize extra technician hiring (safe to call multiple times)
             TechnicianHiring.Initialize();
@@ -184,6 +185,7 @@ public class Core : MelonMod
         try
         {
             _mpBridge?.DrawGUI();
+            ModSettingsMenuBridge.DrawGUI();
         }
         catch (Exception ex)
         {

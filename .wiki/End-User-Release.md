@@ -69,6 +69,15 @@ Data Center/
 3. Falls im Release erwähnt: alte Configs sichern/löschen.
 4. Spiel starten und Log prüfen.
 
+## Neues Modsettings-Menü
+
+Im Main Menu öffnet ein Klick auf `Settings` jetzt eine Auswahl:
+
+- `Game Settings` (normale Spiel-Einstellungen)
+- `Mod Settings` (FrikaMF Web/UI-Einstellungen)
+
+In `Mod Settings` kannst du steuern, ob die Framework-UI aktiv webbasiert gestylt wird (`DC2WEB`) oder beim bisherigen Modernizer bleibt.
+
 ## Deinstallation
 
 1. Spiel schließen.
