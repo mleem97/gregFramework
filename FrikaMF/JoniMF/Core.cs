@@ -2,6 +2,7 @@ using MelonLoader;
 using MelonLoader.Utils;
 using System;
 using System.IO;
+using System.Threading.Tasks;
 using HarmonyLib;
 using UnityEngine;
 
@@ -13,19 +14,28 @@ namespace DataCenterModLoader;
 // file-based crash logger, never throws
 public static class CrashLog
 {
+    private static string _frameworkDirectory;
     private static string _logPath;
+    private static string _errorLogPath;
     private static readonly object _lock = new();
 
     public static void Init(string gameRoot)
     {
         try
         {
-            _logPath = Path.Combine(gameRoot, "dc_modloader_debug.log");
+            _frameworkDirectory = Path.Combine(gameRoot, "FrikaFM");
+            Directory.CreateDirectory(_frameworkDirectory);
+
+            _logPath = Path.Combine(_frameworkDirectory, "frikafm-debug.log");
+            _errorLogPath = Path.Combine(_frameworkDirectory, "frikafm-errors.log");
+
             var header =
-                $"===== RustBridge Debug Log ====={Environment.NewLine}" +
+                $"===== FrikaMF Debug Log ====={Environment.NewLine}" +
                 $"Started: {DateTime.Now:yyyy-MM-dd HH:mm:ss.fff}{Environment.NewLine}" +
                 $"========================================={Environment.NewLine}";
+
             File.WriteAllText(_logPath, header);
+            File.AppendAllText(_errorLogPath, header);
         }
         catch { }
     }
@@ -51,7 +61,7 @@ public static class CrashLog
             if (_logPath == null) return;
             lock (_lock)
             {
-                File.AppendAllText(_logPath,
+                string exceptionBlock =
                     $"[{DateTime.Now:HH:mm:ss.fff}] EXCEPTION in {context}:{Environment.NewLine}" +
                     $"  Type: {ex.GetType().FullName}{Environment.NewLine}" +
                     $"  Message: {ex.Message}{Environment.NewLine}" +
@@ -60,10 +70,41 @@ public static class CrashLog
                         ? $"  InnerException: {ex.InnerException.GetType().FullName}: {ex.InnerException.Message}{Environment.NewLine}" +
                           $"  InnerStackTrace:{Environment.NewLine}{ex.InnerException.StackTrace}{Environment.NewLine}"
                         : "") +
-                    Environment.NewLine);
+                    Environment.NewLine;
+
+                File.AppendAllText(_logPath, exceptionBlock);
+
+                if (!string.IsNullOrEmpty(_errorLogPath))
+                    File.AppendAllText(_errorLogPath, exceptionBlock);
             }
         }
         catch { }
+    }
+
+    public static void LogError(string category, string message)
+    {
+        try
+        {
+            if (string.IsNullOrEmpty(_errorLogPath))
+                return;
+
+            lock (_lock)
+            {
+                string safeCategory = string.IsNullOrWhiteSpace(category) ? "general" : category.Trim();
+                File.AppendAllText(_errorLogPath,
+                    $"[{DateTime.Now:HH:mm:ss.fff}] ERROR [{safeCategory}] {message}{Environment.NewLine}");
+            }
+        }
+        catch { }
+    }
+
+    public static void LogModError(string modId, string message, Exception ex = null)
+    {
+        string safeModId = string.IsNullOrWhiteSpace(modId) ? "unknown-mod" : modId.Trim();
+        LogError($"mod:{safeModId}", message ?? "(no message)");
+
+        if (ex != null)
+            LogException($"mod:{safeModId}", ex);
     }
 }
 
@@ -74,6 +115,7 @@ public class Core : MelonMod
     private FFIBridge _ffiBridge;
     private MultiplayerBridge _mpBridge;
     private string _modsPath;
+    private bool _globalExceptionHooksInstalled;
 
     public override void OnInitializeMelon()
     {
@@ -99,6 +141,8 @@ public class Core : MelonMod
 
             CrashLog.Log("step: creating FFIBridge");
             _ffiBridge = new FFIBridge(LoggerInstance, _modsPath);
+
+            InstallGlobalExceptionHooks();
 
             CrashLog.Log("step: initializing EventDispatcher");
             EventDispatcher.Initialize(_ffiBridge, LoggerInstance);
@@ -129,6 +173,7 @@ public class Core : MelonMod
         catch (Exception ex)
         {
             CrashLog.LogException("OnInitializeMelon", ex);
+            CrashLog.LogError("core", "Initialization failed. See exception details above.");
             throw;
         }
     }
@@ -199,6 +244,7 @@ public class Core : MelonMod
         {
             LoggerInstance.Msg("Shutting down modloader...");
             CrashLog.Log("step: OnApplicationQuit starting");
+            UninstallGlobalExceptionHooks();
             _mpBridge?.Shutdown();
             _ffiBridge?.Shutdown();
             _ffiBridge?.Dispose();
@@ -208,5 +254,46 @@ public class Core : MelonMod
         {
             CrashLog.LogException("OnApplicationQuit", ex);
         }
+    }
+
+    private void InstallGlobalExceptionHooks()
+    {
+        if (_globalExceptionHooksInstalled)
+            return;
+
+        AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
+        TaskScheduler.UnobservedTaskException += OnUnobservedTaskException;
+        _globalExceptionHooksInstalled = true;
+        CrashLog.Log("step: global exception hooks installed");
+    }
+
+    private void UninstallGlobalExceptionHooks()
+    {
+        if (!_globalExceptionHooksInstalled)
+            return;
+
+        AppDomain.CurrentDomain.UnhandledException -= OnUnhandledException;
+        TaskScheduler.UnobservedTaskException -= OnUnobservedTaskException;
+        _globalExceptionHooksInstalled = false;
+        CrashLog.Log("step: global exception hooks removed");
+    }
+
+    private static void OnUnhandledException(object sender, UnhandledExceptionEventArgs args)
+    {
+        if (args.ExceptionObject is Exception ex)
+        {
+            CrashLog.LogException("AppDomain.CurrentDomain.UnhandledException", ex);
+            CrashLog.LogError("runtime", "Unhandled exception captured from AppDomain.");
+            return;
+        }
+
+        CrashLog.LogError("runtime", "Unhandled non-Exception object captured from AppDomain.");
+    }
+
+    private static void OnUnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs args)
+    {
+        CrashLog.LogException("TaskScheduler.UnobservedTaskException", args.Exception);
+        CrashLog.LogError("runtime", "Unobserved task exception captured.");
+        args.SetObserved();
     }
 }
