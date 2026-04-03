@@ -1,27 +1,33 @@
-# Changelog
+## [0.2.0](https://github.com/mleem97/FrikaModFramework/compare/v0.1.5...v0.2.0) (2026-04-03)
 
-<!-- markdownlint-disable MD024 -->
-
-## [00.01.0006](https://github.com/mleem97/FrikaModFramework/compare/v00.01.0005...v00.01.0006) (2026-04-03)
-
-### Changes
-
-* Automate release versioning, changelog updates, and artifact naming.
-
-## [0.1.5](https://github.com/mleem97/FrikaModFramework/compare/v0.1.4...v0.1.5) (2026-04-02)
 
 ### Features
 
-* **framework:** migrate active runtime bridge and hook/event layer into `JoniML` + `FrikaMF` structure
-* **events:** restore `EventDispatcher` and `EventIds` integration for runtime patch dispatch
+* **modding:** add StreamingAssets modpack scaffold and docs ([819c883](https://github.com/mleem97/FrikaModFramework/commit/819c883524c30145d94aabe439acdba01d517cd3))
+* **runtime:** migrate JoniMF bridge and automate hook installation ([0dc8f1b](https://github.com/mleem97/FrikaModFramework/commit/0dc8f1b7e94d6f1ba19066829c5773d9a7d3e352))
 
-### Documentation
 
-* **docs:** expand README, modding guide, and wiki with contribution, build, and hooks/events usage guidance
+### Bug Fixes
 
-### Build System
+* **build:** exclude exported il2cpp unpack sources from compile ([effce94](https://github.com/mleem97/FrikaModFramework/commit/effce942a840d3822abfc3a8025541470a1e4b99))
 
-* **release:** switch to local DLL upload flow for GitHub releases (game-dependent refs stay local)
+## [0.1.5](https://github.com/mleem97/FrikaModFramework/compare/v0.1.4...v0.1.5) (2026-04-02)
+
+
+### Features
+
+* **branding:** complete Frikadelle framework rebrand across output and docs ([fc9373c](https://github.com/mleem97/FrikaModFramework/commit/fc9373c1ce19ecd58041fa6a7343d9487b7560ce))
+* **branding:** rename mod to Frikadelle Modding Framework ([43703ff](https://github.com/mleem97/FrikaModFramework/commit/43703ffd45452e032cc4db90e788658ef89d4901))
+* **framework:** add central mod event hub and publish core lifecycle events ([7b622c8](https://github.com/mleem97/FrikaModFramework/commit/7b622c8124ef77774d771fd7ae9d1e8ecefbca49))
+* **framework:** add gameplay index and runtime hook orchestration ([46f16d0](https://github.com/mleem97/FrikaModFramework/commit/46f16d0130128916169ea686dbb698e515c6a66d))
+* **framework:** auto-export full game signal snapshot on initialization ([e89ed0c](https://github.com/mleem97/FrikaModFramework/commit/e89ed0cf8679a4e3add5f35ba5098aeda9756c58))
+* **framework:** migrate solution layout and restore runtime bridge ([74520e4](https://github.com/mleem97/FrikaModFramework/commit/74520e4413cef0a9ecf93c538ca9211a8133be3e))
+* **framework:** split event categories and add IL2CPP event catalog service ([a1f4ac1](https://github.com/mleem97/FrikaModFramework/commit/a1f4ac1d2492fa3ca385f062f5fa1069face09ec))
+
+
+### Bug Fixes
+
+* **build:** correct DEBUG guards for release-safe framework behavior ([11acdf0](https://github.com/mleem97/FrikaModFramework/commit/11acdf0fed3f361d2d2027e093c228268abadb2b))
 
 ## [0.1.4](https://github.com/mleem97/FrikaModFramework/compare/v0.1.3...v0.1.4) (2026-04-01)
 
@@ -44,19 +50,4 @@
 ### Bug Fixes
 
 * **ui:** use Il2Cpp list for EventSystem raycast results ([4ee8935](https://github.com/mleem97/FrikaModFramework/commit/4ee893521aa6e2b9f761ce2c384b459b01276e04))
-
-## [0.1.1](https://github.com/mleem97/FrikaModFramework/compare/v0.1.0...v0.1.1) (2026-04-01)
-
-
-### Bug Fixes
-
-* **build:** remove duplicate CI compile include for Main.CI.cs ([7113607](https://github.com/mleem97/FrikaModFramework/commit/7113607d6c6ed83ecbc6620c8434d1bdc83619dc))
-
-## [0.1.0](https://github.com/mleem97/FrikaModFramework/compare/3b2b394e6151a389abb9006c36890f3ec97f6346...v0.1.0) (2026-04-01)
-
-
-### Features
-
-* add initial FrikaMF project and core mod code ([3b2b394](https://github.com/mleem97/FrikaModFramework/commit/3b2b394e6151a389abb9006c36890f3ec97f6346))
-* extend export structure and beta export functionality ([fb70085](https://github.com/mleem97/FrikaModFramework/commit/fb70085ed5933cd5e88b632922a4985304ca957f))
 
