@@ -31,6 +31,19 @@ Vollständiger Framework-Funktionskatalog inkl. Use-Case-Anleitungen: [`Framewor
 
 **Empfehlung:** Starte mit C#, wenn du neu im Stack bist. Nutze Rust, wenn du bewusst FFI-Kontrolle, klare ABI-Verträge oder native Performance brauchst.
 
+## Lua/Python/Web FFI (aktueller Status)
+
+- Rust FFI im Framework: **implementiert**.
+- Integrierter Lua-Host im Framework: **nicht implementiert**.
+- Integrierter Python-Host im Framework: **nicht implementiert**.
+- Generische HTTP/WebSocket-FFI-Transportschicht im Core: **nicht implementiert**.
+
+Empfohlener Weg:
+
+- Nutze Lua/Python als Sidecar-Prozess und verbinde ihn über deinen C#- oder Rust-Mod.
+- Verwende die vorhandenen Framework-Events als Input und die Framework-APIs als sicheren Output.
+- Trenne strikt zwischen Unity/IL2CPP-Zugriff (C#/Rust) und Script-/Analyse-Logik (Lua/Python).
+
 ## Architekturüberblick
 
 ```text
@@ -178,6 +191,12 @@ Unterstützte Bildtypen:
 - PNG, JPG/JPEG, BMP, GIF, TGA
 
 Details: [`Web UI Bridge (DC2WEB)`](Web-UI-Bridge)
+
+## Web FFI vs. Web UI (wichtig)
+
+- `DC2WebBridge` = UI-Übersetzung/Styling in Unity (kein allgemeiner Netzwerk-FFI-Bus).
+- Web FFI = eigene Transport-Ebene (z. B. lokales HTTP/WebSocket-Gateway), die du in deinem Mod implementierst.
+- Für sichere Steuerung: Eingaben validieren, rate-limiten, und nur über `GameAPITable`/`GameHooks` mutieren.
 
 ## Praxisregel: Prefix oder Postfix?
 

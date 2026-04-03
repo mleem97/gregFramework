@@ -10,6 +10,11 @@ Diese Seite beschreibt das neue Web-UI-System im Framework (`DC2WebBridge`) und 
 - Mod-Menü: `FrikaMF/JoniMF/ModSettingsMenuBridge.cs`
 - Hook-Integration: `FrikaMF/JoniMF/HarmonyPatches.cs`
 
+Abgrenzung:
+
+- `DC2WebBridge` ist eine UI-/Styling-Brücke innerhalb Unity.
+- `DC2WebBridge` ist keine generische HTTP/WebSocket-FFI-Transportebene.
+
 ## Was jetzt möglich ist
 
 - UI-Styling aus `HTML`/`CSS`
@@ -74,3 +79,11 @@ DC2WebBridge.RegisterWebApp(new Dc2WebAppDescriptor
 3. `Dc2WebImageAsset` für Icons/Grafiken nutzen (SVG-first).
 4. Für größere UIs: App-Descriptor (React/TS) plus klare Design-Tokens.
 5. Im Spiel über `Mod Settings` live prüfen und austarieren.
+
+## Relevante Querverweise
+
+- [Framework Features & Use Cases](Framework-Features-Use-Cases)
+- [FFI Bridge Reference](FFI-Bridge-Reference)
+- [Mod-Developer (Debug)](Mod-Developer-Debug)
+- [Contributors (Debug)](Contributors-Debug)
+- [Web UI Bridge (DC2WEB) EN](Web-UI-Bridge-en)

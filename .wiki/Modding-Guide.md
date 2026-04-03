@@ -138,3 +138,13 @@ Hook install errors are written to diagnostics (`hook-install-errors.txt`).
 ## Rust plugin reference
 
 - `https://github.com/Joniii11/DataCenter-RustBridge`
+
+## Related links
+
+- [Home](Home)
+- [Home EN](Home-en)
+- [Framework Features & Use Cases](Framework-Features-Use-Cases)
+- [FFI Bridge Reference](FFI-Bridge-Reference)
+- [Web UI Bridge (DC2WEB)](Web-UI-Bridge)
+- [Setup](Setup)
+- [Architecture](Architecture)

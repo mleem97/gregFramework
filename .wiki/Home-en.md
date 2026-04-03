@@ -32,4 +32,7 @@ FrikaMF is an unofficial, community-driven modding framework for the Unity IL2CP
 - [Changelog & Versions EN](Changelog-Versions-en)
 - [Known Incompatibilities EN](Known-Incompatibilities-en)
 - [License & Legal EN](License-Legal-en)
+- [Framework Features & Use Cases](Framework-Features-Use-Cases)
+- [FFI Bridge Reference](FFI-Bridge-Reference)
+- [Web UI Bridge EN (DC2WEB)](Web-UI-Bridge-en)
 - Hook source of truth: [`HOOKS.md`](HOOKS)

@@ -44,3 +44,12 @@ FrikaMF ist ein inoffizielles, community-getriebenes Modding-Framework für das 
 
 - Repository: `https://github.com/mleem97/FrikaModFramework`
 - Wiki-Remote: `https://github.com/mleem97/FrikaModFramework.wiki.git`
+
+## Technische Referenz (Direktlinks)
+
+- [Framework Features & Use Cases](Framework-Features-Use-Cases)
+- [FFI Bridge Reference](FFI-Bridge-Reference)
+- [Web UI Bridge (DC2WEB)](Web-UI-Bridge)
+- [Modding Guide](Modding-Guide)
+- [Architecture](Architecture)
+- [Setup](Setup)

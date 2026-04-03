@@ -104,6 +104,32 @@ Reference: [`Web-UI-Bridge`](Web-UI-Bridge)
 - Exports Assembly-CSharp method trigger lines for analysis.
 - Produces deterministic sorted output for downstream tooling.
 
+### K. Managed SDK facade (`ModigAPIs`)
+
+High-level managed API helpers are available under `FrikaMF/ModigAPIs/`:
+
+- `ModigGame`: access to raw singleton-backed game surfaces.
+- `PlayerApi`: economy/progression helpers (`money`, `xp`, `reputation`).
+- `NetworkApi`: network snapshots and break/repair helpers.
+- `TimeApi`: day/hour/time-multiplier helpers.
+- `UiApi`: notifications and message helpers.
+- `WorldApi`: world object discovery helpers.
+- `LocalisationApi`: language and text lookup helpers.
+
+### L. Lua/Python/Web FFI integration status
+
+Current implementation status in this repository:
+
+- Rust native FFI host: **implemented**.
+- Lua runtime host inside framework: **not implemented**.
+- Python runtime host inside framework: **not implemented**.
+- Generic HTTP/WebSocket FFI transport to external processes: **not implemented in core bridge**.
+
+What this means in practice:
+
+- Lua and Python are supported through a sidecar architecture (external runtime process) plus the existing C#/Rust bridge contracts.
+- Web-facing integration is currently implemented at UI level via `DC2WebBridge` (style/app translation), not as a generic web transport for FFI calls.
+
 ## 3) Use case guides (how to build each application flow)
 
 ## Use Case 1: Build a Rust event listener mod
@@ -215,6 +241,46 @@ DC2WebBridge.TryApplyOrReplace(rootGameObject, "HRSystem");
    - `runtimetrigger asm[Assembly-CSharp] type[...] method[...]`
 3. Feed catalog into Hooker install pipeline.
 
+## Use Case 11: Build a Lua sidecar integration
+
+1. Keep `FrikaMF` as the in-game host (C# + optional Rust DLL).
+2. Run Lua in an external process (for example LuaJIT/Lua runtime executable).
+3. Bridge data using one of these patterns:
+    - C# plugin/host wrappers in your mod DLL, or
+    - Rust mod that forwards normalized events/commands to Lua process.
+4. Use framework events (`mod_on_event` contract) as the stable inbound stream.
+5. Return commands to the game through existing API table operations (money/time/dispatch/etc.).
+
+Recommended scope:
+
+- Use Lua for rule engines, balancing scripts, and fast iteration logic.
+- Keep Unity object access and safety-critical calls in C# or Rust.
+
+## Use Case 12: Build a Python sidecar integration
+
+1. Keep game hooks in C# (`HarmonyPatches`) and normalized event forwarding in bridge.
+2. Start a Python worker process from your mod runtime or externally.
+3. Serialize event payloads as compact structs/JSON messages.
+4. Execute analytics/AI/business logic in Python.
+5. Send back compact command messages; apply them via `GameAPITable` or `GameHooks` wrappers.
+
+Recommended scope:
+
+- Use Python for analytics, policy evaluation, and model-backed decisions.
+- Keep frame-critical hot paths inside C#/Rust to avoid per-frame IPC overhead.
+
+## Use Case 13: Web FFI pattern (external control plane)
+
+1. Expose a local HTTP/WebSocket endpoint from your own mod component.
+2. Map incoming web requests to framework-safe actions.
+3. Enforce validation/rate limiting before mutating game state.
+4. Emit telemetry/events back to clients from `ModFramework.Events` and/or Rust callback stream.
+
+Important distinction:
+
+- `DC2WebBridge` is for UI adaptation/styling in Unity.
+- A generic Web FFI transport is a separate integration layer you add on top.
+
 ## 4) Player/Developer/Contributor quick routes
 
 - Players: start at [`End-User-Release`](End-User-Release)
@@ -224,6 +290,8 @@ DC2WebBridge.TryApplyOrReplace(rootGameObject, "HRSystem");
 ## 5) Known constraints (important)
 
 - React/TS/JS support is adapter-driven; no full browser DOM runtime is embedded.
+- No built-in Lua or Python runtime host exists in core framework at this time.
+- No built-in generic HTTP/WebSocket FFI transport is shipped in core bridge.
 - Steam lobby/event queue parts in API v7 are present but partly stubbed.
 - Event ABI is contract-driven; no live schema negotiation yet.
 
@@ -234,3 +302,14 @@ When adding/removing framework capability:
 1. Update this page in the same PR.
 2. Update audience pages if behavior changes user-facing workflows.
 3. Update `HOOKS.md` for hook-surface changes.
+
+## 7) Related links
+
+- [Home](Home)
+- [Home EN](Home-en)
+- [Modding Guide](Modding-Guide)
+- [Architecture](Architecture)
+- [Setup](Setup)
+- [FFI Bridge Reference](FFI-Bridge-Reference)
+- [Web UI Bridge (DC2WEB)](Web-UI-Bridge)
+- [Web UI Bridge (DC2WEB) EN](Web-UI-Bridge-en)

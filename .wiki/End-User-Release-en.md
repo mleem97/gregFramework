@@ -10,6 +10,8 @@ tags:
 
 This page is for players who do **not** develop mods and only install FrikaMF because another mod depends on it.
 
+For a complete overview of framework capabilities and setup flows, see [`Framework Features & Use Cases`](Framework-Features-Use-Cases).
+
 ## What you install
 
 - `FrikaModdingFramework.dll` is a runtime framework for `Data Center`.
@@ -41,6 +43,15 @@ This page is for players who do **not** develop mods and only install FrikaMF be
 1. Close game.
 2. Remove `FrikaModdingFramework.dll` from `Mods`.
 3. Remove dependent mods.
+
+## Related pages
+
+- [Home EN](Home-en)
+- [Mod-Developer (Debug) EN](Mod-Developer-Debug-en)
+- [Contributors (Debug) EN](Contributors-Debug-en)
+- [FFI Bridge Reference](FFI-Bridge-Reference)
+- [Web UI Bridge EN (DC2WEB)](Web-UI-Bridge-en)
+- [Known Incompatibilities EN](Known-Incompatibilities-en)
 
 ## Minimal context example (both language tracks)
 
