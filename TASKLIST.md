@@ -1,0 +1,233 @@
+# Store Object Mod Support Task List
+
+## How to Use This List
+
+- Status values: `todo`, `in-progress`, `blocked`, `done`
+- Priority values: `P0`, `P1`, `P2`
+- Each task includes a concrete definition of done.
+
+## Epic L0 — Library Intake Gate (P0, Recurring)
+
+## L0.1 Snapshot new export metadata
+
+- Status: `todo`
+- Priority: `P0`
+- Tasks:
+  - Record game version, export date/time, and source branch/tag.
+  - Record path(s) for exported libraries used by local build.
+- Definition of Done:
+  - Intake log entry exists and is linked in the current release notes draft.
+
+## L0.2 Validate compile item boundaries
+
+- Status: `todo`
+- Priority: `P0`
+- Area: `FrikaMF.csproj`
+- Tasks:
+  - Ensure generated decompiled sources under `References/il2cpp-unpack` are excluded from `Compile`.
+  - Ensure generated files are tracked as `None` only.
+- Definition of Done:
+  - `FrikaMF` build is not compiling generated unpack `.cs` files.
+
+## L0.3 Run compatibility build gate
+
+- Status: `todo`
+- Priority: `P0`
+- Tasks:
+  - Run `dotnet build .\\FrikaMF.csproj -c Release -p:TreatWarningsAsErrors=true -nologo`.
+  - Run `dotnet build .\\HexLabelMod\\HexLabelMod.csproj -c Release -nologo`.
+- Definition of Done:
+  - Both builds pass with current local exports.
+
+## L0.4 Revalidate hook surface after export
+
+- Status: `todo`
+- Priority: `P0`
+- Area: `JoniML/HarmonyPatches.cs`
+- Tasks:
+  - Verify targeted game methods still exist and signatures match.
+  - Log hook drift and required patch updates.
+- Definition of Done:
+  - Hook compatibility notes are written and actionable changes are listed.
+
+## L0.5 Revalidate event contracts
+
+- Status: `todo`
+- Priority: `P0`
+- Area: `JoniML/EventIds.cs`, `JoniML/EventDispatcher.cs`
+- Tasks:
+  - Confirm existing event IDs still map to valid game behavior.
+  - Identify candidate new events from changed gameplay methods.
+- Definition of Done:
+  - Event contract delta is documented for the release cycle.
+
+## Epic A — Capability Audit (P0)
+
+## A1. Locate store registration pipeline
+
+- Status: `todo`
+- Priority: `P0`
+- Area: `JoniML` / hook discovery
+- Tasks:
+  - Find `Assembly-CSharp` methods that populate store inventory/items.
+  - Identify when mod folder content is scanned/loaded.
+- Definition of Done:
+  - Method map documented with class + method names + call timing.
+
+## A2. Reverse-map object config schema
+
+- Status: `todo`
+- Priority: `P0`
+- Tasks:
+  - List supported config fields (name, price, model, icon, collider, etc.).
+  - Record field types and constraints.
+- Definition of Done:
+  - Schema table with required/optional fields and defaults.
+
+## A3. Identify mandatory asset set
+
+- Status: `todo`
+- Priority: `P0`
+- Tasks:
+  - Confirm required files (`model.obj`, `texture.png`, `icon.png`, etc.).
+  - Confirm path rules and case sensitivity.
+- Definition of Done:
+  - Minimal valid pack example is documented.
+
+## Epic B — MVP Implementation (P0)
+
+## B1. Add manifest loader service
+
+- Status: `todo`
+- Priority: `P0`
+- Area: `FrikaMF` / `JoniML`
+- Tasks:
+  - Implement loader to parse mod object manifests.
+  - Keep parse errors isolated per object pack.
+- Definition of Done:
+  - Loader returns valid objects + structured error list.
+
+## B2. Add strict validation layer
+
+- Status: `todo`
+- Priority: `P0`
+- Tasks:
+  - Validate mandatory fields.
+  - Validate numeric ranges and file existence.
+  - Validate unsupported keys with warnings.
+- Definition of Done:
+  - Invalid packs are rejected without runtime crash.
+
+## B3. Hook runtime store insertion
+
+- Status: `todo`
+- Priority: `P0`
+- Area: `JoniML/HarmonyPatches.cs`
+- Tasks:
+  - Patch store init/update phase.
+  - Inject validated custom objects into store list.
+- Definition of Done:
+  - At least 3 test objects appear and are purchasable.
+
+## B4. Add diagnostics and telemetry
+
+- Status: `todo`
+- Priority: `P0`
+- Tasks:
+  - Log load/validation/registration result per object.
+  - Export summary report to diagnostics folder.
+- Definition of Done:
+  - Diagnostics include success/failure reason per object pack.
+
+## Epic C — Authoring Experience (P1)
+
+## C1. Publish template pack
+
+- Status: `todo`
+- Priority: `P1`
+- Tasks:
+  - Add a `Mods` example pack with valid config + assets.
+  - Include comments for each config field.
+- Definition of Done:
+  - Template works in a clean local test setup.
+
+## C2. Add creator-facing docs
+
+- Status: `todo`
+- Priority: `P1`
+- Files:
+  - `README_MODDING.md`
+  - `.wiki/Modding-Guide.md`
+- Tasks:
+  - Add step-by-step object creation tutorial.
+  - Add troubleshooting for common errors.
+- Definition of Done:
+  - New contributor can follow docs and load one object.
+
+## C3. Add compatibility guidance
+
+- Status: `todo`
+- Priority: `P1`
+- Tasks:
+  - Document supported game version(s).
+  - Document expected behavior when schema changes.
+- Definition of Done:
+  - Compatibility section appears in docs and release notes.
+
+## Epic D — Advanced Features (P2)
+
+## D1. Category and filtering support
+
+- Status: `todo`
+- Priority: `P2`
+- Tasks:
+  - Add category metadata for modded objects.
+  - Integrate with store filters/sorting.
+- Definition of Done:
+  - Modded categories are visible and filterable.
+
+## D2. Localization support
+
+- Status: `todo`
+- Priority: `P2`
+- Tasks:
+  - Add localization key support for name/description.
+  - Add fallback behavior when translation missing.
+- Definition of Done:
+  - At least 2 languages tested with fallback.
+
+## D3. Dependency metadata
+
+- Status: `todo`
+- Priority: `P2`
+- Tasks:
+  - Allow packs to specify min framework/game versions.
+  - Warn and skip incompatible packs.
+- Definition of Done:
+  - Incompatible packs are reported and safely ignored.
+
+## QA Checklist (for each release)
+
+- Status: `todo`
+- Priority: `P0`
+- Checklist:
+  - `dotnet build .\FrikaMF.csproj -c Release -p:TreatWarningsAsErrors=true -nologo`
+  - `dotnet build .\HexLabelMod\HexLabelMod.csproj -c Release -nologo`
+  - Test valid object pack load
+  - Test invalid pack (missing model)
+  - Test invalid values (bad collider/scale)
+  - Verify store insertion and purchase flow
+  - Verify diagnostics output
+
+## Release Checklist (Local DLL Upload)
+
+- Status: `todo`
+- Priority: `P0`
+- Checklist:
+  - Build locally with release config
+  - Confirm DLL outputs exist
+  - Run local release upload:
+    - `. .\scripts\Publish-LocalRelease.ps1`
+    - `$env:GITHUB_TOKEN = "<token>"`
+    - `Publish-LocalRelease -Tag "vX.Y.Z"`
+  - Update changelog and compatibility notes
