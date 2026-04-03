@@ -6,6 +6,57 @@
 - Priority values: `P0`, `P1`, `P2`
 - Each task includes a concrete definition of done.
 
+## Epic S — Standalone Mod System Sync (P0)
+
+## S1 Ensure all standalone mods are framework-dependent
+
+- Status: `in-progress`
+- Priority: `P0`
+- Area: `StandaloneMods/*/Main.cs`, `StandaloneMods/*/CompatMain.cs`
+- Tasks:
+  - Verify runtime dependency checks against `FrikaModdingFramework`.
+  - Add integration check that dependency-missing mode deactivates safely.
+- Definition of Done:
+  - All standalone mods fail gracefully when framework DLL is missing.
+
+## S2 Mirror file-by-file status in wiki
+
+- Status: `in-progress`
+- Priority: `P0`
+- Area: `.wiki/StandaloneMods.md`, `.wiki/Repository-Status-2026-04-04.md`
+- Tasks:
+  - Keep per-file status table in sync with repository changes.
+  - Mark partial features and link next actions to roadmap.
+- Definition of Done:
+  - Wiki status pages match repository state for standalone mods and core bridge.
+
+## Epic R — Release Bundle Completeness (P0)
+
+## R1 Upload full modding bundle ZIP in release workflow
+
+- Status: `in-progress`
+- Priority: `P0`
+- Area: `.github/workflows/release-assets.yml`
+- Tasks:
+  - Package templates, UI templates, runtime UI payload, docs, and scripts into one ZIP.
+  - Upload ZIP to GitHub release along with DLL artifacts.
+- Definition of Done:
+  - Every release contains DLL assets and one complete modding bundle ZIP.
+
+## Epic C — Community Enablement (P1)
+
+## C0 Add issue and pull request templates
+
+- Status: `in-progress`
+- Priority: `P1`
+- Area: `.github/ISSUE_TEMPLATE/*`, `.github/pull_request_template.md`
+- Tasks:
+  - Add bug report template.
+  - Add feature request template.
+  - Add pull request checklist template.
+- Definition of Done:
+  - GitHub UI offers structured forms for bug reports, feature requests, and pull requests.
+
 ## Epic L0 — Library Intake Gate (P0, Recurring)
 
 ## L0.1 Snapshot new export metadata

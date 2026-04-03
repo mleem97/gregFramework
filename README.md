@@ -70,6 +70,17 @@ For development, architecture, hooks, workflows, and deep documentation, use the
 - Support: `SUPPORT.md`
 - Contribution process: `CONTRIBUTING.md`
 
+## Thanks to the community
+
+Special thanks to the Data Center community for constant feedback and inspiration.
+
+Highlighted contributors for feature inspiration:
+
+- `Joniii`
+- `Mochimus`
+- `EgoDeath`
+- `mane_ss`
+
 ## License
 
 See `LICENSE.txt` for full terms.

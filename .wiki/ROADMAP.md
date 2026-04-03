@@ -6,6 +6,17 @@
 
 This roadmap defines what is already possible in the framework today and what should be built next now that the game officially opened mod support for adding new store objects.
 
+## 2026-04-04 Repository Update
+
+Current repository state now includes:
+
+- standalone mod migration under `StandaloneMods/*`
+- framework dependency checks across standalone mod runtime entries
+- `FFM.Langserver.Compat` adapter discovery and diagnostics
+- release workflow for DLL publishing
+
+The next roadmap phases prioritize strict compatibility arbitration, complete modder templates, and release bundle completeness.
+
 ## Current State (Baseline)
 
 ## Already Possible (Verified in Repository)
@@ -189,11 +200,16 @@ Long-term maintainability and creator ecosystem support.
 - MVP insertion pipeline
 - Validation + crash-safe error handling
 - Recurring game-library intake gate on each new export
+- Standalone mod contract enforcement (`all standalone mods must require FrikaModdingFramework`)
+- Release ZIP bundle with templates + modder data
+- Community issue/PR template rollout
 
 ## P1 (Next)
 
 - Authoring docs/templates
 - Sample packs and troubleshooting
+- strict hook claim arbitration mode for `FFM.Langserver.Compat`
+- language adapter templates (`rust`, `python`, `lua`, `delphi`)
 
 ## P2 (Later)
 

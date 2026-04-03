@@ -94,11 +94,69 @@ jobs:
           "assetDir=$outDir" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
           Write-Host "Collected assets in $outDir"
 
+      - name: Build modding bundle zip
+        id: bundle
+        shell: pwsh
+        run: |
+          $bundleRoot = Join-Path $PWD ".release-bundle"
+          $bundleName = "FrikaModFramework-ModdingBundle-${{ steps.tag.outputs.tag }}.zip"
+          $bundleZip = Join-Path $PWD $bundleName
+
+          if (Test-Path $bundleRoot) { Remove-Item -Recurse -Force $bundleRoot }
+          if (Test-Path $bundleZip) { Remove-Item -Force $bundleZip }
+
+          New-Item -ItemType Directory -Path $bundleRoot -Force | Out-Null
+
+          $pathsToInclude = @(
+            ".\\Templates",
+            ".\\.wiki",
+            ".\\scripts\\New-StreamingAssetModPack.ps1",
+            ".\\scripts\\Invoke-DataCenterModDeploy.ps1",
+            ".\\StandaloneMods\\FMF.UIReplacementMod\\FMF.UIReplacementMod\\react-app.html",
+            ".\\StandaloneMods\\FMF.UIReplacementMod\\FMF.UIReplacementMod\\react-app.css",
+            ".\\StandaloneMods\\FMF.UIReplacementMod\\FMF.UIReplacementMod\\react-app.tsx"
+          )
+
+          foreach ($path in $pathsToInclude) {
+            if (-not (Test-Path $path)) {
+              throw "Missing required bundle input: $path"
+            }
+          }
+
+          Copy-Item ".\\Templates" -Destination (Join-Path $bundleRoot "Templates") -Recurse -Force
+          Copy-Item ".\\.wiki" -Destination (Join-Path $bundleRoot ".wiki") -Recurse -Force
+          New-Item -ItemType Directory -Path (Join-Path $bundleRoot "scripts") -Force | Out-Null
+          Copy-Item ".\\scripts\\New-StreamingAssetModPack.ps1" -Destination (Join-Path $bundleRoot "scripts\\New-StreamingAssetModPack.ps1") -Force
+          Copy-Item ".\\scripts\\Invoke-DataCenterModDeploy.ps1" -Destination (Join-Path $bundleRoot "scripts\\Invoke-DataCenterModDeploy.ps1") -Force
+
+          $uiRuntimeDir = Join-Path $bundleRoot "UI\\FMF.UIReplacementMod"
+          New-Item -ItemType Directory -Path $uiRuntimeDir -Force | Out-Null
+          Copy-Item ".\\StandaloneMods\\FMF.UIReplacementMod\\FMF.UIReplacementMod\\react-app.html" -Destination (Join-Path $uiRuntimeDir "react-app.html") -Force
+          Copy-Item ".\\StandaloneMods\\FMF.UIReplacementMod\\FMF.UIReplacementMod\\react-app.css" -Destination (Join-Path $uiRuntimeDir "react-app.css") -Force
+          Copy-Item ".\\StandaloneMods\\FMF.UIReplacementMod\\FMF.UIReplacementMod\\react-app.tsx" -Destination (Join-Path $uiRuntimeDir "react-app.tsx") -Force
+
+          $manifestPath = Join-Path $bundleRoot "bundle-manifest.txt"
+          Get-ChildItem -Path $bundleRoot -Recurse -File |
+            Sort-Object FullName |
+            ForEach-Object { $_.FullName.Replace($bundleRoot + "\\", "") } |
+            Set-Content -Path $manifestPath -Encoding utf8
+
+          Compress-Archive -Path (Join-Path $bundleRoot "*") -DestinationPath $bundleZip -CompressionLevel Optimal
+
+          "bundleZip=$bundleZip" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          Write-Host "Created modding bundle: $bundleZip"
+
       - name: Upload workflow artifact
         uses: actions/upload-artifact@v4
         with:
           name: release-dlls-${{ steps.tag.outputs.tag }}
           path: ${{ steps.assets.outputs.assetDir }}\*.dll
+
+      - name: Upload bundle artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-bundle-${{ steps.tag.outputs.tag }}
+          path: ${{ steps.bundle.outputs.bundleZip }}
 
       - name: Upload DLLs to GitHub Release
         uses: softprops/action-gh-release@v2
@@ -109,4 +167,5 @@ jobs:
             ${{ steps.assets.outputs.assetDir }}\FMF.UIReplacementMod.dll
             ${{ steps.assets.outputs.assetDir }}\FMF.HexLabelMod.dll
             ${{ steps.assets.outputs.assetDir }}\FMF.JoniMLCompatMod.dll
+            ${{ steps.bundle.outputs.bundleZip }}
           generate_release_notes: true

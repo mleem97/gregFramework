@@ -1,0 +1,25 @@
+name: Feature Request
+description: Suggest a new feature for FrikaModFramework.
+title: "feat: "
+labels:
+  - enhancement
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem Statement
+      description: What problem should be solved?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed Solution
+      description: Describe your preferred implementation.
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope
+      description: Mention impacted modules (`FrikaMF/JoniMF`, `StandaloneMods`, docs, etc.).

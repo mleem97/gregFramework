@@ -1,0 +1,13 @@
+{
+  "name": "fmf-ui-template",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "vite build",
+    "export:mod": "node ./scripts/export-to-mod.mjs"
+  },
+  "devDependencies": {
+    "vite": "^5.4.0"
+  }
+}
