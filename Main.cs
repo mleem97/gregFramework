@@ -10,7 +10,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 // Namespace AssetExporter muss zu deiner AssemblyInfo passen
-[assembly: MelonInfo(typeof(AssetExporter.Main), "Frikadelle Modding Framework", "1.0.3", "mleem97")]
+[assembly: MelonInfo(typeof(AssetExporter.Main), "Frikadelle Modding Framework", DataCenterModLoader.ReleaseVersion.Current, "mleem97")]
 [assembly: MelonGame(null, null)]
 
 namespace AssetExporter
@@ -36,8 +36,10 @@ namespace AssetExporter
 #else
             MelonLogger.Msg("Release-Modus aktiv: nur Game-Kommunikation/Framework-Basis, keine Dev-Exports/Hooks.");
 #endif
-            MelonLogger.Msg("Projekt: https://github.com/mleem97/DataCenter-AEMod");
-            ModFramework.Events.Publish(new ModInitializedEvent(DateTime.UtcNow, "1.0.3"));
+            MelonLogger.Msg("Projekt: https://github.com/mleem97/FrikaModFramework");
+            ModFramework.Events.Publish(new ModInitializedEvent(DateTime.UtcNow, DataCenterModLoader.ReleaseVersion.Current));
+
+            RunAutoHookCommandIfRequested();
 
 #if DEBUG
             ModFramework.Events.Subscribe<HookTriggeredEvent>(OnHookTriggered);
@@ -117,9 +119,14 @@ namespace AssetExporter
 
         private void InstallRuntimeHooks()
         {
+            InstallRuntimeHooks(250);
+        }
+
+        private void InstallRuntimeHooks(int maxHooks)
+        {
             try
             {
-                HookInstallResult result = runtimeHookService.ScanAndInstall(250);
+                HookInstallResult result = runtimeHookService.ScanAndInstall(maxHooks);
                 MelonLogger.Msg($"Hook-Scan abgeschlossen. Kandidaten={result.Scanned}, installiert={result.Installed}, fehlgeschlagen={result.Failed}");
 
                 if (result.Errors.Count > 0)
@@ -136,6 +143,93 @@ namespace AssetExporter
                 MelonLogger.Error($"Fehler beim Installieren der Runtime-Hooks: {ex.Message}");
                 ModFramework.Events.Publish(new ModErrorEvent(DateTime.UtcNow, "RuntimeHooks", ex.Message));
             }
+        }
+
+        private void InstallRuntimeHooksFromCatalog(string catalogPath, int maxHooks)
+        {
+            try
+            {
+                HookInstallResult result = runtimeHookService.InstallFromCatalog(catalogPath, maxHooks);
+                MelonLogger.Msg($"Hook-Catalog verarbeitet. Datei={catalogPath} Kandidaten={result.Scanned}, installiert={result.Installed}, fehlgeschlagen={result.Failed}");
+
+                if (result.Errors.Count > 0)
+                {
+                    string diagnosticsPath = Path.Combine(exportPath, "Diagnostics");
+                    Directory.CreateDirectory(diagnosticsPath);
+                    string errorFile = Path.Combine(diagnosticsPath, "hook-install-errors.txt");
+                    File.WriteAllLines(errorFile, result.Errors);
+                    MelonLogger.Warning($"Hook-Fehlerliste geschrieben: {errorFile}");
+                }
+            }
+            catch (Exception ex)
+            {
+                MelonLogger.Error($"Fehler beim Installieren der Catalog-Hooks: {ex.Message}");
+                ModFramework.Events.Publish(new ModErrorEvent(DateTime.UtcNow, "CatalogHooks", ex.Message));
+            }
+        }
+
+        private void RunAutoHookCommandIfRequested()
+        {
+            try
+            {
+                string[] args = Environment.GetCommandLineArgs();
+                bool autoScan = HasArg(args, "--ffm-hooks-auto");
+                bool installAll = HasArg(args, "--ffm-hooks-all");
+                string catalogPath = GetArgValue(args, "--ffm-hooks-catalog=");
+
+                if (!autoScan && string.IsNullOrWhiteSpace(catalogPath))
+                    return;
+
+                int defaultMax = installAll ? int.MaxValue : 250;
+                int maxHooks = GetIntArgValue(args, "--ffm-hooks-max=", defaultMax);
+
+                if (!string.IsNullOrWhiteSpace(catalogPath))
+                {
+                    MelonLogger.Msg($"AutoHook-Command erkannt (catalog). maxHooks={maxHooks}");
+                    InstallRuntimeHooksFromCatalog(catalogPath, maxHooks);
+                    return;
+                }
+
+                MelonLogger.Msg($"AutoHook-Command erkannt (scan). maxHooks={maxHooks}");
+                InstallRuntimeHooks(maxHooks);
+            }
+            catch (Exception ex)
+            {
+                MelonLogger.Warning($"AutoHook-Command konnte nicht ausgeführt werden: {ex.Message}");
+            }
+        }
+
+        private static bool HasArg(IEnumerable<string> args, string name)
+        {
+            foreach (string arg in args)
+            {
+                if (string.Equals(arg, name, StringComparison.OrdinalIgnoreCase))
+                    return true;
+            }
+
+            return false;
+        }
+
+        private static string GetArgValue(IEnumerable<string> args, string prefix)
+        {
+            foreach (string arg in args)
+            {
+                if (!arg.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
+                    continue;
+
+                return arg.Substring(prefix.Length).Trim('"');
+            }
+
+            return string.Empty;
+        }
+
+        private static int GetIntArgValue(IEnumerable<string> args, string prefix, int fallback)
+        {
+            string raw = GetArgValue(args, prefix);
+            if (string.IsNullOrWhiteSpace(raw))
+                return fallback;
+
+            return int.TryParse(raw, out int parsed) && parsed > 0 ? parsed : fallback;
         }
 
         private static void OnHookTriggered(HookTriggeredEvent evt)

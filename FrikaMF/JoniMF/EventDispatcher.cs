@@ -44,6 +44,13 @@ internal static class EventDispatcher
         public int Quantity;
     }
 
+    [StructLayout(LayoutKind.Sequential)]
+    private struct IntPairEvent
+    {
+        public int A;
+        public int B;
+    }
+
     public static void Initialize(FFIBridge ffiBridge, MelonLogger.Instance logger)
     {
         _ffiBridge = ffiBridge;
@@ -104,6 +111,8 @@ internal static class EventDispatcher
     public static void FireShopItemRemoved(int itemId) => Dispatch(EventIds.ShopItemRemoved, new IntEvent { Value = itemId });
     public static void FireCustomEmployeeHired(string employeeId) => DispatchString(EventIds.CustomEmployeeHired, employeeId);
     public static void FireCustomEmployeeFired(string employeeId) => DispatchString(EventIds.CustomEmployeeFired, employeeId);
+    public static void FireHookBridgeInstalled(int installed, int failed) => Dispatch(EventIds.HookBridgeInstalled, new IntPairEvent { A = installed, B = failed });
+    public static void FireHookBridgeTriggered(string methodKey) => DispatchString(EventIds.HookBridgeTriggered, methodKey);
 
     private static void Dispatch(uint eventId)
     {

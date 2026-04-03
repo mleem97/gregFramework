@@ -40,4 +40,7 @@ internal static class EventIds
     public const uint GameSaved = 70;
     public const uint GameLoaded = 71;
     public const uint GameAutoSaved = 72;
+
+    public const uint HookBridgeInstalled = 90;
+    public const uint HookBridgeTriggered = 91;
 }

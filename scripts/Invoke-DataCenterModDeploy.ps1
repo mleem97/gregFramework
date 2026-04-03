@@ -1,7 +1,6 @@
 Set-StrictMode -Version Latest
 
-$script:DeployScriptRoot =
-if (-not [string]::IsNullOrWhiteSpace($PSScriptRoot)) {
+$script:DeployScriptRoot = if (-not [string]::IsNullOrWhiteSpace($PSScriptRoot)) {
     $PSScriptRoot
 }
 elseif (-not [string]::IsNullOrWhiteSpace($PSCommandPath)) {

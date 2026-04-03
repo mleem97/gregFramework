@@ -5,7 +5,7 @@ using System.IO;
 using HarmonyLib;
 using UnityEngine;
 
-[assembly: MelonInfo(typeof(DataCenterModLoader.Core), "DataCenterModLoader", "0.1.0", "DataCenterModding")]
+[assembly: MelonInfo(typeof(DataCenterModLoader.Core), "DataCenterModLoader", DataCenterModLoader.ReleaseVersion.Current, "DataCenterModding")]
 [assembly: MelonGame("Waseku", "Data Center")]
 
 namespace DataCenterModLoader;
@@ -73,6 +73,7 @@ public class Core : MelonMod
 
     private FFIBridge _ffiBridge;
     private string _modsPath;
+    private string _streamingModsPath;
 
     public override void OnInitializeMelon()
     {
@@ -83,17 +84,28 @@ public class Core : MelonMod
             CrashLog.Init(MelonEnvironment.GameRootDirectory);
             CrashLog.Log("step: CrashLog initialized");
 
-            _modsPath = Path.Combine(MelonEnvironment.GameRootDirectory, "Mods", "native");
+            _modsPath = Path.Combine(MelonEnvironment.GameRootDirectory, "Mods", "RustMods");
+            _streamingModsPath = Path.Combine(MelonEnvironment.GameRootDirectory, "Data Center_Data", "StreamingAssets", "Mods");
 
             LoggerInstance.Msg("╔══════════════════════════════════════════╗");
-            LoggerInstance.Msg("║   Data Center Modloader v0.1.0          ║");
+            LoggerInstance.Msg($"║   Data Center Modloader v{ReleaseVersion.Current}    ║");
             LoggerInstance.Msg("║   Rust FFI Bridge Active                ║");
             LoggerInstance.Msg("╚══════════════════════════════════════════╝");
 
             if (!Directory.Exists(_modsPath))
             {
                 Directory.CreateDirectory(_modsPath);
-                LoggerInstance.Msg($"Created Mods/native directory: {_modsPath}");
+                LoggerInstance.Msg($"Created Mods/RustMods directory: {_modsPath}");
+            }
+
+            if (!Directory.Exists(_streamingModsPath))
+            {
+                Directory.CreateDirectory(_streamingModsPath);
+                LoggerInstance.Msg($"Created StreamingAssets/Mods directory: {_streamingModsPath}");
+            }
+            else
+            {
+                LoggerInstance.Msg($"Using StreamingAssets/Mods directory: {_streamingModsPath}");
             }
 
             CrashLog.Log("step: creating FFIBridge");
@@ -115,6 +127,8 @@ public class Core : MelonMod
                 LoggerInstance.Msg("Continuing without full event support.");
                 CrashLog.LogException("Harmony patching", ex);
             }
+
+            RunHookerCommandIfRequested();
 
             CrashLog.Log("step: loading all mods");
             _ffiBridge.LoadAllMods();
@@ -180,5 +194,84 @@ public class Core : MelonMod
         {
             CrashLog.LogException("OnApplicationQuit", ex);
         }
+    }
+
+    private void RunHookerCommandIfRequested()
+    {
+        try
+        {
+            string[] args = Environment.GetCommandLineArgs();
+            bool autoScan = HasArg(args, "--hooker-auto");
+            bool installAll = HasArg(args, "--hooker-all");
+            string catalogPath = GetArgValue(args, "--hooker-catalog=");
+
+            if (!autoScan && string.IsNullOrWhiteSpace(catalogPath))
+                return;
+
+            int defaultMax = installAll ? int.MaxValue : 500;
+            int maxHooks = GetIntArgValue(args, "--hooker-max=", defaultMax);
+            HookerInstallResult result;
+
+            if (!string.IsNullOrWhiteSpace(catalogPath))
+            {
+                LoggerInstance.Msg($"Hooker command: install from catalog ({catalogPath}), max={maxHooks}");
+                result = Hooker.InstallFromCatalog(catalogPath, maxHooks);
+            }
+            else
+            {
+                LoggerInstance.Msg($"Hooker command: scan install, max={maxHooks}");
+                result = Hooker.InstallByScan(maxHooks);
+            }
+
+            LoggerInstance.Msg($"Hooker result: scanned={result.Scanned}, installed={result.Installed}, failed={result.Failed}");
+
+            if (result.Errors.Count > 0)
+            {
+                string diagnosticsPath = Path.Combine(MelonEnvironment.GameRootDirectory, "Mods", "ExportedAssets", "Diagnostics");
+                Directory.CreateDirectory(diagnosticsPath);
+                string errorFile = Path.Combine(diagnosticsPath, "hooker-install-errors.txt");
+                File.WriteAllLines(errorFile, result.Errors);
+                LoggerInstance.Warning($"Hooker error log written: {errorFile}");
+            }
+        }
+        catch (Exception ex)
+        {
+            LoggerInstance.Warning($"Hooker command failed: {ex.Message}");
+            CrashLog.LogException("RunHookerCommandIfRequested", ex);
+        }
+    }
+
+    private static bool HasArg(string[] args, string value)
+    {
+        for (int i = 0; i < args.Length; i++)
+        {
+            if (string.Equals(args[i], value, StringComparison.OrdinalIgnoreCase))
+                return true;
+        }
+
+        return false;
+    }
+
+    private static string GetArgValue(string[] args, string prefix)
+    {
+        for (int i = 0; i < args.Length; i++)
+        {
+            string arg = args[i];
+            if (!arg.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
+                continue;
+
+            return arg.Substring(prefix.Length).Trim('"');
+        }
+
+        return string.Empty;
+    }
+
+    private static int GetIntArgValue(string[] args, string prefix, int fallback)
+    {
+        string raw = GetArgValue(args, prefix);
+        if (string.IsNullOrWhiteSpace(raw))
+            return fallback;
+
+        return int.TryParse(raw, out int value) && value > 0 ? value : fallback;
     }
 }

@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 
 namespace AssetExporter
 {
@@ -27,6 +29,9 @@ namespace AssetExporter
         private static readonly ConcurrentDictionary<string, byte> PatchedMethods = new ConcurrentDictionary<string, byte>();
 
         private readonly string harmonyId = "frikadelle.framework.runtimehooks";
+        private static readonly Regex CatalogLineRegex = new Regex(
+            "^runtime_trigger \\| asm=Assembly-CSharp \\| type=(?<type>[^|]+) \\| method=(?<method>.+)$",
+            RegexOptions.Compiled | RegexOptions.CultureInvariant);
 
         public HookScanResult ScanCandidates(int maxHooks)
         {
@@ -45,6 +50,29 @@ namespace AssetExporter
             var candidates = DiscoverCandidates(maxHooks).ToList();
             ModFramework.Events.Publish(new HookScanCompletedEvent(DateTime.UtcNow, candidates.Count));
 
+            return InstallCandidates(candidates);
+        }
+
+        public HookInstallResult InstallFromCatalog(string catalogPath, int maxHooks)
+        {
+            if (string.IsNullOrWhiteSpace(catalogPath))
+                return new HookInstallResult(0, 0, 0, new[] { "Catalog path is empty." });
+
+            if (!File.Exists(catalogPath))
+                return new HookInstallResult(0, 0, 0, new[] { $"Catalog file not found: {catalogPath}" });
+
+            var candidates = DiscoverFromCatalog(catalogPath, maxHooks).ToList();
+            ModFramework.Events.Publish(new HookScanCompletedEvent(DateTime.UtcNow, candidates.Count));
+
+            return InstallCandidates(candidates);
+        }
+
+        private HookInstallResult InstallCandidates(IReadOnlyList<MethodInfo> candidates)
+        {
+            int scanned = candidates?.Count ?? 0;
+            if (scanned == 0)
+                return new HookInstallResult(0, 0, 0, Array.Empty<string>());
+
             int installed = 0;
             int failed = 0;
             var errors = new List<string>();
@@ -52,7 +80,7 @@ namespace AssetExporter
             if (!TryGetHarmonyTypes(out var harmonyType, out var harmonyMethodType, out var reason))
             {
                 errors.Add(reason);
-                return new HookInstallResult(candidates.Count, installed, failed, errors);
+                return new HookInstallResult(scanned, installed, failed, errors);
             }
 
             object harmony = Activator.CreateInstance(harmonyType, harmonyId);
@@ -63,7 +91,7 @@ namespace AssetExporter
             if (patchMethod == null)
             {
                 errors.Add("Harmony patch method could not be resolved.");
-                return new HookInstallResult(candidates.Count, installed, failed, errors);
+                return new HookInstallResult(scanned, installed, failed, errors);
             }
 
             MethodInfo postfix = typeof(RuntimeHookService).GetMethod(nameof(GenericPostfix), BindingFlags.Public | BindingFlags.Static);
@@ -88,7 +116,101 @@ namespace AssetExporter
             }
 
             ModFramework.Events.Publish(new HookInstallCompletedEvent(DateTime.UtcNow, installed, failed));
-            return new HookInstallResult(candidates.Count, installed, failed, errors);
+            return new HookInstallResult(scanned, installed, failed, errors);
+        }
+
+        private static IEnumerable<MethodInfo> DiscoverFromCatalog(string catalogPath, int maxHooks)
+        {
+            int limit = maxHooks <= 0 ? int.MaxValue : maxHooks;
+            var results = new List<MethodInfo>();
+            var unique = new HashSet<string>(StringComparer.Ordinal);
+
+            Dictionary<string, Type> typeMap = BuildAssemblyTypeMap();
+
+            foreach (string line in File.ReadLines(catalogPath))
+            {
+                if (!TryParseCatalogLine(line, out string typeName, out string methodName))
+                    continue;
+
+                if (!typeMap.TryGetValue(typeName, out Type type) || type == null)
+                    continue;
+
+                MethodInfo[] methods;
+                try
+                {
+                    methods = type
+                        .GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static)
+                        .Where(m => string.Equals(m.Name, methodName, StringComparison.Ordinal))
+                        .ToArray();
+                }
+                catch
+                {
+                    continue;
+                }
+
+                foreach (MethodInfo method in methods)
+                {
+                    string key = BuildMethodKey(method);
+                    if (!unique.Add(key))
+                        continue;
+
+                    results.Add(method);
+                    if (results.Count >= limit)
+                        return results;
+                }
+            }
+
+            return results;
+        }
+
+        private static Dictionary<string, Type> BuildAssemblyTypeMap()
+        {
+            var map = new Dictionary<string, Type>(StringComparer.Ordinal);
+
+            foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                string asmName = assembly.GetName().Name ?? string.Empty;
+                if (!IsRelevantAssembly(asmName))
+                    continue;
+
+                Type[] types;
+                try
+                {
+                    types = assembly.GetTypes();
+                }
+                catch
+                {
+                    continue;
+                }
+
+                foreach (Type type in types)
+                {
+                    if (string.IsNullOrWhiteSpace(type.FullName))
+                        continue;
+
+                    map[type.FullName] = type;
+                }
+            }
+
+            return map;
+        }
+
+        private static bool TryParseCatalogLine(string line, out string typeName, out string methodName)
+        {
+            typeName = string.Empty;
+            methodName = string.Empty;
+
+            if (string.IsNullOrWhiteSpace(line))
+                return false;
+
+            Match match = CatalogLineRegex.Match(line);
+            if (!match.Success)
+                return false;
+
+            typeName = match.Groups["type"].Value.Trim();
+            methodName = match.Groups["method"].Value.Trim();
+
+            return !string.IsNullOrWhiteSpace(typeName) && !string.IsNullOrWhiteSpace(methodName);
         }
 
         public static void GenericPostfix(MethodBase __originalMethod)

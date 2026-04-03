@@ -78,14 +78,14 @@ public class FFIBridge : IDisposable
     {
         if (!Directory.Exists(_modsPath))
         {
-            _logger.Msg("No Mods/native/ directory found.");
+            _logger.Msg("No Mods/RustMods/ directory found.");
             return;
         }
 
         var dllFiles = Directory.GetFiles(_modsPath, "*.dll", SearchOption.AllDirectories);
         if (dllFiles.Length == 0)
         {
-            _logger.Msg("No native mod DLLs found in Mods/native/.");
+            _logger.Msg("No native mod DLLs found in Mods/RustMods/.");
             return;
         }
 
