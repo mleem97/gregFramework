@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Text.Json;
 using MelonLoader;
 using MelonLoader.Utils;
 using UnityEngine;
@@ -13,6 +15,7 @@ internal sealed class ReactUiRuntime
     private const string HtmlFileName = "react-app.html";
     private const string CssFileName = "react-app.css";
     private const string TsxFileName = "react-app.tsx";
+    private const string ScreenRegistryFileName = "react-screens.json";
 
     private readonly MelonLogger.Instance _logger;
 
@@ -21,6 +24,8 @@ internal sealed class ReactUiRuntime
     private MethodInfo _registerWebAppMethod;
     private MethodInfo _tryApplyOrReplaceMethod;
     private MethodInfo _resetAppliedStateMethod;
+    private Assembly _attachedAssembly;
+    private bool _bridgeAttachedLogged;
     private FileSystemWatcher _watcher;
     private bool _reloadRequested;
     private string _activeAssetDirectory = string.Empty;
@@ -28,6 +33,14 @@ internal sealed class ReactUiRuntime
     private string _html = string.Empty;
     private string _css = string.Empty;
     private string _tsx = string.Empty;
+    private List<ScreenRegistration> _screenRegistrations = BuildDefaultScreenRegistrations();
+
+    private sealed class ScreenRegistration
+    {
+        public string ScreenKey { get; set; } = string.Empty;
+        public bool ReplaceExistingUi { get; set; } = true;
+        public string Framework { get; set; } = "react-ts";
+    }
 
     public bool IsReady => _dc2WebBridgeType != null
                            && _descriptorType != null
@@ -62,6 +75,7 @@ internal sealed class ReactUiRuntime
         _html = SafeRead(htmlPath, DefaultHtml());
         _css = SafeRead(cssPath, DefaultCss());
         _tsx = SafeRead(tsxPath, DefaultTsx());
+        _screenRegistrations = LoadScreenRegistrations(dir);
 
         EnsureWatcher(dir);
     }
@@ -77,15 +91,14 @@ internal sealed class ReactUiRuntime
 
     public bool TryAttachBridge(bool logFailures)
     {
-        var fmfAssembly = AppDomain.CurrentDomain
-            .GetAssemblies();
+        var assemblies = AppDomain.CurrentDomain.GetAssemblies();
 
         Assembly loadedAssembly = null;
-        for (int index = 0; index < fmfAssembly.Length; index++)
+        for (int index = 0; index < assemblies.Length; index++)
         {
-            if (string.Equals(fmfAssembly[index].GetName().Name, "FrikaModdingFramework", StringComparison.OrdinalIgnoreCase))
+            if (assemblies[index].GetType("DataCenterModLoader.DC2WebBridge", throwOnError: false) != null)
             {
-                loadedAssembly = fmfAssembly[index];
+                loadedAssembly = assemblies[index];
                 break;
             }
         }
@@ -93,9 +106,12 @@ internal sealed class ReactUiRuntime
         if (loadedAssembly == null)
         {
             if (logFailures)
-                _logger.Warning("[FMF.UIReplacement] FrikaModdingFramework assembly not loaded yet.");
+                _logger.Warning("[FMF.UIReplacement] FrikaMF runtime bridge is not available yet.");
             return false;
         }
+
+        if (IsReady && ReferenceEquals(_attachedAssembly, loadedAssembly))
+            return true;
 
         _dc2WebBridgeType = loadedAssembly.GetType("DataCenterModLoader.DC2WebBridge", throwOnError: false);
         _descriptorType = loadedAssembly.GetType("DataCenterModLoader.Dc2WebAppDescriptor", throwOnError: false);
@@ -103,7 +119,7 @@ internal sealed class ReactUiRuntime
         if (_dc2WebBridgeType == null || _descriptorType == null)
         {
             if (logFailures)
-                _logger.Error("[FMF.UIReplacement] DC2Web bridge types are unavailable in FMF.");
+                _logger.Error("[FMF.UIReplacement] Required FrikaMF bridge types are unavailable.");
             return false;
         }
 
@@ -118,7 +134,15 @@ internal sealed class ReactUiRuntime
             return false;
         }
 
-        _logger.Msg("[FMF.UIReplacement] FMF DC2Web bridge attached.");
+        bool shouldLogAttach = !ReferenceEquals(_attachedAssembly, loadedAssembly) || !_bridgeAttachedLogged;
+        _attachedAssembly = loadedAssembly;
+
+        if (shouldLogAttach)
+        {
+            _logger.Msg("[FMF.UIReplacement] FMF DC2Web bridge attached.");
+            _bridgeAttachedLogged = true;
+        }
+
         return true;
     }
 
@@ -127,11 +151,17 @@ internal sealed class ReactUiRuntime
         if (!IsReady)
             return;
 
-        RegisterApp("MainMenuReact", true, "react-ts");
-        RegisterApp("MainMenuSettings", true, "react-ts");
-        RegisterApp("HRSystem", true, "react-ts");
-        RegisterApp("ComputerShop", true, "react-ts");
-        RegisterApp("GlobalCanvas", true, "react-ts");
+        for (int index = 0; index < _screenRegistrations.Count; index++)
+        {
+            var registration = _screenRegistrations[index];
+            if (registration == null || string.IsNullOrWhiteSpace(registration.ScreenKey))
+                continue;
+
+            RegisterApp(
+                registration.ScreenKey,
+                registration.ReplaceExistingUi,
+                string.IsNullOrWhiteSpace(registration.Framework) ? "react-ts" : registration.Framework);
+        }
     }
 
     public int ApplyToAllCanvases(bool forceReset)
@@ -275,6 +305,58 @@ internal sealed class ReactUiRuntime
         return "GlobalCanvas";
     }
 
+    private static List<ScreenRegistration> BuildDefaultScreenRegistrations()
+    {
+        return new List<ScreenRegistration>
+        {
+            new() { ScreenKey = "MainMenuReact", ReplaceExistingUi = true, Framework = "react-ts" },
+            new() { ScreenKey = "MainMenuSettings", ReplaceExistingUi = true, Framework = "react-ts" },
+            new() { ScreenKey = "HRSystem", ReplaceExistingUi = true, Framework = "react-ts" },
+            new() { ScreenKey = "ComputerShop", ReplaceExistingUi = true, Framework = "react-ts" },
+            new() { ScreenKey = "GlobalCanvas", ReplaceExistingUi = true, Framework = "react-ts" },
+        };
+    }
+
+    private List<ScreenRegistration> LoadScreenRegistrations(string assetDirectory)
+    {
+        var defaults = BuildDefaultScreenRegistrations();
+        string registryPath = Path.Combine(assetDirectory, ScreenRegistryFileName);
+
+        if (!File.Exists(registryPath))
+        {
+            TryWriteDefaultScreenRegistry(registryPath, defaults);
+            return defaults;
+        }
+
+        try
+        {
+            string raw = File.ReadAllText(registryPath);
+            var parsed = JsonSerializer.Deserialize<List<ScreenRegistration>>(raw);
+            if (parsed == null || parsed.Count == 0)
+                return defaults;
+
+            parsed.RemoveAll(item => item == null || string.IsNullOrWhiteSpace(item.ScreenKey));
+            return parsed.Count == 0 ? defaults : parsed;
+        }
+        catch (Exception ex)
+        {
+            _logger.Warning($"[FMF.UIReplacement] Failed to read {ScreenRegistryFileName}: {ex.Message}. Using defaults.");
+            return defaults;
+        }
+    }
+
+    private static void TryWriteDefaultScreenRegistry(string registryPath, List<ScreenRegistration> defaults)
+    {
+        try
+        {
+            string json = JsonSerializer.Serialize(defaults, new JsonSerializerOptions { WriteIndented = true });
+            File.WriteAllText(registryPath, json);
+        }
+        catch
+        {
+        }
+    }
+
     private static void SetField(object target, string fieldName, object value)
     {
         var field = target.GetType().GetField(fieldName, BindingFlags.Public | BindingFlags.Instance);
@@ -304,7 +386,7 @@ internal sealed class ReactUiRuntime
 
     private static string DefaultHtml()
     {
-        return "<div id='root'><h1>Frika Modern UI</h1><p>React-inspired animated replacement layer active.</p></div>";
+        return "<div id='root'><h1>Data Center — Start Menu</h1><p>Continue, New Game, Multiplayer, Settings, and Exit are available from the modern overlay.</p></div>";
     }
 
     private static string DefaultCss()
@@ -312,8 +394,12 @@ internal sealed class ReactUiRuntime
         return @":root{--panel-color:#0b1220f2;--text-color:#f8fafc;--secondary-text-color:#cbd5e1;--btn-normal:#1d4ed8;--btn-highlight:#2563eb;--btn-pressed:#1e40af;--accent:#22d3ee;}\n"
             + ".app-shell{animation:fade-in .35s ease-out;}\n"
             + ".app-card{backdrop-filter:blur(8px);border:1px solid rgba(56,189,248,.35);box-shadow:0 10px 30px rgba(2,6,23,.5);animation:slide-up .3s ease-out;}\n"
-            + ".btn-primary{transition:transform .12s ease,filter .12s ease;}\n"
-            + ".btn-primary:hover{transform:translateY(-1px);filter:brightness(1.08);}\n"
+            + ".menu-action-button{border:1px solid transparent;transition:transform .12s ease,filter .12s ease;}\n"
+            + ".menu-action-button:hover{transform:translateY(-1px);filter:brightness(1.08);}\n"
+            + ".menu-action-button:focus,.menu-action-button:focus-visible{outline:2px solid var(--accent);outline-offset:2px;box-shadow:0 0 0 3px #22d3ee44;}\n"
+            + ".menu-action-button--primary{background:var(--btn-normal);border-color:#60a5fa;color:#fff;}\n"
+            + ".menu-action-button--secondary{background:#1e293b;border-color:#64748b;color:#dbeafe;}\n"
+            + ".menu-action-button--danger{background:#7f1d1d;border-color:#f87171;color:#ffe4e6;}\n"
             + "@keyframes fade-in{from{opacity:0}to{opacity:1}}\n"
             + "@keyframes slide-up{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}";
     }
@@ -323,9 +409,15 @@ internal sealed class ReactUiRuntime
         return "const App = () => (\n"
             + "  <div className='app-shell'>\n"
             + "    <div className='app-card'>\n"
-            + "      <h1>Frika Modern React UI</h1>\n"
-            + "      <p>All major screens are replaced through FMF DC2WebBridge descriptors.</p>\n"
-            + "      <button className='btn-primary'>Open Dashboard</button>\n"
+            + "      <h1>Data Center - Start Menu</h1>\n"
+            + "      <p>Fully modernized main menu for FrikaMF.</p>\n"
+            + "      <div className='menu-grid'>\n"
+            + "        <button className='menu-action-button menu-action-button--primary' style={{ borderWidth: '1px', borderStyle: 'solid' }}>Continue</button>\n"
+            + "        <button className='menu-action-button menu-action-button--secondary' style={{ borderWidth: '1px', borderStyle: 'solid' }}>New Game</button>\n"
+            + "        <button className='menu-action-button menu-action-button--secondary' style={{ borderWidth: '1px', borderStyle: 'solid' }}>Multiplayer</button>\n"
+            + "        <button className='menu-action-button menu-action-button--secondary' style={{ borderWidth: '1px', borderStyle: 'solid' }}>Settings</button>\n"
+            + "        <button className='menu-action-button menu-action-button--danger' style={{ borderWidth: '1px', borderStyle: 'solid' }}>Exit</button>\n"
+            + "      </div>\n"
             + "    </div>\n"
             + "  </div>\n"
             + ");";
