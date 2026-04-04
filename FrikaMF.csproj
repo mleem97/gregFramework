@@ -16,7 +16,7 @@
     <FindDataCenterPathScript>$(MSBuildProjectDirectory)\scripts\Find-DataCenterPath.ps1</FindDataCenterPathScript>
   </PropertyGroup>
 
-  <Target Name="DetectGameDir" BeforeTargets="BeforeResolveReferences">
+  <Target Name="DetectGameDir" BeforeTargets="ResolveAssemblyReferences">
     <PropertyGroup>
       <GameDir Condition="'$(GameDir)' == '' and '$(DATA_CENTER_GAME_DIR)' != ''">$(DATA_CENTER_GAME_DIR)</GameDir>
     </PropertyGroup>
@@ -40,7 +40,7 @@
 
   </Target>
 
-  <Target Name="AddGameReferences" DependsOnTargets="DetectGameDir" BeforeTargets="BeforeResolveReferences">
+  <Target Name="AddGameReferences" DependsOnTargets="DetectGameDir" BeforeTargets="ResolveAssemblyReferences">
     <ItemGroup Condition="Exists('$(MelonLoaderDir)\net6\MelonLoader.dll')">
       <Reference Include="0Harmony">
         <HintPath>$(MelonLoaderDir)\net6\0Harmony.dll</HintPath>
@@ -92,6 +92,12 @@
       </Reference>
       <Reference Include="UnityEngine.AIModule">
         <HintPath>$(MelonLoaderDir)\Il2CppAssemblies\UnityEngine.AIModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.AnimationModule">
+        <HintPath>$(MelonLoaderDir)\Il2CppAssemblies\UnityEngine.AnimationModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.AssetBundleModule">
+        <HintPath>$(MelonLoaderDir)\Il2CppAssemblies\UnityEngine.AssetBundleModule.dll</HintPath>
       </Reference>
       <Reference Include="UnityEngine.UIModule">
         <HintPath>$(MelonLoaderDir)\Il2CppAssemblies\UnityEngine.UIModule.dll</HintPath>
@@ -234,7 +240,7 @@
     </ItemGroup>
   </Target>
 
-  <Target Name="ValidateLocalGameReferences" DependsOnTargets="DetectGameDir;AddGameReferences" BeforeTargets="BeforeResolveReferences" Condition="'$(CI)' != 'true'">
+  <Target Name="ValidateLocalGameReferences" DependsOnTargets="DetectGameDir;AddGameReferences" BeforeTargets="ResolveAssemblyReferences" Condition="'$(CI)' != 'true'">
     <Error
       Condition="!Exists('$(MelonLoaderDir)\net6\MelonLoader.dll')"
       Text="Missing MelonLoader net6 assemblies at '$(MelonLoaderDir)\net6'. Set /p:GameDir='C:\path\to\Data Center' (or environment variable DATA_CENTER_GAME_DIR), then run the game once with MelonLoader installed." />
@@ -245,6 +251,16 @@
 
 
   <ItemGroup>
+    <Compile Remove="Main.cs" />
+    <Compile Remove="Main.CI.cs" />
+    <Compile Remove="StandalonePlugins\**\*.cs" />
+    <Compile Remove="FrikaMF\GameSignalSnapshotService.cs" />
+    <Compile Remove="FrikaMF\Il2CppEventCatalogService.cs" />
+    <Compile Remove="FrikaMF\Il2CppGameplayIndexService.cs" />
+    <Compile Remove="FrikaMF\ModEventFramework.cs" />
+    <Compile Remove="FrikaMF\RuntimeHookService.cs" />
+    <Compile Remove="FrikaMF\Events\**\*.cs" />
+    <Compile Remove="FrikaMF\TestMods\FrameworkDependencyTest.cs" />
     <Compile Remove="JoniML\**\*.cs" />
     <Compile Remove="il2cpp-unpack\**\*.cs" />
     <Compile Remove="References\il2cpp-unpack\**\*.cs" />
@@ -252,6 +268,19 @@
     <Compile Remove=".bridge-sync\**\*.cs" />
     <Compile Remove="**\obj\**\*.cs" />
     <Compile Remove="**\bin\**\*.cs" />
+    <None Include="Main.cs" />
+    <None Include="Main.CI.cs" />
+    <None Include="StandalonePlugins\**\*.cs" />
+    <None Include="FrikaMF\GameSignalSnapshotService.cs" />
+    <None Include="FrikaMF\Il2CppEventCatalogService.cs" />
+    <None Include="FrikaMF\Il2CppGameplayIndexService.cs" />
+    <None Include="FrikaMF\ModEventFramework.cs" />
+    <None Include="FrikaMF\RuntimeHookService.cs" />
+    <None Include="FrikaMF\Events\**\*.cs" />
+    <None Include="FrikaMF\TestMods\FrameworkDependencyTest.cs" />
+    <None Include="FrikaMF\DC2WebBridge.cs" />
+    <None Include="FrikaMF\UiModernizer.cs" />
+    <None Include="FrikaMF\ModSettingsMenuBridge.cs" />
     <None Include="JoniML\**\*.cs" />
     <None Include="il2cpp-unpack\**\*.cs" />
     <None Include="References\il2cpp-unpack\**\*.cs" />
