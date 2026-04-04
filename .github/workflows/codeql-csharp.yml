@@ -1,0 +1,88 @@
+name: "CodeQL CSharp"
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: read
+  security-events: write
+
+jobs:
+  analyze:
+    runs-on: windows-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: csharp
+          build-mode: manual
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 6.0.x
+
+      - name: Restore and build available C# projects
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+
+          $projects = @(
+            'FrikaMF.csproj',
+            'References/il2cpp-unpack/Assembly-CSharp/Assembly-CSharp.csproj',
+            'StandaloneMods/FMF.UIReplacementMod/FMF.UIReplacementMod.csproj',
+            'StandaloneMods/FMF.JoniMLCompatMod/FMF.JoniMLCompatMod.csproj',
+            'StandaloneMods/FMF.HexLabelMod/FMF.HexLabelMod.csproj',
+            'StandaloneMods/FMF.GregifyEmployees/FMF.GregifyEmployees.csproj',
+            'StandaloneMods/FMF.ConsoleInputGuard/FMF.ConsoleInputGuard.csproj',
+            'Templates/StandaloneModTemplate/StandaloneModTemplate.csproj'
+          )
+
+          foreach ($project in $projects) {
+            if (-not (Test-Path -LiteralPath $project)) {
+              Write-Host "Skipping missing project: $project"
+              continue
+            }
+
+            Write-Host "Restoring $project"
+            dotnet restore $project --no-cache
+          }
+
+          foreach ($project in $projects) {
+            if (-not (Test-Path -LiteralPath $project)) {
+              continue
+            }
+
+            Write-Host "Building $project"
+            $buildArgs = @(
+              'build',
+              $project,
+              '--configuration', 'Release',
+              '--no-restore',
+              '/p:CI=true'
+            )
+
+            if ($project -like '*FMF.UIReplacementMod.csproj') {
+              $buildArgs += '/p:EnableReactBuildOnBuild=false'
+            }
+
+            try {
+              dotnet @buildArgs
+            }
+            catch {
+              Write-Warning "Build failed for $project. Continuing so CodeQL can analyze any successfully compiled projects."
+            }
+          }
+
+      - name: Perform CodeQL analysis
+        uses: github/codeql-action/analyze@v3

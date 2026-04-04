@@ -1,0 +1,25 @@
+{
+  "version": "0.2",
+  "language": "en",
+  "ignorePaths": [
+    "**/bin/**",
+    "**/obj/**",
+    "**/dist/**",
+    "**/node_modules/**",
+    "tree.md",
+    ".gitignore"
+  ],
+  "words": [
+    "Frika",
+    "FrikaMF",
+    "Modig",
+    "ModigAPI",
+    "ModigAPIs",
+    "Localisation",
+    "dotnet",
+    "Il2Cpp",
+    "MelonLoader",
+    "HarmonyX",
+    "WASEKU"
+  ]
+}
