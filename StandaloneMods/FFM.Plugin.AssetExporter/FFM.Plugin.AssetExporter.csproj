@@ -1,0 +1,116 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <PlatformTarget>x64</PlatformTarget>
+    <AssemblyName>FFM.Plugin.AssetExporter</AssemblyName>
+    <RootNamespace>AssetExporter</RootNamespace>
+    <RepositoryRoot>$(MSBuildThisFileDirectory)..\..\</RepositoryRoot>
+    <DefaultSteamGamePath>Program Files (x86)\Steam\steamapps\common\Data Center</DefaultSteamGamePath>
+    <FindDataCenterPathScript>$(RepositoryRoot)scripts\Find-DataCenterPath.ps1</FindDataCenterPathScript>
+  </PropertyGroup>
+
+  <Target Name="DetectGameDir" BeforeTargets="ResolveAssemblyReferences">
+    <PropertyGroup>
+      <GameDir Condition="'$(GameDir)' == '' and '$(DATA_CENTER_GAME_DIR)' != ''">$(DATA_CENTER_GAME_DIR)</GameDir>
+    </PropertyGroup>
+
+    <Exec
+      Condition="'$(GameDir)' == '' and Exists('$(FindDataCenterPathScript)')"
+      Command="pwsh -NoProfile -ExecutionPolicy Bypass -File &quot;$(FindDataCenterPathScript)&quot;"
+      ConsoleToMsBuild="true"
+      IgnoreExitCode="true">
+      <Output TaskParameter="ConsoleOutput" ItemName="_DetectedGameDirOutput" />
+    </Exec>
+
+    <PropertyGroup>
+      <GameDirAutoDetected Condition="'$(GameDir)' == '' and '@(_DetectedGameDirOutput)' != ''">@(_DetectedGameDirOutput->'%(Identity)')</GameDirAutoDetected>
+      <GameDir Condition="'$(GameDir)' == '' and '$(GameDirAutoDetected)' != ''">$(GameDirAutoDetected)</GameDir>
+      <GameDir Condition="'$(GameDir)' == ''">C:\$(DefaultSteamGamePath)</GameDir>
+      <MelonLoaderDir Condition="'$(MelonLoaderDir)' == ''">$(GameDir)\MelonLoader</MelonLoaderDir>
+    </PropertyGroup>
+  </Target>
+
+  <Target Name="ValidateLocalGameReferences" DependsOnTargets="DetectGameDir" BeforeTargets="ResolveAssemblyReferences" Condition="'$(CI)' != 'true'">
+    <Error
+      Condition="!Exists('$(MelonLoaderDir)\net6\MelonLoader.dll')"
+      Text="Missing MelonLoader net6 assemblies at '$(MelonLoaderDir)\net6'. Set /p:GameDir='C:\path\to\Data Center' (or DATA_CENTER_GAME_DIR), then run the game once with MelonLoader installed." />
+  </Target>
+
+  <Target Name="AddGameReferences" DependsOnTargets="DetectGameDir" BeforeTargets="ResolveAssemblyReferences">
+    <ItemGroup Condition="Exists('$(MelonLoaderDir)\net6\MelonLoader.dll')">
+      <Reference Include="MelonLoader">
+        <HintPath>$(MelonLoaderDir)\net6\MelonLoader.dll</HintPath>
+        <Private>false</Private>
+      </Reference>
+      <Reference Include="Il2CppInterop.Runtime">
+        <HintPath>$(MelonLoaderDir)\net6\Il2CppInterop.Runtime.dll</HintPath>
+        <Private>false</Private>
+      </Reference>
+      <Reference Include="Il2Cppmscorlib">
+        <HintPath>$(MelonLoaderDir)\Il2CppAssemblies\Il2Cppmscorlib.dll</HintPath>
+        <Private>false</Private>
+      </Reference>
+      <Reference Include="Il2CppSystem">
+        <HintPath>$(MelonLoaderDir)\Il2CppAssemblies\Il2CppSystem.dll</HintPath>
+        <Private>false</Private>
+      </Reference>
+      <Reference Include="UnityEngine">
+        <HintPath>$(MelonLoaderDir)\Il2CppAssemblies\UnityEngine.dll</HintPath>
+        <Private>false</Private>
+      </Reference>
+      <Reference Include="UnityEngine.CoreModule">
+        <HintPath>$(MelonLoaderDir)\Il2CppAssemblies\UnityEngine.CoreModule.dll</HintPath>
+        <Private>false</Private>
+      </Reference>
+      <Reference Include="UnityEngine.ImageConversionModule">
+        <HintPath>$(MelonLoaderDir)\Il2CppAssemblies\UnityEngine.ImageConversionModule.dll</HintPath>
+        <Private>false</Private>
+      </Reference>
+      <Reference Include="UnityEngine.IMGUIModule">
+        <HintPath>$(MelonLoaderDir)\Il2CppAssemblies\UnityEngine.IMGUIModule.dll</HintPath>
+        <Private>false</Private>
+      </Reference>
+      <Reference Include="UnityEngine.UI">
+        <HintPath>$(MelonLoaderDir)\Il2CppAssemblies\UnityEngine.UI.dll</HintPath>
+        <Private>false</Private>
+      </Reference>
+      <Reference Include="UnityEngine.UIModule">
+        <HintPath>$(MelonLoaderDir)\Il2CppAssemblies\UnityEngine.UIModule.dll</HintPath>
+        <Private>false</Private>
+      </Reference>
+      <Reference Include="Unity.InputSystem">
+        <HintPath>$(MelonLoaderDir)\Il2CppAssemblies\Unity.InputSystem.dll</HintPath>
+        <Private>false</Private>
+      </Reference>
+      <Reference Include="Unity.InputSystem.ForUI">
+        <HintPath>$(MelonLoaderDir)\Il2CppAssemblies\Unity.InputSystem.ForUI.dll</HintPath>
+        <Private>false</Private>
+      </Reference>
+    </ItemGroup>
+  </Target>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\FrikaMF.csproj" />
+
+    <Compile Include="..\..\Main.cs" Link="Main.cs" />
+    <Compile Include="..\..\Main.CI.cs" Link="Main.CI.cs" />
+
+    <Compile Include="..\..\FrikaMF\GameSignalSnapshotService.cs" Link="Services\GameSignalSnapshotService.cs" />
+    <Compile Include="..\..\FrikaMF\Il2CppEventCatalogService.cs" Link="Services\Il2CppEventCatalogService.cs" />
+    <Compile Include="..\..\FrikaMF\Il2CppGameplayIndexService.cs" Link="Services\Il2CppGameplayIndexService.cs" />
+    <Compile Include="..\..\FrikaMF\ModEventFramework.cs" Link="Framework\ModEventFramework.cs" />
+    <Compile Include="..\..\FrikaMF\RuntimeHookService.cs" Link="Services\RuntimeHookService.cs" />
+    <Compile Include="..\..\FrikaMF\TestMods\FrameworkDependencyTest.cs" Link="TestMods\FrameworkDependencyTest.cs" />
+
+    <Compile Include="..\..\FrikaMF\Events\ErrorEvents.cs" Link="Events\ErrorEvents.cs" />
+    <Compile Include="..\..\FrikaMF\Events\ExportEvents.cs" Link="Events\ExportEvents.cs" />
+    <Compile Include="..\..\FrikaMF\Events\HookEvents.cs" Link="Events\HookEvents.cs" />
+    <Compile Include="..\..\FrikaMF\Events\Il2CppCatalogEvents.cs" Link="Events\Il2CppCatalogEvents.cs" />
+    <Compile Include="..\..\FrikaMF\Events\IModEvent.cs" Link="Events\IModEvent.cs" />
+    <Compile Include="..\..\FrikaMF\Events\ModLifecycleEvents.cs" Link="Events\ModLifecycleEvents.cs" />
+    <Compile Include="..\..\FrikaMF\Events\ToggleEvents.cs" Link="Events\ToggleEvents.cs" />
+  </ItemGroup>
+</Project>
