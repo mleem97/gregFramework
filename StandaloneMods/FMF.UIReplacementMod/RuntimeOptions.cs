@@ -12,6 +12,8 @@ internal sealed class RuntimeOptions
     public string DiscordClientId { get; set; } = "123456789012345678";
     public int MaxPlayers { get; set; } = 16;
     public bool EnableLiveUiReload { get; set; } = true;
+    public bool EnableAutoRefreshPass { get; set; } = false;
+    public float AutoRefreshIntervalSeconds { get; set; } = 10f;
     public string PreferredUiRoot { get; set; } = "GameRoot/UI";
 
     public static RuntimeOptions LoadOrCreate(MelonLogger.Instance logger)
@@ -36,6 +38,7 @@ internal sealed class RuntimeOptions
                 return new RuntimeOptions();
 
             loaded.MaxPlayers = Math.Clamp(loaded.MaxPlayers, 2, 32);
+            loaded.AutoRefreshIntervalSeconds = Math.Clamp(loaded.AutoRefreshIntervalSeconds, 2f, 120f);
             return loaded;
         }
         catch (Exception ex)

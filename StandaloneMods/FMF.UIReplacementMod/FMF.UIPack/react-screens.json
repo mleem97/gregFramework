@@ -1,0 +1,27 @@
+[
+  {
+    "screenKey": "MainMenuReact",
+    "replaceExistingUi": true,
+    "framework": "react-ts"
+  },
+  {
+    "screenKey": "MainMenuSettings",
+    "replaceExistingUi": true,
+    "framework": "react-ts"
+  },
+  {
+    "screenKey": "HRSystem",
+    "replaceExistingUi": true,
+    "framework": "react-ts"
+  },
+  {
+    "screenKey": "ComputerShop",
+    "replaceExistingUi": true,
+    "framework": "react-ts"
+  },
+  {
+    "screenKey": "GlobalCanvas",
+    "replaceExistingUi": true,
+    "framework": "react-ts"
+  }
+]

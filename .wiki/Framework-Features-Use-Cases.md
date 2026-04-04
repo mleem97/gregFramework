@@ -6,7 +6,7 @@ This page is the complete capability map for `FrikaModdingFramework` and include
 
 ## 1) Runtime architecture and ownership
 
-Core runtime modules under `FrikaMF/JoniMF/`:
+Core runtime modules under `FrikaMF/`:
 
 - `Core.cs`: MelonLoader entrypoint and lifecycle orchestration.
 - `FfiBridge.cs`: native Rust DLL loading and export dispatch.
@@ -168,7 +168,7 @@ pub extern "C" fn mod_on_event(event_id: u32, _ptr: *const u8, _len: u32) {
 
 ## Use Case 2: Add a new gameplay event to the framework
 
-1. Add a new ID in `FrikaMF/JoniMF/EventIds.cs`.
+1. Add a new ID in `FrikaMF/EventIds.cs`.
 2. Add payload struct in `EventDispatcher.cs` if needed.
 3. Add a `Fire...` helper in `EventDispatcher.cs`.
 4. Patch target method in `HarmonyPatches.cs` and call the helper.
@@ -240,7 +240,7 @@ DC2WebBridge.TryApplyOrReplace(rootGameObject, "HRSystem");
 
 ## Use Case 9: Auto-install runtime hooks for discovery
 
-1. Prepare catalog file (`assembly-hooks.txt` or exported dump).
+1. Prepare catalog file ([`docs/references/assembly-hooks.txt`](../docs/references/assembly-hooks.txt) or exported dump).
 2. Run with hooker options from launch flags (see `Modding-Guide`).
 3. Inspect emitted hook bridge events (`HookBridgeInstalled`, `HookBridgeTriggered`).
 

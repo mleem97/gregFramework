@@ -1,7 +1,5 @@
 # Modding Guide EN
 
-English mirror page.
+This page was moved to:
 
-The maintained canonical page is currently:
-
-- [Modding Guide](Modding-Guide)
+- [ModDevs/Guides/Getting-Started-en](ModDevs/Guides/Getting-Started-en)

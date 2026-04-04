@@ -54,6 +54,8 @@ React source files are in:
 Main files:
 
 - `react-ui/src/App.tsx`
+- `react-ui/src/hooks/useFmfBridge.ts`
+- `react-ui/src/types/bridge.ts`
 - `react-ui/src/styles.css`
 - `react-ui/scripts/export-to-mod.mjs`
 
@@ -75,6 +77,14 @@ Files produced:
 - `react-app.html`
 - `react-app.css`
 - `react-app.tsx`
+- `react-screens.json`
+- `react-state.json`
+
+Bridge/state notes:
+
+- `useFmfBridge` centralizes bridge action dispatch and `STATE_UPDATE` listener handling.
+- `react-screens.json` controls which Unity canvas keys are registered by `ReactUiRuntime`.
+- `react-state.json` is written by C# runtime as a sync snapshot contract (`STATE_UPDATE` envelope).
 
 ## Build
 

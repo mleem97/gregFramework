@@ -1,9 +1,12 @@
 using System;
+using System.IO;
 using System.Linq;
+using System.Text.Json;
 using Il2CppTMPro;
 using MelonLoader;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 [assembly: MelonInfo(typeof(FMF.UIReplacementMod.Main), "FMF UI Replacement", "00.01.0009", "mleem97")]
@@ -13,6 +16,7 @@ namespace FMF.UIReplacementMod;
 
 public sealed class Main : MelonMod
 {
+    private const string StateSnapshotFileName = "react-state.json";
     private static readonly Color WindowBackground = new(0.06f, 0.09f, 0.14f, 0.92f);
     private static readonly Color SurfaceBackground = new(0.10f, 0.14f, 0.21f, 0.95f);
     private static readonly Color PrimaryAction = new(0.18f, 0.44f, 0.78f, 0.98f);
@@ -31,6 +35,26 @@ public sealed class Main : MelonMod
     private ReactUiRuntime _reactRuntime;
     private DiscordRichPresenceRuntime _discordRuntime;
     private RuntimeOptions _options;
+    private float _nextStateSnapshotAt;
+    private string _lastStateSnapshot = string.Empty;
+
+    private sealed class UiStateEnvelope
+    {
+        public string Type { get; set; } = "STATE_UPDATE";
+        public UiStatePayload Payload { get; set; } = new();
+    }
+
+    private sealed class UiStatePayload
+    {
+        public string SceneName { get; set; } = "unknown";
+        public int MaxPlayers { get; set; }
+        public bool UiReplacementEnabled { get; set; }
+        public bool AutoRefreshEnabled { get; set; }
+        public float AutoRefreshIntervalSeconds { get; set; }
+        public bool LiveReloadEnabled { get; set; }
+        public bool BridgeReady { get; set; }
+        public string Timestamp { get; set; } = DateTime.UtcNow.ToString("O");
+    }
 
     public override void OnInitializeMelon()
     {
@@ -42,10 +66,10 @@ public sealed class Main : MelonMod
         _discordRuntime = new DiscordRichPresenceRuntime(LoggerInstance, _options);
         _discordRuntime.TryInitialize();
 
-        _frameworkReady = IsFmfLoaded();
+        _frameworkReady = IsFrikaMfRuntimeLoaded();
         if (!_frameworkReady)
         {
-            LoggerInstance.Warning("FMF dependency not ready yet. Waiting for FrikaModdingFramework load...");
+            LoggerInstance.Warning("FrikaMF runtime not ready yet. Waiting for runtime initialization...");
             _dependencyWarningShown = true;
             _nextDependencyCheckAt = Time.unscaledTime + 1.0f;
             return;
@@ -54,10 +78,13 @@ public sealed class Main : MelonMod
         _reactRuntime.TryAttachBridge(logFailures: true);
         _reactRuntime.RegisterProfiles();
 
-        LoggerInstance.Msg("FMF dependency detected. UI replacement is active.");
+        LoggerInstance.Msg("FrikaMF runtime detected. UI replacement is active.");
         LoggerInstance.Msg("Hotkeys: Ctrl+U toggle replacement | Ctrl+Shift+U force refresh");
         LoggerInstance.Msg($"Configured max players: {_options.MaxPlayers}");
+        LoggerInstance.Msg($"Auto refresh pass: {(_options.EnableAutoRefreshPass ? "enabled" : "disabled")} ({_options.AutoRefreshIntervalSeconds:0.#}s)");
         LoggerInstance.Msg($"UI asset root: {_reactRuntime.GetActiveAssetDirectory()}");
+
+        WriteStateSnapshot(force: true);
     }
 
     public override void OnSceneWasLoaded(int buildIndex, string sceneName)
@@ -74,6 +101,7 @@ public sealed class Main : MelonMod
 
         _lastAppliedGraphics = ApplyUiReplacement();
         LoggerInstance.Msg($"Scene '{sceneName}' styled. Updated graphics: {_lastAppliedGraphics}");
+        WriteStateSnapshot(force: true);
     }
 
     public override void OnUpdate()
@@ -88,6 +116,12 @@ public sealed class Main : MelonMod
 
         _discordRuntime?.UpdatePresenceIfDue(_options?.MaxPlayers ?? 16);
 
+        if (Time.unscaledTime >= _nextStateSnapshotAt)
+        {
+            _nextStateSnapshotAt = Time.unscaledTime + 2.5f;
+            WriteStateSnapshot(force: false);
+        }
+
         if (!_uiReplacementEnabled)
             return;
 
@@ -98,12 +132,16 @@ public sealed class Main : MelonMod
             _reactRuntime.ApplyToAllCanvases(forceReset: true);
             _lastAppliedGraphics = ApplyUiReplacement();
             LoggerInstance.Msg("[FMF.UIReplacement] Live UI reload applied.");
+            WriteStateSnapshot(force: true);
         }
+
+        if (!(_options?.EnableAutoRefreshPass ?? false))
+            return;
 
         if (Time.unscaledTime < _nextRefreshAt)
             return;
 
-        _nextRefreshAt = Time.unscaledTime + 2.0f;
+        _nextRefreshAt = Time.unscaledTime + Math.Max(2f, _options?.AutoRefreshIntervalSeconds ?? 10f);
 
         if (_reactRuntime != null)
         {
@@ -121,20 +159,21 @@ public sealed class Main : MelonMod
 
         _nextDependencyCheckAt = Time.unscaledTime + 1.5f;
 
-        _frameworkReady = IsFmfLoaded();
+        _frameworkReady = IsFrikaMfRuntimeLoaded();
         if (!_frameworkReady)
             return;
 
         _reactRuntime?.TryAttachBridge(logFailures: true);
         _reactRuntime?.RegisterProfiles();
 
-        LoggerInstance.Msg("FMF dependency detected at runtime. UI replacement is now active.");
+        LoggerInstance.Msg("FrikaMF runtime detected at runtime. UI replacement is now active.");
 
         if (_dependencyWarningShown)
             LoggerInstance.Msg("Dependency wait resolved successfully.");
 
         _dependencyWarningShown = false;
         _lastAppliedGraphics = ApplyUiReplacement();
+        WriteStateSnapshot(force: true);
     }
 
     public override void OnGUI()
@@ -181,18 +220,18 @@ public sealed class Main : MelonMod
         _discordRuntime?.Shutdown();
     }
 
-    private static bool IsFmfLoaded()
+    private static bool IsFrikaMfRuntimeLoaded()
     {
         var assemblies = AppDomain.CurrentDomain.GetAssemblies();
 
-        bool assemblyLoaded = assemblies.Any(a =>
-            string.Equals(a.GetName().Name, "FrikaModdingFramework", StringComparison.OrdinalIgnoreCase));
+        for (int index = 0; index < assemblies.Length; index++)
+        {
+            var coreType = assemblies[index].GetType("DataCenterModLoader.Core", throwOnError: false);
+            if (coreType != null)
+                return true;
+        }
 
-        if (!assemblyLoaded)
-            return false;
-
-        var coreType = Type.GetType("DataCenterModLoader.Core, FrikaModdingFramework", throwOnError: false);
-        return coreType != null;
+        return false;
     }
 
     private int ApplyUiReplacement()
@@ -352,5 +391,56 @@ public sealed class Main : MelonMod
             return WindowBackground;
 
         return SurfaceBackground;
+    }
+
+    private void WriteStateSnapshot(bool force)
+    {
+        try
+        {
+            if (_reactRuntime == null)
+                return;
+
+            string assetDir = _reactRuntime.GetActiveAssetDirectory();
+            if (string.IsNullOrWhiteSpace(assetDir))
+                return;
+
+            Directory.CreateDirectory(assetDir);
+
+            string sceneName = "unknown";
+            try
+            {
+                sceneName = SceneManager.GetActiveScene().name;
+            }
+            catch
+            {
+            }
+
+            var envelope = new UiStateEnvelope
+            {
+                Payload = new UiStatePayload
+                {
+                    SceneName = sceneName,
+                    MaxPlayers = _options?.MaxPlayers ?? 16,
+                    UiReplacementEnabled = _uiReplacementEnabled,
+                    AutoRefreshEnabled = _options?.EnableAutoRefreshPass ?? false,
+                    AutoRefreshIntervalSeconds = _options?.AutoRefreshIntervalSeconds ?? 10f,
+                    LiveReloadEnabled = _options?.EnableLiveUiReload ?? true,
+                    BridgeReady = _reactRuntime.IsReady,
+                    Timestamp = DateTime.UtcNow.ToString("O"),
+                },
+            };
+
+            string json = JsonSerializer.Serialize(envelope, new JsonSerializerOptions { WriteIndented = true });
+            if (!force && string.Equals(json, _lastStateSnapshot, StringComparison.Ordinal))
+                return;
+
+            string statePath = Path.Combine(assetDir, StateSnapshotFileName);
+            File.WriteAllText(statePath, json);
+            _lastStateSnapshot = json;
+        }
+        catch (Exception ex)
+        {
+            LoggerInstance.Warning($"[FMF.UIReplacement] Failed to write state snapshot: {ex.Message}");
+        }
     }
 }

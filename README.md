@@ -52,23 +52,26 @@
 
 For development, architecture, hooks, workflows, and deep documentation, use the wiki:
 
-- Local wiki source: `./.wiki/`
-- Setup: `./.wiki/Setup.md`
-- Architecture: `./.wiki/Architecture.md`
-- Modding Guide: `./.wiki/Modding-Guide.md`
-- Device Reference: `./.wiki/Device-Reference.md`
-- Verified Hooks: `./.wiki/HOOKS.md`
-- Asset Export Notes: `./.wiki/AssetExport.md`
-- UI Reference: `./.wiki/ui.md`
-- MelonLoader Notes: `./.wiki/MelonLoader.md`
-- Roadmap: `./.wiki/ROADMAP.md`
-- Task List: `./.wiki/TASKLIST.md`
+- [Local wiki source](./.wiki/)
+- [Setup](./.wiki/Setup.md)
+- [Architecture](./.wiki/Architecture.md)
+- [Modding Guide](./.wiki/ModDevs/Guides/Getting-Started.md)
+- [Device Reference](./.wiki/Device-Reference.md)
+- [Verified Hooks](./.wiki/HOOKS.md)
+- [Asset Export Notes](./.wiki/AssetExport.md)
+- [UI Reference](./.wiki/ui.md)
+- [MelonLoader Notes](./.wiki/MelonLoader.md)
+- [Roadmap](./.wiki/ROADMAP.md)
+- [Task List](./.wiki/TASKLIST.md)
+- [Data Center FAQ](./.wiki/DataCenterFAQ/Index.md)
+- [AI Usage Policy (Wiki)](./.wiki/AI-USAGE.md)
 
 ## Security and support
 
-- Security policy: `SECURITY.md`
-- Support: `SUPPORT.md`
-- Contribution process: `CONTRIBUTING.md`
+- [Security policy](./SECURITY.md)
+- [Support](./SUPPORT.md)
+- [Contribution process](./CONTRIBUTING.md)
+- [AI Usage Policy (Root)](./AI_POLICY.md)
 
 ## Thanks to the community
 

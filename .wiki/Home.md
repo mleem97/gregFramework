@@ -20,9 +20,9 @@ FrikaMF ist ein inoffizielles, community-getriebenes Modding-Framework für das 
 
 ## Zielgruppen-Navigation
 
-- 🚀 **Ich will Mods nutzen:** [End-User (Release)](End-User-Release)
-- 🛠️ **Ich will Mods bauen:** [Mod-Developer (Debug)](Mod-Developer-Debug)
-- 🤝 **Ich will contributen:** [Contributors (Debug)](Contributors-Debug)
+- 🚀 **Ich will Mods nutzen:** [EndUser](EndUser/Index)
+- 🛠️ **Ich will Mods bauen:** [ModDevs](ModDevs/Index)
+- 🤝 **Ich will contributen:** [Contributors](Contributors/Index)
 - 💖 **Ich will sponsoren:** [Sponsoren](Sponsoren)
 
 ## Schnelle Orientierung
@@ -30,8 +30,10 @@ FrikaMF ist ein inoffizielles, community-getriebenes Modding-Framework für das 
 - Hook-Quelle der Wahrheit: [`HOOKS.md`](HOOKS)
 - Versionen/Release-Historie: [Changelog & Versionen](Changelog-Versionen)
 - Spielpatch-Probleme: [Bekannte Inkompatibilitäten](Bekannte-Inkompatibilitaeten)
+- Vanilla-FAQ: [Data Center FAQ](DataCenterFAQ/Index)
 - Begriffe & Grundlagen: [Glossar](Glossar)
 - Rechtliches: [Lizenz & Rechtliches](Lizenz-Rechtliches)
+- AI-Richtlinie: [AI Usage Policy](AI-USAGE)
 - Offener Brief an WASEKU: [Brief an WASEKU](Brief-an-WASEKU)
 
 ## Technische Kurzfassung
@@ -49,7 +51,8 @@ FrikaMF ist ein inoffizielles, community-getriebenes Modding-Framework für das 
 
 - [Framework Features & Use Cases](Framework-Features-Use-Cases)
 - [FFI Bridge Reference](FFI-Bridge-Reference)
+- [Lua FFI Start Developing (DE+EN)](Lua-FFI-Start-Developing)
 - [Web UI Bridge (DC2WEB)](Web-UI-Bridge)
-- [Modding Guide](Modding-Guide)
+- [Modding Guide](ModDevs/Guides/Getting-Started)
 - [Architecture](Architecture)
 - [Setup](Setup)

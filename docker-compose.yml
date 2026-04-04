@@ -1,0 +1,26 @@
+services:
+  docs:
+    build:
+      context: ./docs-site
+      dockerfile: Dockerfile
+    container_name: frikamf-docs
+    working_dir: /app
+    command: npm run start
+    ports:
+      - "3000:3000"
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    volumes:
+      - ./docs-site:/app
+      - /app/node_modules
+
+  docs-build:
+    build:
+      context: ./docs-site
+      dockerfile: Dockerfile
+    container_name: frikamf-docs-build
+    working_dir: /app
+    command: npm run build
+    volumes:
+      - ./docs-site:/app
+      - /app/node_modules

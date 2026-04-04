@@ -10,6 +10,13 @@ Thank you for your interest in contributing to `Frikadelle Modding Framework`.
 - Do not add features or changes that support copyright infringement, asset theft, or unauthorized redistribution.
 - Keep changes small, focused, and easy to review.
 
+## 🤖 AI Policy
+
+- [AI Usage Policy & Disclaimer (Root)](./AI_POLICY.md)
+- [AI Usage Policy & Disclaimer (Wiki)](./.wiki/AI-USAGE.md)
+
+If AI tooling was used significantly, disclose it briefly in your PR and confirm manual review/testing.
+
 ---
 
 ## 🛠 Local Development Workflow
@@ -35,10 +42,17 @@ dotnet build FrikaMF.csproj -c Release -p:TreatWarningsAsErrors=true -nologo
 
 ## 🔁 RustBridge Sync Flow
 
-- Upstream reference: `https://github.com/Joniii11/DataCenter-RustBridge.git`.
-- Default sync mode is `staged` and does not overwrite existing files in `FrikaMF/JoniMF`.
-- Staged upstream candidates are written to `.bridge-sync/staged/JoniMF` as `*.upstream.cs` for manual merge review.
-- Sync report is written to `.bridge-sync/reports/rustbridge-sync-report.md`.
+- Upstream reference: [DataCenter-RustBridge](https://github.com/Joniii11/DataCenter-RustBridge.git).
+- Default sync mode is `staged` and does not overwrite existing files in `FrikaMF`.
+- Staged upstream candidates are written to [`.bridge-sync/staged/JoniMF`](./.bridge-sync/staged/JoniMF) as `*.upstream.cs` for manual merge review.
+- Sync report is written to [`.bridge-sync/reports/rustbridge-sync-report.md`](./.bridge-sync/reports/rustbridge-sync-report.md).
+
+## 🔍 CodeQL C# scanning
+
+- Prefer the dedicated `CodeQL C#` workflow in [`.github/workflows/codeql-csharp.yml`](./.github/workflows/codeql-csharp.yml).
+- It uses CodeQL `build-mode: manual` so the scan can resolve more types and call targets than `build-mode: none`.
+- On CI, C# projects are built with `/p:CI=true`; `FMF.UIReplacementMod` also disables its React export during analysis with `/p:EnableReactBuildOnBuild=false`.
+- If a project still cannot compile on hosted runners because local MelonLoader/game references are missing, the workflow keeps going so CodeQL can still analyze successfully built projects.
 
 For manual pull using an already cloned upstream copy:
 

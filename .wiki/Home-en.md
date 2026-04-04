@@ -20,9 +20,9 @@ FrikaMF is an unofficial, community-driven modding framework for the Unity IL2CP
 
 ## Audience shortcuts
 
-- Use mods: [End-User (Release) EN](End-User-Release-en)
-- Build mods: [Mod-Developer (Debug) EN](Mod-Developer-Debug-en)
-- Contribute: [Contributors (Debug) EN](Contributors-Debug-en)
+- Use mods: [EndUser EN](EndUser/Index-en)
+- Build mods: [ModDevs EN](ModDevs/Index-en)
+- Contribute: [Contributors EN](Contributors/Index-en)
 - Sponsor: [Sponsors EN](Sponsors-en)
 - Game developer note: [Letter to WASEKU EN](Letter-to-WASEKU-en)
 
@@ -31,8 +31,11 @@ FrikaMF is an unofficial, community-driven modding framework for the Unity IL2CP
 - [Glossary EN](Glossary-en)
 - [Changelog & Versions EN](Changelog-Versions-en)
 - [Known Incompatibilities EN](Known-Incompatibilities-en)
+- [Data Center FAQ](DataCenterFAQ/Index)
 - [License & Legal EN](License-Legal-en)
+- [AI Usage Policy](AI-USAGE)
 - [Framework Features & Use Cases](Framework-Features-Use-Cases)
 - [FFI Bridge Reference](FFI-Bridge-Reference)
+- [Lua FFI Start Developing (DE+EN)](Lua-FFI-Start-Developing)
 - [Web UI Bridge EN (DC2WEB)](Web-UI-Bridge-en)
 - Hook source of truth: [`HOOKS.md`](HOOKS)

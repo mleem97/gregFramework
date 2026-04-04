@@ -108,6 +108,13 @@ StyleCopReport.xml
 *.svclog
 *.scc
 
+# FrikaMF generated hook artifacts
+src/FrikaMF/Hooks/Generated/*.g.cs
+
+# Uncompressed large reference dumps (keep .gz only)
+docs/references/assembly-hooks.txt
+docs/references/modder-hooks.ffm.txt
+
 # Chutzpah Test files
 _Chutzpah*
 
@@ -294,6 +301,9 @@ FakesAssemblies/
 # Node.js Tools for Visual Studio
 .ntvs_analysis.dat
 node_modules/
+docs-site/.docusaurus/
+docs-site/build/
+docs-site/.cache/
 
 # Visual Studio 6 build log
 *.plg
@@ -371,3 +381,54 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+References/UI-Images/20260401203255_1.jpg
+References/UI-Images/20260401203257_1.jpg
+References/UI-Images/20260401203259_1.jpg
+References/UI-Images/20260401203302_1.jpg
+References/UI-Images/20260401203303_1.jpg
+References/UI-Images/20260401203305_1.jpg
+References/UI-Images/20260401203306_1.jpg
+References/UI-Images/20260401203307_1.jpg
+References/UI-Images/20260401203308_1.jpg
+References/UI-Images/20260401203309_1.jpg
+References/UI-Images/20260401203310_1.jpg
+References/UI-Images/20260401203315_1.jpg
+References/UI-Images/20260401203324_1.jpg
+References/UI-Images/20260401203327_1.jpg
+References/UI-Images/20260401203328_1.jpg
+References/UI-Images/20260401203350_1.jpg
+References/UI-Images/20260401203542_1.jpg
+References/UI-Images/20260401203548_1.jpg
+References/UI-Images/20260401203557_1.jpg
+References/UI-Images/20260401203558_1.jpg
+References/UI-Images/20260401203602_1.jpg
+References/UI-Images/20260401203604_1.jpg
+References/UI-Images/20260401203605_1.jpg
+References/UI-Images/20260401203608_1.jpg
+References/UI-Images/20260401203610_1.jpg
+References/UI-Images/20260401203611_1.jpg
+References/UI-Images/20260401203613_1.jpg
+References/UI-Images/20260401203614_1.jpg
+References/UI-Images/20260401203616_1.jpg
+References/UI-Images/20260401203617_1.jpg
+References/UI-Images/20260401203619_1.jpg
+References/UI-Images/20260401203620_1.jpg
+References/UI-Images/20260401203624_1.jpg
+References/UI-Images/20260401203630_1.jpg
+References/UI-Images/20260401203632_1.jpg
+References/UI-Images/20260401203635_1.jpg
+References/UI-Images/20260401203638_1.jpg
+References/UI-Images/20260401203640_1.jpg
+References/UI-Images/20260401203641_1.jpg
+References/UI-Images/20260401203643_1.jpg
+References/UI-Images/20260401203644_1.jpg
+References/UI-Images/20260401203645_1.jpg
+References/UI-Images/20260401203646_1.jpg
+References/UI-Images/20260401203712_1.jpg
+References/UI-Images/20260401203719_1.jpg
+References/UI-Images/20260401203729_1.jpg
+References/UI-Images/20260401204110_1.jpg
+References/UI-Images/20260401204123_1.jpg
+References/UI-Images/20260403201650_1.jpg
+References/UI-Images/20260403201650_2.jpg
+References/UI-Images/20260403201651_1.jpg

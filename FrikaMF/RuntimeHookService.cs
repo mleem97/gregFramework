@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using FrikaMF.Hooks;
 
 namespace AssetExporter
 {
@@ -61,6 +62,8 @@ namespace AssetExporter
             if (!File.Exists(catalogPath))
                 return new HookInstallResult(0, 0, 0, new[] { $"Catalog file not found: {catalogPath}" });
 
+            HookBinder.LoadAliases(catalogPath);
+
             var candidates = DiscoverFromCatalog(catalogPath, maxHooks).ToList();
             ModFramework.Events.Publish(new HookScanCompletedEvent(DateTime.UtcNow, candidates.Count));
 
@@ -95,7 +98,9 @@ namespace AssetExporter
             }
 
             MethodInfo postfix = typeof(RuntimeHookService).GetMethod(nameof(GenericPostfix), BindingFlags.Public | BindingFlags.Static);
+            MethodInfo prefix = typeof(RuntimeHookService).GetMethod(nameof(GenericPrefix), BindingFlags.Public | BindingFlags.Static);
             object postfixHarmonyMethod = Activator.CreateInstance(harmonyMethodType, postfix);
+            object prefixHarmonyMethod = Activator.CreateInstance(harmonyMethodType, prefix);
 
             foreach (MethodInfo candidate in candidates)
             {
@@ -105,7 +110,7 @@ namespace AssetExporter
 
                 try
                 {
-                    patchMethod.Invoke(harmony, new[] { candidate, null, postfixHarmonyMethod, null, null });
+                    patchMethod.Invoke(harmony, new[] { candidate, prefixHarmonyMethod, postfixHarmonyMethod, null, null });
                     installed++;
                 }
                 catch (Exception ex)
@@ -213,10 +218,27 @@ namespace AssetExporter
             return !string.IsNullOrWhiteSpace(typeName) && !string.IsNullOrWhiteSpace(methodName);
         }
 
-        public static void GenericPostfix(MethodBase __originalMethod)
+        public static void GenericPrefix(MethodBase __originalMethod, object __instance, object[] __args)
         {
             if (__originalMethod == null)
                 return;
+
+            string alias = HookBinder.ResolveAlias(__originalMethod);
+            var context = new HookContext(alias, __originalMethod, __instance, __args);
+            HookBinder.DispatchBefore(context);
+        }
+
+        public static void GenericPostfix(MethodBase __originalMethod, object __instance, object[] __args, object __result)
+        {
+            if (__originalMethod == null)
+                return;
+
+            string alias = HookBinder.ResolveAlias(__originalMethod);
+            var context = new HookContext(alias, __originalMethod, __instance, __args)
+            {
+                ReturnValue = __result,
+            };
+            HookBinder.DispatchAfter(context);
 
             string key = BuildMethodKey(__originalMethod);
             int count = TriggerCounts.AddOrUpdate(key, 1, UpdateCount);

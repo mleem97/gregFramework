@@ -7,9 +7,9 @@
 
 ### Zielgruppen
 
-- [End-User (Release)](End-User-Release)
-- [Mod-Developer (Debug)](Mod-Developer-Debug)
-- [Contributors (Debug)](Contributors-Debug)
+- [EndUser](EndUser/Index)
+- [ModDevs](ModDevs/Index)
+- [Contributors](Contributors/Index)
 - [Sponsoren](Sponsoren)
 - [Brief an WASEKU (Data Center)](Brief-an-WASEKU)
 
@@ -19,14 +19,15 @@
 - [Changelog & Versionen](Changelog-Versionen)
 - [Bekannte Inkompatibilitäten](Bekannte-Inkompatibilitaeten)
 - [Lizenz & Rechtliches](Lizenz-Rechtliches)
+- [AI Usage Policy](AI-USAGE)
 
 ## English
 
 ### Audiences
 
-- [End-User (Release) EN](End-User-Release-en)
-- [Mod-Developer (Debug) EN](Mod-Developer-Debug-en)
-- [Contributors (Debug) EN](Contributors-Debug-en)
+- [EndUser EN](EndUser/Index-en)
+- [ModDevs EN](ModDevs/Index-en)
+- [Contributors EN](Contributors/Index-en)
 - [Sponsors EN](Sponsors-en)
 - [Letter to WASEKU (Data Center) EN](Letter-to-WASEKU-en)
 
@@ -36,8 +37,18 @@
 - [Changelog & Versions EN](Changelog-Versions-en)
 - [Known Incompatibilities EN](Known-Incompatibilities-en)
 - [License & Legal EN](License-Legal-en)
+- [AI Usage Policy](AI-USAGE)
 
-## Technische Referenz
+## TechnicalReference
+
+- [TechnicalReference DE](TechnicalReference/Index)
+- [TechnicalReference EN](TechnicalReference/Index-en)
+
+## Data Center FAQ
+
+- [Data Center FAQ](DataCenterFAQ/Index)
+
+## Technische Referenz (Direktseiten)
 
 - [HOOKS (Quelle der Wahrheit)](HOOKS)
 - [Setup](Setup)
@@ -45,18 +56,18 @@
 - [Framework Features & Use Cases](Framework-Features-Use-Cases)
 - [Framework Features & Use Cases EN](Framework-Features-Use-Cases-en)
 - [FFI Bridge Reference](FFI-Bridge-Reference)
+- [Lua FFI Start Developing (DE+EN)](Lua-FFI-Start-Developing)
 - [Mod Config System](Mod-Config-System)
 - [Web UI Bridge (DC2WEB)](Web-UI-Bridge)
 - [Web UI Bridge (DC2WEB) EN](Web-UI-Bridge-en)
-- [Modding Guide](Modding-Guide)
-- [Modding Guide EN](Modding-Guide-en)
+- [Modding Guide](ModDevs/Guides/Getting-Started)
+- [Modding Guide EN](ModDevs/Guides/Getting-Started-en)
 - [Device Reference](Device-Reference)
 - [Asset Export](AssetExport)
 - [UI Reference](ui)
 - [MelonLoader Notes](MelonLoader)
 - [Standalone Mods](StandaloneMods)
 - [Release Assets and Templates](Release-Assets-and-Templates)
-- [Repository Status (2026-04-04)](Repository-Status-2026-04-04)
 - [Community Thanks](Community-Thanks)
 
 ## Projekt

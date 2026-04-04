@@ -1,5 +1,52 @@
 # Copilot Instructions
 
+## GitHub Copilot — FrikaModdingFramework
+
+### Projekt
+
+FrikaModdingFramework (FrikaMF) ist ein inoffizielles Modding-Framework für
+"Data Center" (WASEKU, Unity IL2CPP). Unterstützt Mods in **C#** (MelonLoader/HarmonyX)
+und **Rust** (C-ABI FFI via P/Invoke).
+
+**Inoffiziell · Community-driven · Keine Zugehörigkeit zu WASEKU**
+
+### Verfügbare Wiki-Agenten
+
+| Command | Datei | Zweck |
+|---|---|---|
+| `/wiki-init` | `.github/prompts/wiki-init.prompt.md` | Wiki neu anlegen (State + Queue) |
+| `/wiki-orchestrator` | `.github/prompts/wiki-orchestrator.prompt.md` | Fortschritt überwachen, Locks aufräumen |
+| `/wiki-worker` | `.github/prompts/wiki-worker.prompt.md` | Seite generieren (parallel starten!) |
+| `/wiki-reviewer` | `.github/prompts/wiki-reviewer.prompt.md` | Seiten reviewen |
+| `/wiki-update` | `.github/prompts/wiki-update.prompt.md` | Sektion re-queuen |
+
+### Schnellstart Wiki
+
+```
+1. /wiki-init                          → Einmalig: State & Queue anlegen
+2. /wiki-worker  (Panel 1)             ┐
+3. /wiki-worker  (Panel 2)             │ Parallel starten für Geschwindigkeit
+4. /wiki-worker  (Panel 3)             ┘
+5. /wiki-reviewer (eigenes Panel)      → Prüft fertige Seiten
+6. /wiki-orchestrator                  → Fortschritt & Cleanup
+```
+
+### Technischer Kontext
+
+- Spielklassen: `Il2Cpp.*` (z.B. `Il2Cpp.Server`, `Il2Cpp.NetworkSwitch`)
+- Build: `dotnet build /p:GameDir="..."` oder env `DATA_CENTER_GAME_DIR`
+- CI: `$(CI)=true` → keine Spielinstallation nötig
+- Commits: Conventional Commits (`feat:`, `fix:`, `docs:`, `chore:`)
+- Wiki-Output: `docs/wiki/`
+- Wiki-State: `.wiki-state/`
+
+### Allgemeine Regeln
+
+- Wiki-Seiten: Deutsch (Code-Kommentare Englisch)
+- Code-Beispiele IMMER in beiden Sprachen: 🦀 Rust + 🔷 C#
+- Kein "TODO", kein "Details folgen", keine Platzhalter
+- YAML-Frontmatter auf jeder Seite (title, description, sidebar_position, tags)
+
 ## General Guidelines
 - Use English language for all Markdown documentation files that are not excluded by .gitignore.
 - Always use Conventional Commits with atomic commit messages (e.g., feat:, fix:, docs:, chore:) for this repository.
@@ -9,7 +56,7 @@
 
 ## Release and Versioning Rules (Mandatory)
 - Use release version format `XX.XX.XXXX` for framework releases.
-- Treat `FrikaMF/JoniMF/ReleaseVersion.cs` as the single source of truth for framework release version.
+- Treat `FrikaMF/ReleaseVersion.cs` as the single source of truth for framework release version.
 - For automated release prep, use:
 	- `pwsh -ExecutionPolicy Bypass -File .\scripts\Update-ReleaseMetadata.ps1 -Bump major`
 	- `pwsh -ExecutionPolicy Bypass -File .\scripts\Update-ReleaseMetadata.ps1 -Bump medium`
@@ -25,9 +72,24 @@
 
 ## Project-Specific Rules
 - Focus on game events and hook candidates within `Assembly-CSharp`, as this is the relevant game assembly.
-- Keep runtime bridge code under `FrikaMF/JoniMF`.
+- Keep runtime bridge code under `FrikaMF`.
 - Keep Rust native mods in `Data Center/Mods/RustMods`.
 - Keep game object/content packs in `Data Center_Data/StreamingAssets/Mods`.
+
+## Hook Naming Convention (Mandatory)
+- Canonical hook format is `FFM.[Category].[Entity].[Action]`.
+- Always use 4 segments: `FFM`, `Category`, `Entity`, `Action`.
+- `Action` must start with `On` for event hooks.
+- Use PascalCase for all segments and avoid abbreviations.
+- Suppressible hooks must expose a `.Suppress` variant (e.g. `FFM.Store.Cart.OnCheckedOut.Suppress`).
+- When mapping numeric event IDs to names, use `FrikaMF/HookNames.cs` as the canonical source.
+
+## Mac Compatibility Policy (Mandatory)
+- No native macOS runtime target is planned for FrikaMF.
+- Supported approach is a documented Wine/CrossOver compatibility path.
+- Stage 1 deliverable: setup documentation (`MAC_SETUP.md`).
+- Stage 2 deliverable: optional setup automation script (`tools/install-mac.sh`).
+- Not planned: custom Wine/Proton fork or native reimplementation.
 
 ## Tooling Language Boundaries (Mandatory)
 - Do not introduce language-foreign build or automation scripts unless they provide exceptional development value.
@@ -35,7 +97,7 @@
 
 ## Repository Inventory (Code-Grounded)
 
-### `FrikaMF/JoniMF/` file roles
+### `FrikaMF/` file roles
 - `Core.cs`: MelonLoader entrypoint that initializes crash logging, Harmony patches, event dispatch, runtime hooker command handling, and Rust mod loading.
 - `CustomEmployeeManager.cs`: Manages custom employee registration/state persistence and injects custom employee cards/actions into the HR UI.
 - `EventDispatcher.cs`: Marshals C# event payload structs into unmanaged buffers and forwards them to Rust mods via `FFIBridge.DispatchEvent`.
@@ -56,17 +118,17 @@
 - No in-repo content pack directory entries were found under this path in the current snapshot.
 
 ### Harmony patch attributes grouped by target
-- `Player`: `UpdateCoin`, `UpdateXP`, `UpdateReputation` (`FrikaMF/JoniMF/HarmonyPatches.cs`)
-- `Server`: `PowerButton`, `ItIsBroken`, `RepairDevice`, `ServerInsertedInRack`, `RegisterLink`, `UnregisterLink`, `UpdateCustomer`, `UpdateAppID` (`FrikaMF/JoniMF/HarmonyPatches.cs`)
-- `TimeController`: `Update` (`FrikaMF/JoniMF/HarmonyPatches.cs`)
-- `MainGameManager`: `ButtonCustomerChosen`, `ButtonBuyWall` (`FrikaMF/JoniMF/HarmonyPatches.cs`)
-- `ComputerShop`: `ButtonCheckOut`, `ButtonBuyShopItem`, `ButtonClear`, `RemoveSpawnedItem` (`FrikaMF/JoniMF/HarmonyPatches.cs`)
-- `HRSystem`: `ButtonConfirmHire`, `ButtonConfirmFireEmployee`, `ButtonCancelBuying`, `OnEnable` (`FrikaMF/JoniMF/HarmonyPatches.cs`)
-- `SaveSystem`: `SaveGame`, `Load`, `AutoSave` (`FrikaMF/JoniMF/HarmonyPatches.cs`)
-- `CustomerBase`: `AreAllAppRequirementsMet` (`FrikaMF/JoniMF/HarmonyPatches.cs`)
-- `Rack`: `ButtonUnmountRack` (`FrikaMF/JoniMF/HarmonyPatches.cs`)
-- `NetworkMap`: `AddBrokenSwitch`, `RemoveBrokenSwitch` (`FrikaMF/JoniMF/HarmonyPatches.cs`)
-- `BalanceSheet`: `SaveSnapshot` (`FrikaMF/JoniMF/HarmonyPatches.cs`)
+- `Player`: `UpdateCoin`, `UpdateXP`, `UpdateReputation` (`FrikaMF/HarmonyPatches.cs`)
+- `Server`: `PowerButton`, `ItIsBroken`, `RepairDevice`, `ServerInsertedInRack`, `RegisterLink`, `UnregisterLink`, `UpdateCustomer`, `UpdateAppID` (`FrikaMF/HarmonyPatches.cs`)
+- `TimeController`: `Update` (`FrikaMF/HarmonyPatches.cs`)
+- `MainGameManager`: `ButtonCustomerChosen`, `ButtonBuyWall` (`FrikaMF/HarmonyPatches.cs`)
+- `ComputerShop`: `ButtonCheckOut`, `ButtonBuyShopItem`, `ButtonClear`, `RemoveSpawnedItem` (`FrikaMF/HarmonyPatches.cs`)
+- `HRSystem`: `ButtonConfirmHire`, `ButtonConfirmFireEmployee`, `ButtonCancelBuying`, `OnEnable` (`FrikaMF/HarmonyPatches.cs`)
+- `SaveSystem`: `SaveGame`, `Load`, `AutoSave` (`FrikaMF/HarmonyPatches.cs`)
+- `CustomerBase`: `AreAllAppRequirementsMet` (`FrikaMF/HarmonyPatches.cs`)
+- `Rack`: `ButtonUnmountRack` (`FrikaMF/HarmonyPatches.cs`)
+- `NetworkMap`: `AddBrokenSwitch`, `RemoveBrokenSwitch` (`FrikaMF/HarmonyPatches.cs`)
+- `BalanceSheet`: `SaveSnapshot` (`FrikaMF/HarmonyPatches.cs`)
 - Additional module patch: `CableSpinner.Start` (`HexLabelMod/HexLabelMod.cs`)
 
 ### Native loading / P/Invoke declarations and Rust export mapping
@@ -84,7 +146,7 @@
 - Corresponding Rust `extern "C"` implementations are `[UNVERIFIED — Rust crate sources not present in this workspace]`.
 
 ### Current version and release metadata
-- Current version source: `FrikaMF/JoniMF/ReleaseVersion.cs` → `00.01.0006`.
+- Current version source: `FrikaMF/ReleaseVersion.cs` → `00.01.0009`.
 - Most recent CHANGELOG entries:
 	- `00.01.0006` (2026-04-03): automated release versioning/changelog/artifact naming.
 	- `0.1.5` (2026-04-02): runtime bridge/hook-event migration and docs/release-flow updates.
@@ -122,7 +184,7 @@
 	- `UpdateCustomer(...)`
 	- `UpdateAppID(...)`
 - IL2CPP tokens (RID): `[UNVERIFIED — requires dnSpy confirmation]`.
-- Harmony patch exists: `Yes` (`FrikaMF/JoniMF/HarmonyPatches.cs`).
+- Harmony patch exists: `Yes` (`FrikaMF/HarmonyPatches.cs`).
 - Rust FFI hook status: `Implemented via EventDispatcher forwarding`.
 
 #### `NetworkSwitch`
@@ -158,7 +220,7 @@
 	- `UpdateSpeedOnCustomerBaseApp(...)`
 	- `AddAppPerformance(...)` (`[UNVERIFIED — requires dnSpy confirmation]`)
 - IL2CPP tokens (RID): `[UNVERIFIED — requires dnSpy confirmation]`.
-- Harmony patch exists: `Yes` (`FrikaMF/JoniMF/HarmonyPatches.cs`, `AreAllAppRequirementsMet`).
+- Harmony patch exists: `Yes` (`FrikaMF/HarmonyPatches.cs`, `AreAllAppRequirementsMet`).
 - Rust FFI hook status: `Partial (satisfaction events are forwarded; flow-pause target not yet patched)`.
 
 #### `SaveData`
@@ -212,7 +274,7 @@
 	- `RemoveSpawnedItem(...)`
 	- `ButtonAssetManagementScreen()`, `ButtonNetworkMap()`, `ButtonBalanceSheetScreen()`, `ButtonHireScreen()`
 - IL2CPP tokens (RID): `[UNVERIFIED — requires dnSpy confirmation]`.
-- Harmony patch exists: `Yes` (`FrikaMF/JoniMF/HarmonyPatches.cs`).
+- Harmony patch exists: `Yes` (`FrikaMF/HarmonyPatches.cs`).
 - Rust FFI hook status: `Implemented for checkout/cart/item events`.
 
 ### Additional required model targets
@@ -236,7 +298,7 @@
 
 ### Current bridge struct status
 - `GameContext` struct definition: `[UNVERIFIED — not present in C# bridge]`.
-- Current C# bridge contract is `GameAPITable` (`FrikaMF/JoniMF/GameApi.cs`).
+- Current C# bridge contract is `GameAPITable` (`FrikaMF/GameApi.cs`).
 
 ### `GameAPITable` C-ABI view
 - `ApiVersion`: `u32` — API table version value provided to mods (`API_VERSION = 5`).
@@ -275,7 +337,7 @@
 - No direct `[DllImport]` signatures target Rust DLL exports; all export binding is dynamic via `GetProcAddress`.
 
 ### DLL loading behavior
-- Load path: recursively scans `Mods/RustMods/**/*.dll` from game root (`FrikaMF/JoniMF/Core.cs` + `FFIBridge.LoadAllMods`).
+- Load path: recursively scans `Mods/RustMods/**/*.dll` from game root (`FrikaMF/Core.cs` + `FFIBridge.LoadAllMods`).
 - Error handling: logs `LoadLibrary` and export failures, continues loading remaining DLLs, and records crash context to `dc_modloader_debug.log`.
 - Fallback behavior: missing optional exports (`mod_update`, `mod_on_event`, etc.) are allowed and only reduce capability.
 

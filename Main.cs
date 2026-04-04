@@ -150,7 +150,7 @@ namespace AssetExporter
                 }
 
                 int eventCount = 0;
-                var eventFields = typeof(FrikaMF.EventIds).GetFields(BindingFlags.Public | BindingFlags.Static);
+                var eventFields = typeof(DataCenterModLoader.EventIds).GetFields(BindingFlags.Public | BindingFlags.Static);
                 for (int index = 0; index < eventFields.Length; index++)
                 {
                     FieldInfo field = eventFields[index];

@@ -1,8 +1,12 @@
 # HOOKS.md — Verified Hook Targets
 
+Canonical naming rules and the complete hook catalog are defined in:
+
+- [`HOOK-NAMING-CONVENTION.md`](HOOK-NAMING-CONVENTION)
+
 Game Version: Data Center v1.0.38  
 Engine: Unity 6000.3.12f1  
-Source: Runtime method dump (`assembly-hooks.txt`, Assembly-CSharp, April 2026)
+Source: Runtime method dump ([`docs/references/assembly-hooks.txt`](../docs/references/assembly-hooks.txt), Assembly-CSharp, April 2026)
 
 | Class (`Il2Cpp.*`) | Method | Status | Notes |
 | --- | --- | --- | --- |
