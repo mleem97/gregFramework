@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
-import gregImage from '../image.png';
 import { getHomepageContent } from '../i18n/homepage';
 import {
   FaArrowUpRightFromSquare,
@@ -83,7 +82,12 @@ export default function HomePage(): JSX.Element {
     <Layout
       title="Frika Mod Framework"
       description="Community docs for FrikaMF, standalone Rust stacks, multiplayer, and plugins.">
-      <main style={{ backgroundColor: 'var(--color-app-bg)' }}>
+      <main
+        style={{
+          backgroundColor: 'var(--color-app-bg)',
+          backgroundImage:
+            'radial-gradient(circle at 12% 6%, rgba(226, 58, 113, 0.2), transparent 36%), radial-gradient(circle at 88% 10%, rgba(226, 58, 113, 0.16), transparent 34%), radial-gradient(circle at 50% 100%, rgba(173, 20, 87, 0.14), transparent 45%)',
+        }}>
         {/* Hero Section */}
         <section className="flex min-h-[60vh] flex-col items-center justify-center px-4 py-20 text-center">
           <h1 className="homepage-logo-title mb-8 text-3xl font-black text-white md:text-5xl leading-none">
@@ -138,151 +142,142 @@ export default function HomePage(): JSX.Element {
             <h2 className="mb-10 fade-in-hidden animate-on-scroll text-3xl font-bold text-white">{t.docsPaths}</h2>
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               <Link to="/wiki-import/End-User-Release" className="app-card rounded-lg p-5 text-left text-gray-200 transition-all hover:border-opacity-100 block">
-                <div className="mb-2 text-lg font-bold text-white">End-User</div>
-                <div className="text-sm text-gray-400">Install, update, FAQ, troubleshooting.</div>
+                <div className="mb-2 text-lg font-bold text-white">{t.docsEndUserTitle}</div>
+                <div className="text-sm text-gray-400">{t.docsEndUserDescription}</div>
               </Link>
               <Link to="/wiki-import/Mod-Developer-Debug" className="app-card rounded-lg p-5 text-left text-gray-200 transition-all hover:border-opacity-100 block">
-                <div className="mb-2 text-lg font-bold text-white">Mod-Devs</div>
-                <div className="text-sm text-gray-400">Debug workflows, setup, hooks and references.</div>
+                <div className="mb-2 text-lg font-bold text-white">{t.docsModDevsTitle}</div>
+                <div className="text-sm text-gray-400">{t.docsModDevsDescription}</div>
               </Link>
               <Link to="/wiki-import/Contirbutors/Contributors-Debug" className="app-card rounded-lg p-5 text-left text-gray-200 transition-all hover:border-opacity-100 block">
-                <div className="mb-2 text-lg font-bold text-white">Contributors</div>
-                <div className="text-sm text-gray-400">Conventions, CI checks, contribution workflow.</div>
+                <div className="mb-2 text-lg font-bold text-white">{t.docsContributorsTitle}</div>
+                <div className="text-sm text-gray-400">{t.docsContributorsDescription}</div>
               </Link>
               <Link to="/wiki-import/Framework-Features-Use-Cases" className="app-card rounded-lg p-5 text-left text-gray-200 transition-all hover:border-opacity-100 block">
-                <div className="mb-2 text-lg font-bold text-white">Capability Matrix</div>
-                <div className="text-sm text-gray-400">Complete feature map and implementation use cases.</div>
+                <div className="mb-2 text-lg font-bold text-white">{t.docsCapabilityTitle}</div>
+                <div className="text-sm text-gray-400">{t.docsCapabilityDescription}</div>
               </Link>
             </div>
           </div>
         </section>
 
-        <section id="ecosystem" className="border-t border-brandPink-900 bg-brandDark px-4 py-20">
+        {/* Ecosystem Coverage Section */}
+        <section id="ecosystem" className="border-t px-4 py-20" style={{ borderColor: 'var(--color-card-border)', backgroundColor: 'var(--color-app-bg)' }}>
           <div className="mx-auto max-w-6xl">
-            <h2 className="mb-8 text-center text-4xl font-bold text-white">Ecosystem Coverage</h2>
+            <h2 className="mb-8 text-center text-3xl font-bold text-white">{t.ecosystemTitle}</h2>
             <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-              <article className="rounded-xl border border-brandPink-900 bg-gray-900 p-6">
+              <article className="app-card p-6 rounded-xl border-t-2 flex flex-col h-full" style={{ borderTopColor: 'var(--color-accent-pink)' }}>
                 <h3 className="mb-2 flex items-center gap-2 text-lg font-bold text-white">
-                  <FaCode />
-                  FrikaMF Core
+                  <FaCode /> {t.ecosystemCoreTitle}
                 </h3>
-                <p className="text-sm text-gray-400">Hook system, FFI bridge, event contracts and runtime architecture.</p>
-                <Link to="/wiki-import/Framework-Features-Use-Cases" className="mt-3 inline-block text-sm font-semibold text-brandPink-500 hover:text-brandPink-300">
-                  Open core docs →
+                <p className="text-sm text-gray-400 mb-6 grow">{t.ecosystemCoreDescription}</p>
+                <Link to="/wiki-import/Framework-Features-Use-Cases" className="text-sm font-semibold transition-colors hover:text-white" style={{ color: 'var(--color-accent-pink)' }}>
+                  {t.ecosystemCoreCta}
                 </Link>
               </article>
 
-              <article className="rounded-xl border border-brandPink-900 bg-gray-900 p-6">
+              <article className="app-card p-6 rounded-xl border-t-2 flex flex-col h-full border-t-orange-500/50">
                 <h3 className="mb-2 flex items-center gap-2 text-lg font-bold text-white">
-                  <FaServer />
-                  Standalone Rust Frameworks
+                  <FaServer /> {t.ecosystemRustTitle}
                 </h3>
-                <p className="text-sm text-gray-400">Rust/FFI implementation guides for external and standalone runtimes.</p>
-                <Link to="/wiki-import/Lua-FFI-Start-Developing" className="mt-3 inline-block text-sm font-semibold text-brandPink-500 hover:text-brandPink-300">
-                  Open Rust/FFI docs →
+                <p className="text-sm text-gray-400 mb-6 grow">{t.ecosystemRustDescription}</p>
+                <Link to="/wiki-import/Lua-FFI-Start-Developing" className="text-sm font-semibold transition-colors hover:text-white" style={{ color: 'var(--color-accent-pink)' }}>
+                  {t.ecosystemRustCta}
                 </Link>
               </article>
 
-              <article className="rounded-xl border border-brandPink-900 bg-gray-900 p-6">
+              <article className="app-card p-6 rounded-xl border-t-2 flex flex-col h-full border-t-blue-500/50">
                 <h3 className="mb-2 flex items-center gap-2 text-lg font-bold text-white">
-                  <FaPeopleGroup />
-                  Multiplayer & Plugins
+                  <FaPeopleGroup /> {t.ecosystemMultiplayerTitle}
                 </h3>
-                <p className="text-sm text-gray-400">Multiplayer roadmap, plugin docs, and community module references.</p>
-                <Link to="/wiki-import/Steamworks-P2P-Multiplayer-Roadmap" className="mt-3 inline-block text-sm font-semibold text-brandPink-500 hover:text-brandPink-300">
-                  Open multiplayer docs →
+                <p className="text-sm text-gray-400 mb-6 grow">{t.ecosystemMultiplayerDescription}</p>
+                <Link to="/wiki-import/Steamworks-P2P-Multiplayer-Roadmap" className="text-sm font-semibold transition-colors hover:text-white" style={{ color: 'var(--color-accent-pink)' }}>
+                  {t.ecosystemMultiplayerCta}
                 </Link>
               </article>
             </div>
           </div>
         </section>
 
-        <section id="greg-story" className="border-t border-brandPink-900 bg-brandDark px-4 py-20">
-          <div className="mx-auto grid max-w-6xl grid-cols-1 items-center gap-8 rounded-2xl border border-brandPink-900 bg-gray-900 p-6 md:grid-cols-[360px_1fr] md:p-8">
-            <div className="mx-auto w-full max-w-90 overflow-hidden rounded-xl border border-brandPink-900 bg-black/30 shadow-2xl">
-              <img src={gregImage} alt="Greg, server technician" className="h-auto w-full object-cover" />
-            </div>
-
-            <div>
-              <h2 className="mb-4 text-3xl font-extrabold text-white md:text-4xl">Die Legende von Greg</h2>
-              <p className="mb-4 text-gray-300">
-                Greg ist der unermüdliche Server-Techniker des Projekts. Er wirkt zwar so, als hätte er seit Monaten nicht mehr
-                geschlafen, und er ist meistens still — aber sobald ein Rack ausfällt oder ein Mod zickt, ist Greg schon da.
-              </p>
-              <p className="mb-4 text-gray-300">
-                Unterwürfig erfüllt er all deine Wünsche: mehr Uptime, sauberere Configs, bessere Logs und weniger Drama im
-                Deployment. Er fragt nicht viel, er liefert einfach. Und wenn es um Open Source und Server geht, schlägt sein Herz
-                lauter als jeder Lüfter im Datacenter.
-              </p>
-              <p className="inline-block rounded-lg border border-brandPink-800 bg-brandPink-900/40 px-4 py-2 text-lg font-bold text-white">
-                “Be smart. Be like Greg.”
-              </p>
-            </div>
-          </div>
-        </section>
-
-        <section id="community" className="border-t border-brandPink-900 bg-brandDark px-4 py-16">
-          <div className="mx-auto mb-6 max-w-6xl rounded-xl border border-amber-500/40 bg-amber-950/30 p-4 text-amber-200">
-            <div className="text-sm font-semibold uppercase tracking-wide">{t.comingSoon}</div>
-            <div className="mt-1 text-base font-medium">
-              {t.comingSoonText}
-            </div>
-          </div>
-
-          <div className="mx-auto flex max-w-6xl flex-col items-start justify-between gap-6 rounded-xl border border-brandPink-900 bg-gray-900 p-6 md:flex-row md:items-center">
-            <div>
-              <h3 className="text-2xl font-bold text-white">{t.communityTitle}</h3>
-              <p className="mt-2 text-gray-400">
-                {t.communityText}
-              </p>
-            </div>
-            <div className="flex flex-wrap gap-3">
-              <Link to="https://frikadellental.de" className="inline-flex items-center gap-2 rounded border border-gray-700 bg-gray-800 px-4 py-2 font-bold text-white transition-colors hover:border-gray-500 hover:bg-gray-700">
-                <FaArrowUpRightFromSquare />
-                frikadellental.de
-              </Link>
-              <Link to="/mods/standalone" className="inline-flex items-center gap-2 rounded border border-gray-700 bg-gray-800 px-4 py-2 font-bold text-white transition-colors hover:border-gray-500 hover:bg-gray-700">
-                <FaShop />
-                Available Mods
-              </Link>
-              <Link to="https://github.com/mleem97/FrikaModFramework" className="inline-flex items-center gap-2 rounded border border-gray-700 bg-gray-800 px-4 py-2 font-bold text-white transition-colors hover:border-gray-500 hover:bg-gray-700">
-                <FaGithub />
-                Repository
-              </Link>
-              <Link to="https://github.com/mleem97/FrikaModFramework" className="inline-flex items-center gap-2 rounded border border-gray-700 bg-gray-800 px-4 py-2 font-bold text-white transition-colors hover:border-gray-500 hover:bg-gray-700">
-                <FaArrowUpRightFromSquare />
-                PROJECT
-              </Link>
-              <Link to="https://discord.gg/greg" className="inline-flex items-center gap-2 rounded bg-[#5865F2] px-4 py-2 font-bold text-white transition-colors hover:bg-[#4752c4]">
-                <FaDiscord />
-                JOIN
-              </Link>
+        {/* Greg Story Section */}
+        <section id="greg-story" className="border-t px-4 py-20" style={{ borderColor: 'var(--color-card-border)', backgroundColor: 'var(--color-app-bg)' }}>
+          <div className="mx-auto max-w-6xl">
+            <div className="app-card rounded-2xl p-6 md:p-8 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+              <div>
+                <h2 className="mb-4 text-2xl font-bold text-white md:text-3xl">{t.gregTitle}</h2>
+                <p className="mb-4 text-gray-300 text-sm md:text-base leading-relaxed max-w-md">
+                  {t.gregText1}
+                </p>
+                <p className="mb-4 text-gray-300 text-sm md:text-base leading-relaxed max-w-md">
+                  {t.gregText2}
+                </p>
+                <p className="text-lg font-bold text-white italic">{t.gregQuote}</p>
+              </div>
+              <div className="shrink-0">
+                <div className="w-32 h-40 md:w-48 md:h-56 rounded-lg border flex items-center justify-center text-5xl md:text-7xl" style={{ borderColor: 'var(--color-card-border)', backgroundColor: 'rgba(226, 58, 113, 0.05)' }}>
+                  👨‍💼
+                </div>
+              </div>
             </div>
           </div>
         </section>
 
-        <section id="support" className="border-t border-brandPink-900 bg-brandDark px-4 py-16">
-          <div className="mx-auto flex max-w-6xl flex-col items-start justify-between gap-4 md:flex-row md:items-center">
+        {/* Community Section */}
+        <section id="community" className="border-t px-4 py-16" style={{ borderColor: 'var(--color-card-border)', backgroundColor: 'var(--color-app-bg)' }}>
+          <div className="mx-auto max-w-6xl">
+            <div className="mb-6 rounded-xl p-4 border" style={{ borderColor: 'rgba(202, 165, 61, 0.4)', backgroundColor: 'rgba(202, 165, 61, 0.08)' }}>
+              <div className="text-sm font-semibold uppercase tracking-wide text-amber-200">{t.comingSoon}</div>
+              <div className="mt-1 text-base font-medium text-amber-100">{t.comingSoonText}</div>
+            </div>
+
+            <div className="app-card p-6 rounded-xl flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+              <div>
+                <h3 className="text-2xl font-bold text-white">{t.communityTitle}</h3>
+                <p className="mt-2 text-gray-400">{t.communityText}</p>
+              </div>
+              <div className="flex flex-wrap gap-3">
+                <Link to="https://frikadellental.de" className="inline-flex items-center gap-2 rounded border px-4 py-2 font-bold text-white transition-colors" style={{ borderColor: 'var(--color-card-border)', backgroundColor: 'var(--color-card-bg)' }}>
+                  <FaArrowUpRightFromSquare /> frikadellental.de
+                </Link>
+                <Link to="/mods/standalone" className="inline-flex items-center gap-2 rounded border px-4 py-2 font-bold text-white transition-colors" style={{ borderColor: 'var(--color-card-border)', backgroundColor: 'var(--color-card-bg)' }}>
+                  <FaShop /> {t.availableModsLabel}
+                </Link>
+                <Link to="https://github.com/mleem97/FrikaModFramework" className="inline-flex items-center gap-2 rounded border px-4 py-2 font-bold text-white transition-colors" style={{ borderColor: 'var(--color-card-border)', backgroundColor: 'var(--color-card-bg)' }}>
+                  <FaGithub /> {t.repositoryLabel}
+                </Link>
+                <Link to="https://discord.gg/greg" className="inline-flex items-center gap-2 rounded px-4 py-2 font-bold text-white transition-colors" style={{ backgroundColor: '#5865F2' }}>
+                  <FaDiscord /> {t.joinLabel}
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Support Section */}
+        <section id="support" className="border-t px-4 py-16" style={{ borderColor: 'var(--color-card-border)', backgroundColor: 'var(--color-app-bg)' }}>
+          <div className="mx-auto max-w-6xl flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
-              <h3 className="text-2xl font-bold text-white">Support</h3>
-              <p className="text-gray-400">Report bugs, request docs for new community plugins, and track workstreams.</p>
+              <h3 className="text-2xl font-bold text-white">{t.supportTitle}</h3>
+              <p className="text-gray-400">{t.supportText}</p>
             </div>
             <Link
               to="https://github.com/mleem97/FrikaModFramework/issues"
-              className="inline-flex items-center gap-2 rounded border border-brandPink-900 bg-brandPink-800 px-5 py-3 font-bold text-white transition-colors hover:bg-brandPink-500">
-              <FaLifeRing />
-              Open GitHub Issues
+              className="inline-flex items-center gap-2 rounded px-5 py-3 font-bold text-white transition-colors"
+              style={{ backgroundColor: 'var(--color-accent-pink)' }}>
+              <FaLifeRing /> {t.supportCta}
             </Link>
           </div>
         </section>
       </main>
 
-      <footer className="border-t border-brandPink-900 bg-brandDark py-8">
+      <footer className="border-t py-8" style={{ borderColor: 'var(--color-card-border)', backgroundColor: 'var(--color-card-bg)' }}>
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-4 text-sm text-gray-500 md:flex-row">
-          <div className="text-2xl font-black text-gray-700">FRIKA MOD 🍪</div>
+          <div className="font-bold flex items-center gap-2">
+            <span className="bg-white/10 px-2 py-1 rounded text-white">FRIKA MOD 🍪</span>
+          </div>
           <div>
             © 2026{' '}
-            <a href="https://github.com/mleem97/FrikaModFramework" className="transition-colors hover:text-brandPink-500">
+            <a href="https://github.com/mleem97/FrikaModFramework" className="transition-colors hover:text-[var(--color-accent-pink)]">
               FrikaModFramework
             </a>{' '}
             & FrikaModFramework Project. All Rights Reserved.

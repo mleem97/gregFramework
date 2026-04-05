@@ -18,6 +18,16 @@ const homepageByLocale: Record<LocaleKey, HomepageContent> = {
 export type { HomepageContent, LocaleKey } from './types';
 
 export function getHomepageContent(locale: string): HomepageContent {
-  const normalizedLocale = (locale || 'en').toLowerCase() as LocaleKey;
-  return homepageByLocale[normalizedLocale] ?? homepageByLocale.en;
+  const normalizedLocale = (locale || 'en').toLowerCase();
+  const languageOnly = normalizedLocale.split('-')[0] as LocaleKey;
+
+  if (normalizedLocale in homepageByLocale) {
+    return homepageByLocale[normalizedLocale as LocaleKey];
+  }
+
+  if (languageOnly in homepageByLocale) {
+    return homepageByLocale[languageOnly];
+  }
+
+  return homepageByLocale.en;
 }
