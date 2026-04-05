@@ -89,7 +89,7 @@ const config = {
           items: [
             {to: '/docs', label: 'Overview'},
             {to: '/mods/framework', label: 'Framework'},
-            {to: '/mods/standalone', label: 'Standalone Mods'},
+            {to: '/mods/standalone', label: 'Standalone (Plugins & Mods)'},
             {to: '/wiki-import/Framework-Features-Use-Cases', label: 'Ecosystem'},
           ],
         },
