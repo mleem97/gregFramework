@@ -442,6 +442,48 @@
   color: #ffd1e4;
 }
 
+.footer__links {
+  margin-bottom: 0.85rem;
+}
+
+.footer__title {
+  color: #f2f4f8;
+}
+
+.footer__item {
+  margin-top: 0.35rem;
+}
+
+.footer-link-icon {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.footer-link-icon::before {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.3rem;
+  height: 1.3rem;
+  border-radius: 9999px;
+  font-size: 0.73rem;
+  background: rgba(173, 20, 87, 0.24);
+  border: 1px solid rgba(173, 20, 87, 0.45);
+}
+
+.footer-link-github::before {
+  content: '🐙';
+}
+
+.footer-link-discord::before {
+  content: '💬';
+}
+
+.footer-link-support::before {
+  content: '🛟';
+}
+
 .pagination-nav__link {
   border: 1px solid rgba(226, 58, 113, 0.3);
   background: linear-gradient(180deg, rgba(28, 13, 21, 0.7), rgba(22, 10, 16, 0.62));

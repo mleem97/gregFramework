@@ -101,7 +101,29 @@ const config = {
     },
     footer: {
       style: 'dark',
-      copyright: `Copyright ${new Date().getFullYear()} <a href="https://meyermedia.eu" target="_blank" rel="noopener noreferrer">Meyer Media</a>`,
+      links: [
+        {
+          title: 'Community',
+          items: [
+            {
+              label: 'GitHub',
+              href: 'https://github.com/mleem97/FrikaModFramework',
+              className: 'footer-link-icon footer-link-github',
+            },
+            {
+              label: 'Discord',
+              href: 'https://discord.gg/greg',
+              className: 'footer-link-icon footer-link-discord',
+            },
+            {
+              label: 'Support',
+              href: 'https://github.com/mleem97/FrikaModFramework/issues',
+              className: 'footer-link-icon footer-link-support',
+            },
+          ],
+        },
+      ],
+      copyright: `Copyright ${new Date().getFullYear()} <a href="https://meyermedia.eu" target="_blank" rel="noopener noreferrer">Meyer Media</a><br/>Dieses Wiki ist ein Community-Projekt und steht in keiner Verbindung zu WASEKU oder dem Spiel selbst.`,
     },
   },
 };
