@@ -9,7 +9,7 @@ const sidebars = {
         'mods/framework',
         {
           type: 'category',
-          label: 'Standalone Mods',
+          label: 'Standalone (Plugins & Mods)',
           items: [
             'mods/standalone/index',
             'mods/standalone/ffm-plugin-asset-exporter',
