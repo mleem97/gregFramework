@@ -97,10 +97,7 @@ while true do
     end
     socket.sleep(0.01)
 end
-```
-
-
-## How to stay update-resilient
+``# How to stay update-resilient
 
 - Prefer hooking deterministic gameplay methods over generic Unity internals.
 - Keep hook behavior small and fail-safe (`try/catch` in high-risk paths).
@@ -194,11 +191,11 @@ Hook install errors are written to diagnostics (`hook-install-errors.txt`).
 
 ## Related links
 
-- [Home](/wiki-import/Home)
-- [Home EN](/wiki-import/Home-en)
+- [Home](../Home)
+- [Home EN](../Home-en)
 - [Framework Features & Use Cases](/wiki-import/Framework-Features-Use-Cases)
 - [FFI Bridge Reference](/wiki-import/FFI-Bridge-Reference)
 - [Lua FFI Start Developing (DE+EN)](/wiki-import/Lua-FFI-Start-Developing)
 - [Web UI Bridge (DC2WEB)](/wiki-import/Web-UI-Bridge)
-- [Setup](/wiki-import/Setup)
+- [Setup](../Setup)
 - [Architecture](/wiki-import/Architecture)

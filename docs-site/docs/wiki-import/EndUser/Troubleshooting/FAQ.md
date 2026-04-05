@@ -10,4 +10,4 @@ Nein. Du kannst eine Sprache wählen.
 
 ## Lädt mein Mod nicht?
 
-Siehe [Troubleshooting](Troubleshooting-en).
+Siehe [Troubleshooting](troubleshooting-details).

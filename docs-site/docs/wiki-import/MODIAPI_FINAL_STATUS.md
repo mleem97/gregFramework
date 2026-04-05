@@ -1,3 +1,5 @@
+<!-- markdownlint-disable MD022 MD031 MD032 MD040 MD060 -->
+<!-- cspell:disable -->
 # ModigAPI Consolidation - Final Status Report
 
 **Completion Date:** 2026-04-04  

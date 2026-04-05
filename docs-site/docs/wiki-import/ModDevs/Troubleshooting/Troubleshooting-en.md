@@ -1,7 +1,3 @@
----
-slug: /wiki-import/ModDevs/Troubleshooting/Troubleshooting-en
----
-
 # Troubleshooting EN
 
 ## Verify

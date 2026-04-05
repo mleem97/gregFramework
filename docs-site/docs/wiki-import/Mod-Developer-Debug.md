@@ -2,4 +2,4 @@
 
 Diese Seite wurde verschoben nach:
 
-- [ModDevs/Mod-Developer-Debug](ModDevs/Mod-Developer-Debug)
+- [ModDevs/Index](/wiki-import/ModDevs/)

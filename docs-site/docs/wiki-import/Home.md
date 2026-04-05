@@ -20,18 +20,20 @@ FrikaMF ist ein inoffizielles, community-getriebenes Modding-Framework für das 
 
 ## Zielgruppen-Navigation
 
-- 🚀 **Ich will Mods nutzen:** [End-User (Release)](EndUser/End-User-Release)
-- 🛠️ **Ich will Mods bauen:** [Mod-Developer (Debug)](ModDevs/Mod-Developer-Debug)
-- 🤝 **Ich will contributen:** [Contributors (Debug)](Contirbutors/Contributors-Debug)
+- 🚀 **Ich will Mods nutzen:** [EndUser](/wiki-import/EndUser/)
+- 🛠️ **Ich will Mods bauen:** [ModDevs](/wiki-import/ModDevs/)
+- 🤝 **Ich will contributen:** [Contributors](/wiki-import/Contributors/)
 - 💖 **Ich will sponsoren:** [Sponsoren](Sponsoren)
 
 ## Schnelle Orientierung
 
-- Hook-Quelle der Wahrheit: [`HOOKS.md`](HOOKS)
+- Hook-Quelle der Wahrheit: [`HOOKS.md`](/wiki-import/HOOKS)
 - Versionen/Release-Historie: [Changelog & Versionen](Changelog-Versionen)
 - Spielpatch-Probleme: [Bekannte Inkompatibilitäten](Bekannte-Inkompatibilitaeten)
+- Vanilla-FAQ: [Data Center FAQ](/wiki-import/DataCenterFAQ/)
 - Begriffe & Grundlagen: [Glossar](Glossar)
 - Rechtliches: [Lizenz & Rechtliches](Lizenz-Rechtliches)
+- AI-Richtlinie: [AI Usage Policy](AI-USAGE)
 - Offener Brief an WASEKU: [Brief an WASEKU](Brief-an-WASEKU)
 
 ## Technische Kurzfassung
@@ -47,10 +49,10 @@ FrikaMF ist ein inoffizielles, community-getriebenes Modding-Framework für das 
 
 ## Technische Referenz (Direktlinks)
 
-- [Framework Features & Use Cases](Framework-Features-Use-Cases)
-- [FFI Bridge Reference](FFI-Bridge-Reference)
-- [Lua FFI Start Developing (DE+EN)](Lua-FFI-Start-Developing)
-- [Web UI Bridge (DC2WEB)](Web-UI-Bridge)
-- [Modding Guide](ModDevs/Modding-Guide)
-- [Architecture](Architecture)
+- [Framework Features & Use Cases](/wiki-import/Framework-Features-Use-Cases)
+- [FFI Bridge Reference](/wiki-import/FFI-Bridge-Reference)
+- [Lua FFI Start Developing (DE+EN)](/wiki-import/Lua-FFI-Start-Developing)
+- [Web UI Bridge (DC2WEB)](/wiki-import/Web-UI-Bridge)
+- [Modding Guide](ModDevs/Guides/Getting-Started)
+- [Architecture](/wiki-import/Architecture)
 - [Setup](Setup)

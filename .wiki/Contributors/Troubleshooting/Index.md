@@ -1,3 +1,0 @@
-# Troubleshooting Index
-
-- [Troubleshooting](Troubleshooting)

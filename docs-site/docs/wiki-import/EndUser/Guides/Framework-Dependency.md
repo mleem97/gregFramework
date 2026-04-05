@@ -13,5 +13,5 @@ FrikaMF als stabile Laufzeit-Abhängigkeit für eigene Mods verwenden.
 ## Nächste Seiten
 
 - [FAQ](../Troubleshooting/FAQ)
-- [Troubleshooting](../Troubleshooting/Troubleshooting-en)
+- [Troubleshooting](../Troubleshooting/)
 - [Disclaimer](../Reference/Disclaimer)

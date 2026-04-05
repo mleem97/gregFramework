@@ -109,7 +109,7 @@ Use this format when adding or updating device docs:
   2. `<Step 2>`
 - Source evidence:
   - `.wiki/HOOKS.md` entry
-  - runtime dump excerpt (`assembly-hooks.txt`)
+  - runtime dump excerpt ([`docs/references/assembly-hooks.txt`](/references/))
 ```
 
 ## Device documentation backlog
@@ -120,6 +120,6 @@ Use this format when adding or updating device docs:
 
 ## Related pages
 
-- [Modding Guide](Modding-Guide)
-- [Architecture](Architecture)
+- [Modding Guide](ModDevs/Guides/Getting-Started)
+- [Architecture](/wiki-import/Architecture)
 - [Setup](Setup)

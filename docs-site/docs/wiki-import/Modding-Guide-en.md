@@ -2,4 +2,4 @@
 
 This page was moved to:
 
-- [ModDevs/Modding-Guide-en](ModDevs/Modding-Guide-en)
+- [ModDevs/Guides/Getting-Started-en](ModDevs/Guides/Getting-Started-en)

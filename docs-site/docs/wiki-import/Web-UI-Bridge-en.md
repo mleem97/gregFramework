@@ -82,8 +82,8 @@ DC2WebBridge.RegisterWebApp(new Dc2WebAppDescriptor
 
 ## Related links
 
-- [Framework Features & Use Cases](Framework-Features-Use-Cases)
-- [FFI Bridge Reference](FFI-Bridge-Reference)
+- [Framework Features & Use Cases](/wiki-import/Framework-Features-Use-Cases)
+- [FFI Bridge Reference](/wiki-import/FFI-Bridge-Reference)
 - [Mod-Developer (Debug) EN](Mod-Developer-Debug-en)
 - [Contributors (Debug) EN](Contributors-Debug-en)
-- [Web UI Bridge (DC2WEB)](Web-UI-Bridge)
+- [Web UI Bridge (DC2WEB)](/wiki-import/Web-UI-Bridge)

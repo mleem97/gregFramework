@@ -25,7 +25,7 @@ Game updates may change signatures and hook points, breaking framework-level pat
 
 1. Capture `MelonLoader/Latest.log`.
 2. Confirm game/framework/mod versions.
-3. Review [`HOOKS.md`](HOOKS) and compatibility notes.
+3. Review [`HOOKS.md`](/wiki-import/HOOKS) and compatibility notes.
 
 ## Compatibility matrix template
 

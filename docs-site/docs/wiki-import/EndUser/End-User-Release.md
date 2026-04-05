@@ -134,13 +134,13 @@ Technisch ja, praktisch bringt es ohne abhängigen Mod kaum Mehrwert.
 
 ## Relevante Querverweise
 
-- [Home](/wiki-import/Home)
-- [Mod-Developer (Debug)](/wiki-import/Mod-Developer-Debug)
-- [Contributors (Debug)](/wiki-import/Contributors-Debug)
-- [Framework Features & Use Cases](/wiki-import/Framework-Features-Use-Cases)
-- [FFI Bridge Reference](/wiki-import/FFI-Bridge-Reference)
-- [Web UI Bridge (DC2WEB)](/wiki-import/Web-UI-Bridge)
-- [Bekannte Inkompatibilitäten](/wiki-import/Bekannte-Inkompatibilitaeten)
+- [Home](../Home)
+- [ModDevs](/wiki-import/ModDevs/)
+- [Contributors](/wiki-import/Contributors/)
+- [Framework Features & Use Cases](../Framework-Features-Use-Cases)
+- [FFI Bridge Reference](../FFI-Bridge-Reference)
+- [Web UI Bridge (DC2WEB)](../Web-UI-Bridge)
+- [Bekannte Inkompatibilitäten](../Bekannte-Inkompatibilitaeten)
 
 ## Minimalbeispiel (nur zur Einordnung)
 

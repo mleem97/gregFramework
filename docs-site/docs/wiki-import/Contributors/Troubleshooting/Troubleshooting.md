@@ -1,5 +1,5 @@
 ---
-slug: /wiki-import/Contributors/Troubleshooting/Troubleshooting
+slug: troubleshooting-details
 ---
 
 # Troubleshooting

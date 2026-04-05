@@ -60,7 +60,7 @@ Rust Mod (.dll)                         C# Mod (.dll)
 
 ## Quelle der Wahrheit für Hooks
 
-- Verifizierte Hook-Ziele: [`HOOKS.md`](/wiki-import/HOOKS)
+- Verifizierte Hook-Ziele: [`HOOKS.md`](../HOOKS)
 - Runtime-Patches: `FrikaMF/HarmonyPatches.cs`
 
 ## Getting Started: 🔷 C# Track
