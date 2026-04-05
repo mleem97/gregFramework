@@ -10,7 +10,7 @@ tags:
 
 This page is for players who do **not** develop mods and only install FrikaMF because another mod depends on it.
 
-For a complete overview of framework capabilities and setup flows, see [`Framework Features & Use Cases`](Framework-Features-Use-Cases).
+For a complete overview of framework capabilities and setup flows, see [`Framework Features & Use Cases`](/wiki-import/Framework-Features-Use-Cases).
 
 ## What you install
 
@@ -46,12 +46,12 @@ For a complete overview of framework capabilities and setup flows, see [`Framewo
 
 ## Related pages
 
-- [Home EN](Home-en)
-- [Mod-Developer (Debug) EN](Mod-Developer-Debug-en)
-- [Contributors (Debug) EN](Contributors-Debug-en)
-- [FFI Bridge Reference](FFI-Bridge-Reference)
-- [Web UI Bridge EN (DC2WEB)](Web-UI-Bridge-en)
-- [Known Incompatibilities EN](Known-Incompatibilities-en)
+- [Home EN](/wiki-import/Home-en)
+- [Mod-Developer (Debug) EN](/wiki-import/Mod-Developer-Debug-en)
+- [Contributors (Debug) EN](/wiki-import/Contributors-Debug-en)
+- [FFI Bridge Reference](/wiki-import/FFI-Bridge-Reference)
+- [Web UI Bridge EN (DC2WEB)](/wiki-import/Web-UI-Bridge-en)
+- [Known Incompatibilities EN](/wiki-import/Known-Incompatibilities-en)
 
 ## Minimal context example (both language tracks)
 

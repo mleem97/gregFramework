@@ -194,11 +194,11 @@ Hook install errors are written to diagnostics (`hook-install-errors.txt`).
 
 ## Related links
 
-- [Home](Home)
-- [Home EN](Home-en)
-- [Framework Features & Use Cases](Framework-Features-Use-Cases)
-- [FFI Bridge Reference](FFI-Bridge-Reference)
-- [Lua FFI Start Developing (DE+EN)](Lua-FFI-Start-Developing)
-- [Web UI Bridge (DC2WEB)](Web-UI-Bridge)
-- [Setup](Setup)
-- [Architecture](Architecture)
+- [Home](/wiki-import/Home)
+- [Home EN](/wiki-import/Home-en)
+- [Framework Features & Use Cases](/wiki-import/Framework-Features-Use-Cases)
+- [FFI Bridge Reference](/wiki-import/FFI-Bridge-Reference)
+- [Lua FFI Start Developing (DE+EN)](/wiki-import/Lua-FFI-Start-Developing)
+- [Web UI Bridge (DC2WEB)](/wiki-import/Web-UI-Bridge)
+- [Setup](/wiki-import/Setup)
+- [Architecture](/wiki-import/Architecture)

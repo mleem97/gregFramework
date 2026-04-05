@@ -10,7 +10,7 @@ tags:
 
 Diese Seite ist für Spieler gedacht, die **keine Mods entwickeln**, sondern FrikaMF nur als Abhängigkeit für andere Mods nutzen.
 
-Für einen vollständigen Überblick aller Framework-Funktionen und Use-Case-Flows siehe [`Framework Features & Use Cases`](Framework-Features-Use-Cases).
+Für einen vollständigen Überblick aller Framework-Funktionen und Use-Case-Flows siehe [`Framework Features & Use Cases`](/wiki-import/Framework-Features-Use-Cases).
 
 ## Was du installierst
 
@@ -134,13 +134,13 @@ Technisch ja, praktisch bringt es ohne abhängigen Mod kaum Mehrwert.
 
 ## Relevante Querverweise
 
-- [Home](Home)
-- [Mod-Developer (Debug)](Mod-Developer-Debug)
-- [Contributors (Debug)](Contributors-Debug)
-- [Framework Features & Use Cases](Framework-Features-Use-Cases)
-- [FFI Bridge Reference](FFI-Bridge-Reference)
-- [Web UI Bridge (DC2WEB)](Web-UI-Bridge)
-- [Bekannte Inkompatibilitäten](Bekannte-Inkompatibilitaeten)
+- [Home](/wiki-import/Home)
+- [Mod-Developer (Debug)](/wiki-import/Mod-Developer-Debug)
+- [Contributors (Debug)](/wiki-import/Contributors-Debug)
+- [Framework Features & Use Cases](/wiki-import/Framework-Features-Use-Cases)
+- [FFI Bridge Reference](/wiki-import/FFI-Bridge-Reference)
+- [Web UI Bridge (DC2WEB)](/wiki-import/Web-UI-Bridge)
+- [Bekannte Inkompatibilitäten](/wiki-import/Bekannte-Inkompatibilitaeten)
 
 ## Minimalbeispiel (nur zur Einordnung)
 

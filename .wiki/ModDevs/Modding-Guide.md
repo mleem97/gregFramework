@@ -97,10 +97,7 @@ while true do
     end
     socket.sleep(0.01)
 end
-```
-
-
-## How to stay update-resilient
+``# How to stay update-resilient
 
 - Prefer hooking deterministic gameplay methods over generic Unity internals.
 - Keep hook behavior small and fail-safe (`try/catch` in high-risk paths).

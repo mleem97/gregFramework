@@ -11,6 +11,12 @@ This documentation is organized by experience level so new users can start quick
 - New to modding: go to **Newbies**
 - Built a few mods: go to **Intermediates**
 - Working on runtime internals: go to **Pros**
+- Looking for official modules: go to **Mods → Framework** and **Mods → Standalone Mods**
+
+## Mods Hub
+
+- Framework entry: [`Framework`](./mods/framework.md)
+- Standalone list: [`Standalone Mods`](./mods/standalone/index.md)
 
 ## Source model
 

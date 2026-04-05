@@ -71,7 +71,6 @@ pub extern "C" fn mod_info() -> ModInfoFFI {
 }
 ```
 
-
 ### Tab: 🇬🇧 English
 
 **Goal:** Provide plugin metadata so FrikaMF can identify your native module.
@@ -102,7 +101,6 @@ pub extern "C" fn mod_info() -> ModInfoFFI {
     }
 }
 ```
-
 
 ### 2) `mod_init(api_table)` — bootstrap and API binding
 
@@ -141,7 +139,6 @@ pub extern "C" fn mod_init(api_table: *mut core::ffi::c_void) -> bool {
 }
 ```
 
-
 ### Tab: 🇬🇧 English
 
 **Goal:** Bind `GameAPITable` and start/connect your Lua sidecar.
@@ -177,7 +174,6 @@ pub extern "C" fn mod_init(api_table: *mut core::ffi::c_void) -> bool {
 }
 ```
 
-
 ### 3) `mod_update(delta_time)` — per-frame tick
 
 ### Tab: 🇩🇪 Deutsch
@@ -192,7 +188,6 @@ pub extern "C" fn mod_update(delta_time: f32) {
 }
 ```
 
-
 ### Tab: 🇬🇧 English
 
 **Goal:** Non-blocking tick loop and sidecar polling.
@@ -204,7 +199,6 @@ pub extern "C" fn mod_update(delta_time: f32) {
     // Non-blocking: poll Lua commands and apply them
 }
 ```
-
 
 ### 4) `mod_fixed_update(delta_time)` — fixed-step logic
 
@@ -220,7 +214,6 @@ pub extern "C" fn mod_fixed_update(delta_time: f32) {
 }
 ```
 
-
 ### Tab: 🇬🇧 English
 
 **Goal:** Keep deterministic/fixed-step logic separate.
@@ -232,7 +225,6 @@ pub extern "C" fn mod_fixed_update(delta_time: f32) {
     // Optional: fixed-step simulation logic
 }
 ```
-
 
 ### 5) `mod_on_scene_loaded(scene_name)` — scene lifecycle
 
@@ -252,7 +244,6 @@ pub extern "C" fn mod_on_scene_loaded(scene_name: *const i8) {
 }
 ```
 
-
 ### Tab: 🇬🇧 English
 
 ```rust
@@ -268,7 +259,6 @@ pub extern "C" fn mod_on_scene_loaded(scene_name: *const i8) {
     println!("Scene loaded: {}", name);
 }
 ```
-
 
 ### 6) `mod_on_event(event_id, data_ptr, data_len)` — event ingestion
 
@@ -293,7 +283,6 @@ pub extern "C" fn mod_on_event(event_id: u32, data_ptr: *const u8, data_len: u32
 }
 ```
 
-
 ### Tab: 🇬🇧 English
 
 ```rust
@@ -315,7 +304,6 @@ pub extern "C" fn mod_on_event(event_id: u32, data_ptr: *const u8, data_len: u32
 }
 ```
 
-
 ### 7) `mod_shutdown()` — cleanup
 
 ### Tab: 🇩🇪 Deutsch
@@ -327,7 +315,6 @@ pub extern "C" fn mod_shutdown() {
 }
 ```
 
-
 ### Tab: 🇬🇧 English
 
 ```rust
@@ -336,7 +323,6 @@ pub extern "C" fn mod_shutdown() {
     // Close sidecar connection cleanly
 }
 ```
-
 
 ## Lua sidecar starter snippets
 
@@ -365,7 +351,6 @@ while true do
 end
 ```
 
-
 ### Tab: 🇬🇧 English
 
 ```lua
@@ -388,7 +373,6 @@ while true do
   socket.sleep(0.01)
 end
 ```
-
 
 ## Callable API matrix (v7)
 
@@ -496,4 +480,3 @@ end
 - [Modding Guide](Modding-Guide)
 - [Mod-Developer (Debug)](Mod-Developer-Debug)
 - [Framework Features & Use Cases](Framework-Features-Use-Cases)
-

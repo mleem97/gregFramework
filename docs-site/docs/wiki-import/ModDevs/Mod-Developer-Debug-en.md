@@ -10,7 +10,7 @@ tags:
 
 You only need one track: **Rust** or **C#**. FrikaMF bridges runtime communication.
 
-Full framework capability catalog with setup guides: [`Framework Features & Use Cases`](Framework-Features-Use-Cases).
+Full framework capability catalog with setup guides: [`Framework Features & Use Cases`](/wiki-import/Framework-Features-Use-Cases).
 
 ## Rust vs C# decision guide
 
@@ -37,7 +37,7 @@ Recommended approach:
 
 For full DE/EN step-by-step tutorials per FFI entrypoint, see:
 
-- [Lua FFI — How to Start Developing (DE + EN)](Lua-FFI-Start-Developing)
+- [Lua FFI — How to Start Developing (DE + EN)](/wiki-import/Lua-FFI-Start-Developing)
 
 ## Architecture
 
@@ -51,7 +51,7 @@ Rust Mod (.dll)                         C# Mod (.dll)
 
 ## Source of truth for hooks
 
-- [`HOOKS.md`](HOOKS)
+- [`HOOKS.md`](/wiki-import/HOOKS)
 
 ## C# track quick start
 
@@ -104,7 +104,7 @@ Interop assemblies often contain metadata-facing stubs; real implementation live
 - It is not a generic network FFI transport bus.
 - For Web FFI, implement your own HTTP/WebSocket gateway with validation and rate limits.
 
-Config API reference: [`Mod Config System`](Mod-Config-System)
+Config API reference: [`Mod Config System`](/wiki-import/Mod-Config-System)
 
 ## Cross-track example
 

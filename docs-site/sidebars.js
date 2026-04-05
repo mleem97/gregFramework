@@ -4,6 +4,30 @@ const sidebars = {
     'intro',
     {
       type: 'category',
+      label: 'Mods',
+      items: [
+        'mods/framework',
+        {
+          type: 'category',
+          label: 'Standalone Mods',
+          items: [
+            'mods/standalone/index',
+            'mods/standalone/ffm-plugin-asset-exporter',
+            'mods/standalone/ffm-plugin-multiplayer',
+            'mods/standalone/ffm-plugin-player-models',
+            'mods/standalone/ffm-plugin-sysadmin',
+            'mods/standalone/ffm-plugin-web-ui-bridge',
+            'mods/standalone/fmf-console-input-guard',
+            'mods/standalone/fmf-gregify-employees',
+            'mods/standalone/fmf-hex-label-mod',
+            'mods/standalone/fmf-lang-compat-bridge',
+            'mods/standalone/fmf-ui-replacement-mod',
+          ],
+        },
+      ],
+    },
+    {
+      type: 'category',
       label: 'By Experience',
       items: [
         'audiences/newbies',

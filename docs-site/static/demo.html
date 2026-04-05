@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FrikaModFramework | Datacenter Modding Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap');
+
+        * {
+            font-family: 'Inter', system-ui, sans-serif;
+        }
+
+        :root {
+            /* Web-App Header Farben */
+            --color-nav-bg: #1a0510;
+            --color-nav-border: #3d0e26;
+            --color-nav-pill: #4a122e;
+
+            /* Web-App Body Farben */
+            --color-app-bg: #0d0a0b;
+            --color-card-bg: #161214;
+            --color-card-border: #2a1f24;
+            --color-card-hover: #1e181a;
+
+            /* Akzente */
+            --color-accent-pink: #e23a71;
+            --color-accent-green: #00c853;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            background-color: var(--color-app-bg);
+            color: #e2e8f0;
+        }
+
+        body {
+            background-color: var(--color-app-bg);
+            color: #e2e8f0;
+        }
+
+        .app-card {
+            background-color: var(--color-card-bg);
+            border: 1px solid var(--color-card-border);
+            transition: all 0.2s ease;
+        }
+
+        .app-card:hover {
+            background-color: var(--color-card-hover);
+            border-color: var(--color-nav-pill);
+        }
+
+        .app-btn-primary {
+            background-color: var(--color-accent-green);
+            color: #000;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .app-btn-primary:hover {
+            background-color: #00e676;
+            box-shadow: 0 0 15px rgba(0, 200, 83, 0.3);
+        }
+
+        .nav-bg {
+            background-color: var(--color-nav-bg);
+            border-color: var(--color-nav-border);
+        }
+
+        .nav-pill {
+            background-color: var(--color-nav-pill);
+        }
+
+        header {
+            background-color: var(--color-nav-bg);
+            border-bottom-color: var(--color-nav-border);
+        }
+
+        ::selection {
+            background-color: var(--color-accent-pink);
+            color: white;
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col selection:text-white">
+
+    <header class="w-full nav-bg border-b border-nav-border sticky top-0 z-50">
+        <div class="px-6 h-14 flex justify-between items-center text-sm">
+            
+            <div class="flex items-center gap-6">
+                <a href="#" class="nav-pill text-white px-3 py-1.5 rounded-md font-bold tracking-tight shadow-sm border border-white/5 hover:border-white/20 transition-colors">
+                    Frika Mod Framework
+                </a>
+                <nav class="hidden md:flex gap-4 font-medium text-gray-400">
+                    <a href="#" class="hover:text-white transition-colors">Home</a>
+                    <a href="#" class="text-white drop-shadow-sm">Docs Hub</a>
+                </nav>
+            </div>
+
+            <div class="flex items-center gap-5 text-gray-400 font-medium text-xs md:text-sm">
+                <button class="flex flex-col items-center leading-none hover:text-white transition-colors">
+                    <span class="text-[10px] uppercase tracking-wider mb-0.5">文A</span>
+                    <span class="text-xs">日本語</span>
+                </button>
+                
+                <div class="h-4 w-px bg-white/10 mx-1"></div>
+
+                <a href="#" class="hover:text-white transition-colors flex items-center gap-1 whitespace-nowrap">Mods <span class="text-[10px]">↗</span></a>
+                <a href="#" class="hover:text-white transition-colors flex items-center gap-1 whitespace-nowrap">Discord <span class="text-[10px]">↗</span></a>
+                <a href="#" class="hover:text-white transition-colors flex items-center gap-1 whitespace-nowrap">Support <span class="text-[10px]">↗</span></a>
+                <a href="https://github.com/mleem97/FrikaModFramework/" class="text-white hover:text-[var(--color-accent-pink)] transition-colors flex items-center gap-1 whitespace-nowrap">
+                    GitHub <span class="text-[10px]">↗</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-6xl mx-auto px-4 md:px-6 py-16 w-full flex flex-col items-center">
+        
+        <div class="text-center mb-20 w-full flex flex-col items-center">
+            <h1 class="text-3xl md:text-5xl font-black text-white mb-8 leading-none tracking-tight">
+                FRIKA MOD <span class="text-amber-700">🍪</span><br>FRAMEWORK
+            </h1>
+
+            <h2 class="text-2xl md:text-5xl font-extrabold text-white mb-6 tracking-tight">
+                DATACENTER MODDING HUB.<br>
+                <span class="text-gray-400">SMART LIKE GREG.</span>
+            </h2>
+            
+            <p class="text-gray-400 mb-10 max-w-lg mx-auto text-base md:text-lg leading-relaxed">
+                Streamlined. Flexible. Community-curated.<br>
+                Covering FrikaMF, Rust stacks, multiplayer and plugins.
+            </p>
+
+            <div class="flex flex-col sm:flex-row gap-4 justify-center w-full px-4 md:px-0">
+                <button class="app-btn-primary py-3 px-8 rounded-full shadow-lg whitespace-nowrap">
+                    OPEN PORTAL
+                </button>
+                <button class="app-card hover:app-card text-white font-semibold py-3 px-8 rounded-full transition-colors whitespace-nowrap border">
+                    VISIT datacentermods.com
+                </button>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 w-full mb-20">
+            <div class="app-card p-5 rounded-xl">
+                <h3 class="text-white font-bold mb-2 flex items-center gap-2"><span>🛠️</span> Dual-Track Modding</h3>
+                <p class="text-sm text-gray-400 leading-relaxed">Build mods in C# directly or native in Rust via C-ABI/FFI.</p>
+            </div>
+            <div class="app-card p-5 rounded-xl">
+                <h3 class="text-white font-bold mb-2 flex items-center gap-2"><span>⚡</span> Runtime Hook Bridge</h3>
+                <p class="text-sm text-gray-400 leading-relaxed">Harmony patches, event IDs, and deterministic hook forwarding.</p>
+            </div>
+            <div class="app-card p-5 rounded-xl">
+                <h3 class="text-white font-bold mb-2 flex items-center gap-2"><span>📚</span> Wiki-Driven Docs</h3>
+                <p class="text-sm text-gray-400 leading-relaxed">Source of truth from .wiki with end-user and mod-dev paths.</p>
+            </div>
+            <div class="app-card p-5 rounded-xl">
+                <h3 class="text-white font-bold mb-2 flex items-center gap-2"><span>👥</span> Community Ecosystem</h3>
+                <p class="text-sm text-gray-400 leading-relaxed">Core framework docs plus standalone plugin and ecosystem docs.</p>
+            </div>
+        </div>
+
+        <div class="w-full mb-20 p-6 md:p-8 rounded-2xl border border-white/5" style="background-color: rgba(22, 18, 20, 0.3);">
+            <h2 class="text-2xl font-bold text-white mb-6 text-center">Documentation Paths</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl mx-auto">
+                <a href="#" class="app-card p-5 rounded-lg group block">
+                    <h3 class="text-white font-bold mb-1 group-hover:text-[var(--color-accent-pink)] transition-colors">End-User</h3>
+                    <p class="text-sm text-gray-500">Install, update, FAQ, troubleshooting.</p>
+                </a>
+                <a href="#" class="app-card p-5 rounded-lg group block">
+                    <h3 class="text-white font-bold mb-1 group-hover:text-[var(--color-accent-pink)] transition-colors">Mod-Devs</h3>
+                    <p class="text-sm text-gray-500">Debug workflows, setup, hooks and references.</p>
+                </a>
+                <a href="#" class="app-card p-5 rounded-lg group block">
+                    <h3 class="text-white font-bold mb-1 group-hover:text-[var(--color-accent-pink)] transition-colors">Contributors</h3>
+                    <p class="text-sm text-gray-500">Conventions, CI checks, contribution workflow.</p>
+                </a>
+                <a href="#" class="app-card p-5 rounded-lg group block">
+                    <h3 class="text-white font-bold mb-1 group-hover:text-[var(--color-accent-pink)] transition-colors">Capability Matrix</h3>
+                    <p class="text-sm text-gray-500">Complete feature map and implementation use cases.</p>
+                </a>
+            </div>
+        </div>
+
+        <div class="w-full mb-20">
+            <h2 class="text-2xl font-bold text-white mb-6 text-center">Ecosystem Coverage</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="app-card p-6 rounded-xl flex flex-col h-full border-t-2 border-t-[var(--color-accent-pink)]/50">
+                    <h3 class="text-white font-bold mb-2 flex items-center gap-2"><span>&lt;/&gt;</span> FrikaMF Core</h3>
+                    <p class="text-sm text-gray-400 mb-6 flex-grow">Hook system, FFI bridge, event contracts and runtime architecture.</p>
+                    <a href="#" class="text-[var(--color-accent-pink)] text-sm font-semibold hover:text-white transition-colors mt-auto">Open core docs &rarr;</a>
+                </div>
+                <div class="app-card p-6 rounded-xl flex flex-col h-full border-t-2 border-t-orange-500/50">
+                    <h3 class="text-white font-bold mb-2 flex items-center gap-2"><span>🗄️</span> Standalone Rust</h3>
+                    <p class="text-sm text-gray-400 mb-6 flex-grow">Rust/FFI implementation guides for external and standalone runtimes.</p>
+                    <a href="#" class="text-[var(--color-accent-pink)] text-sm font-semibold hover:text-white transition-colors mt-auto">Open Rust/FFI docs &rarr;</a>
+                </div>
+                <div class="app-card p-6 rounded-xl flex flex-col h-full border-t-2 border-t-blue-500/50">
+                    <h3 class="text-white font-bold mb-2 flex items-center gap-2"><span>👥</span> Multiplayer & Plugins</h3>
+                    <p class="text-sm text-gray-400 mb-6 flex-grow">Multiplayer roadmap, plugin docs, and community module references.</p>
+                    <a href="#" class="text-[var(--color-accent-pink)] text-sm font-semibold hover:text-white transition-colors mt-auto">Open multiplayer docs &rarr;</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="w-full mb-20 p-6 md:p-8 rounded-xl app-card">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+                <div>
+                    <h3 class="text-2xl font-bold text-white mb-2">Die Legende von Greg</h3>
+                    <p class="text-gray-400 text-sm md:text-base leading-relaxed max-w-md">
+                        Greg ist der unermüdliche Server-Techniker des Projekts. Er wirkt zwar so, als hätte er seit Monaten nicht mehr geschlafen, und er ist meistens still — aber sobald ein Rack ausfällt oder ein Mod zickt, ist Greg schon da.
+                    </p>
+                    <p class="text-gray-500 text-xs md:text-sm mt-3">
+                        "Be smart. Be like Greg."
+                    </p>
+                </div>
+                <div class="flex-shrink-0">
+                    <div class="w-32 h-40 md:w-48 md:h-56 rounded-lg border border-[var(--color-card-border)] flex items-center justify-center" style="background: linear-gradient(135deg, rgba(228, 58, 113, 0.1) 0%, rgba(74, 18, 46, 0.1) 100%);">
+                        <span class="text-5xl md:text-7xl">👨‍💼</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="w-full border-t" style="border-color: var(--color-card-border); background-color: var(--color-card-bg); margin-top: auto;">
+        <div class="max-w-6xl mx-auto px-6 py-6 flex flex-col md:flex-row justify-between items-center text-xs text-gray-500 gap-4">
+            <div class="font-bold flex items-center gap-2">
+                <span class="bg-white/10 px-2 py-1 rounded text-white">FRIKA MOD 🍪</span>
+            </div>
+            <div class="text-center md:text-right">
+                &copy; 2026 FrikaModFramework Project. <a href="https://github.com/mleem97/FrikaModFramework/issues" class="hover:text-[var(--color-accent-pink)] ml-2">Report Issue</a>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

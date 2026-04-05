@@ -10,7 +10,7 @@ tags:
 
 Diese Seite ist für Entwickler, die direkt am `FrikaModdingFramework` arbeiten.
 
-Für die vollständige, laufend zu pflegende Feature-Matrix mit Implementierungs-Use-Cases siehe [`Framework Features & Use Cases`](Framework-Features-Use-Cases).
+Für die vollständige, laufend zu pflegende Feature-Matrix mit Implementierungs-Use-Cases siehe [`Framework Features & Use Cases`](/wiki-import/Framework-Features-Use-Cases).
 
 ## Dev-Setup
 
@@ -45,7 +45,7 @@ dotnet build .\FrikaMF.csproj /p:GameDir="C:\Pfad\zu\Data Center"
 ## Workflow: Neuen Hook hinzufügen (Schritt für Schritt)
 
 1. **dnSpy/dotPeek:** Zielmethode finden und Signatur prüfen.
-2. **Dokumentation:** Eintrag in [`HOOKS.md`](HOOKS) hinzufügen/aktualisieren.
+2. **Dokumentation:** Eintrag in [`HOOKS.md`](/wiki-import/HOOKS) hinzufügen/aktualisieren.
 3. **Patch:** Harmony Patch in `FrikaMF/HarmonyPatches.cs` ergänzen.
 4. **Bridge:** Event-ID in `EventIds.cs` und Dispatch in `EventDispatcher.cs` ergänzen.
 5. **Rust-Vertrag:** Falls benötigt, C-ABI-Struktur + `mod_on_event` Vertrag ergänzen.
@@ -98,7 +98,7 @@ Aktuelle technische Grenze:
 - Kein eingebetteter Browser/DOM/JS-Engine-Laufzeitstack.
 - React/TS/JS laufen über Übersetzungsadapter auf Unity-UI-Profile.
 
-Details: [`Web UI Bridge (DC2WEB)`](Web-UI-Bridge)
+Details: [`Web UI Bridge (DC2WEB)`](/wiki-import/Web-UI-Bridge)
 
 ## Lua/Python/Web FFI Contributor Notes
 
