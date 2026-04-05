@@ -1,7 +1,3 @@
----
-slug: /wiki-import/EndUser/Troubleshooting/Troubleshooting-en
----
-
 # Troubleshooting EN
 
 ## Standard Checks

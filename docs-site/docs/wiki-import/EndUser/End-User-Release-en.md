@@ -46,12 +46,12 @@ For a complete overview of framework capabilities and setup flows, see [`Framewo
 
 ## Related pages
 
-- [Home EN](/wiki-import/Home-en)
-- [Mod-Developer (Debug) EN](/wiki-import/Mod-Developer-Debug-en)
-- [Contributors (Debug) EN](/wiki-import/Contributors-Debug-en)
-- [FFI Bridge Reference](/wiki-import/FFI-Bridge-Reference)
-- [Web UI Bridge EN (DC2WEB)](/wiki-import/Web-UI-Bridge-en)
-- [Known Incompatibilities EN](/wiki-import/Known-Incompatibilities-en)
+- [Home EN](../Home-en)
+- [ModDevs EN](../ModDevs/Index-en)
+- [Contributors EN](../Contributors/Index-en)
+- [FFI Bridge Reference](../FFI-Bridge-Reference)
+- [Web UI Bridge EN (DC2WEB)](../Web-UI-Bridge-en)
+- [Known Incompatibilities EN](../Known-Incompatibilities-en)
 
 ## Minimal context example (both language tracks)
 

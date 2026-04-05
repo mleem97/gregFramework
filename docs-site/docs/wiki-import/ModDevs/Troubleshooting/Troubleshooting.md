@@ -1,5 +1,5 @@
 ---
-slug: /wiki-import/ModDevs/Troubleshooting/Troubleshooting
+slug: troubleshooting-details
 ---
 
 # Troubleshooting

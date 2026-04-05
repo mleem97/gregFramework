@@ -28,7 +28,7 @@ Recommended integration model for Lua/Python today:
 
 Detailed bilingual Lua onboarding tutorials:
 
-- [Lua FFI Start Developing (DE+EN)](Lua-FFI-Start-Developing)
+- [Lua FFI Start Developing (DE+EN)](/wiki-import/Lua-FFI-Start-Developing)
 
 ## Callability quick answer
 
@@ -176,10 +176,10 @@ Implementation detail:
 
 ## Related links
 
-- [Framework Features & Use Cases](Framework-Features-Use-Cases)
-- [Mod Config System](Mod-Config-System)
+- [Framework Features & Use Cases](/wiki-import/Framework-Features-Use-Cases)
+- [Mod Config System](/wiki-import/Mod-Config-System)
 - [Modding Guide](Modding-Guide)
-- [Lua FFI Start Developing (DE+EN)](Lua-FFI-Start-Developing)
-- [Architecture](Architecture)
-- [Web UI Bridge (DC2WEB)](Web-UI-Bridge)
+- [Lua FFI Start Developing (DE+EN)](/wiki-import/Lua-FFI-Start-Developing)
+- [Architecture](/wiki-import/Architecture)
+- [Web UI Bridge (DC2WEB)](/wiki-import/Web-UI-Bridge)
 - [Web UI Bridge (DC2WEB) EN](Web-UI-Bridge-en)

@@ -34,7 +34,7 @@ Core runtime modules under `FrikaMF/`:
 - Calls optional update callbacks every frame/fixed frame.
 - Dispatches typed gameplay events to `mod_on_event`.
 
-Reference: [`FFI-Bridge-Reference`](FFI-Bridge-Reference)
+Reference: [`FFI-Bridge-Reference`](/wiki-import/FFI-Bridge-Reference)
 
 ### B. Stable Game API table for native mods
 
@@ -48,7 +48,7 @@ Reference: [`FFI-Bridge-Reference`](FFI-Bridge-Reference)
 - Notification/rate/pause/save controls.
 - Steam/P2P function surface and player position.
 
-Reference: [`FFI-Bridge-Reference`](FFI-Bridge-Reference)
+Reference: [`FFI-Bridge-Reference`](/wiki-import/FFI-Bridge-Reference)
 
 ### C. Event contract and hook bridge
 
@@ -85,7 +85,7 @@ Reference files: `HarmonyPatches.cs`, `EventDispatcher.cs`, `EventIds.cs`
 - Supports image assets including SVG-first workflow (`SVG`, `PNG`, `JPG/JPEG`, `BMP`, `GIF`, `TGA`).
 - Runtime `Mod Settings` panel for toggles and replacement mode.
 
-Reference: [`Web-UI-Bridge`](Web-UI-Bridge)
+Reference: [`Web-UI-Bridge`](/wiki-import/Web-UI-Bridge)
 
 ### H. Multiplayer bridge
 
@@ -124,7 +124,7 @@ The framework supports a runtime mod configuration surface (C# wrappers + low-le
 - runtime panel editing
 - immediate persistence to JSON under `UserData/ModConfigs`
 
-Reference: [`Mod Config System`](Mod-Config-System)
+Reference: [`Mod Config System`](/wiki-import/Mod-Config-System)
 
 ### L. Lua/Python/Web FFI integration status
 
@@ -240,7 +240,7 @@ DC2WebBridge.TryApplyOrReplace(rootGameObject, "HRSystem");
 
 ## Use Case 9: Auto-install runtime hooks for discovery
 
-1. Prepare catalog file (`assembly-hooks.txt` or exported dump).
+1. Prepare catalog file ([`docs/references/assembly-hooks.txt`](/references/) or exported dump).
 2. Run with hooker options from launch flags (see `Modding-Guide`).
 3. Inspect emitted hook bridge events (`HookBridgeInstalled`, `HookBridgeTriggered`).
 
@@ -318,9 +318,9 @@ When adding/removing framework capability:
 - [Home](Home)
 - [Home EN](Home-en)
 - [Modding Guide](Modding-Guide)
-- [Architecture](Architecture)
+- [Architecture](/wiki-import/Architecture)
 - [Setup](Setup)
-- [FFI Bridge Reference](FFI-Bridge-Reference)
-- [Mod Config System](Mod-Config-System)
-- [Web UI Bridge (DC2WEB)](Web-UI-Bridge)
+- [FFI Bridge Reference](/wiki-import/FFI-Bridge-Reference)
+- [Mod Config System](/wiki-import/Mod-Config-System)
+- [Web UI Bridge (DC2WEB)](/wiki-import/Web-UI-Bridge)
 - [Web UI Bridge (DC2WEB) EN](Web-UI-Bridge-en)

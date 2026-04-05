@@ -6,5 +6,5 @@ Zielgruppe: Entwickler, die Mods auf FrikaMF aufbauen.
 
 - [Getting Started](Guides/Getting-Started)
 - [Hook Event Reference](Reference/Hook-Event-Reference)
-- [Troubleshooting](Troubleshooting/Troubleshooting-en)
+- [Troubleshooting](Troubleshooting/)
 - [AI Usage Policy](../AI-USAGE)

@@ -1,4 +1,4 @@
 # Troubleshooting Index
 
 - [FAQ](FAQ)
-- [Troubleshooting](Troubleshooting-en)
+- [Troubleshooting](troubleshooting-details)

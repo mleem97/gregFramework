@@ -1,7 +1,3 @@
----
-slug: /wiki-import/Contributors/Troubleshooting/Troubleshooting-en
----
-
 # Troubleshooting EN
 
 ## Common Contributor Issues

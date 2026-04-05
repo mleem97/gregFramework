@@ -6,6 +6,6 @@ Zielgruppe: Nutzer, die FrikaMF als Abhängigkeit verwenden möchten.
 
 - [Framework Dependency Usage](Guides/Framework-Dependency)
 - [FAQ](Troubleshooting/FAQ)
-- [Troubleshooting](Troubleshooting/Troubleshooting-en)
+- [Troubleshooting](Troubleshooting/)
 - [Disclaimer](Reference/Disclaimer)
 - [AI Usage Policy](../AI-USAGE)

@@ -1,5 +1,5 @@
 ---
-slug: /wiki-import/EndUser/Troubleshooting/Troubleshooting
+slug: troubleshooting-details
 ---
 
 # Troubleshooting

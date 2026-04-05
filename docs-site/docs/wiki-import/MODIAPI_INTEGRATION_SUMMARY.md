@@ -1,3 +1,5 @@
+<!-- markdownlint-disable MD022 MD031 MD032 MD036 MD040 MD060 -->
+<!-- cspell:disable -->
 # FrikaMF ModigAPI Integration Summary
 
 **Date:** 2026-04-04  

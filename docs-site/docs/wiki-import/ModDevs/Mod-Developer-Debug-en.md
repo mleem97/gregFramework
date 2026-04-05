@@ -51,7 +51,7 @@ Rust Mod (.dll)                         C# Mod (.dll)
 
 ## Source of truth for hooks
 
-- [`HOOKS.md`](/wiki-import/HOOKS)
+- [`HOOKS.md`](../HOOKS)
 
 ## C# track quick start
 

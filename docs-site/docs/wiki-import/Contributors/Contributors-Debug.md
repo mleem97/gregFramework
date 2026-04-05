@@ -175,4 +175,3 @@ public static void FireMoneyChanged(int oldValue, int newValue)
     EventDispatcher.Dispatch(EventIds.MoneyChanged, payload);
 }
 ```
-

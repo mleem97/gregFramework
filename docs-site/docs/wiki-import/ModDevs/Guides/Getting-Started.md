@@ -10,4 +10,4 @@
 ## Weiter
 
 - [Hook Event Reference](../Reference/Hook-Event-Reference)
-- [Troubleshooting](../Troubleshooting/Troubleshooting-en)
+- [Troubleshooting](../Troubleshooting/)

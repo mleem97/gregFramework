@@ -6,5 +6,5 @@ Zielgruppe: Mitwirkende am Framework und an der Dokumentation.
 
 - [Contribution Workflow](Guides/Contribution-Workflow)
 - [Naming Convention](Reference/Naming-Convention)
-- [Troubleshooting](Troubleshooting/Troubleshooting-en)
+- [Troubleshooting](Troubleshooting/)
 - [AI Usage Policy](../AI-USAGE)
