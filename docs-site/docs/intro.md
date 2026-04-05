@@ -1,7 +1,7 @@
 ---
 id: intro
 title: FrikaMF Docs Start
-slug: /
+slug: /docs
 ---
 
 This documentation is organized by experience level so new users can start quickly while advanced contributors still get deep technical references.
