@@ -90,14 +90,18 @@ const config = {
         },
         {
           type: 'localeDropdown',
-          className: 'nav-locale nav-right-icon',
+          className: 'nav-locale nav-right-icon nav-icon-only',
           position: 'right',
         },
-        {to: '/mods/standalone', label: 'Mods', position: 'right', className: 'nav-right-icon nav-link-mods'},
-        {href: 'https://discord.gg/greg', label: 'Discord', position: 'right', className: 'nav-right-icon nav-link-discord'},
-        {href: 'https://github.com/mleem97/FrikaModFramework/issues', label: 'Support', position: 'right', className: 'nav-right-icon nav-link-support'},
-        {href: 'https://github.com/mleem97/FrikaModFramework', label: 'GitHub', position: 'right', className: 'nav-right-icon nav-link-github'},
+        {to: '/mods/standalone', label: 'Mods', position: 'right', className: 'nav-right-icon nav-icon-only nav-link-mods'},
+        {href: 'https://discord.gg/greg', label: 'Discord', position: 'right', className: 'nav-right-icon nav-icon-only nav-link-discord'},
+        {href: 'https://github.com/mleem97/FrikaModFramework/issues', label: 'Support', position: 'right', className: 'nav-right-icon nav-icon-only nav-link-support'},
+        {href: 'https://github.com/mleem97/FrikaModFramework', label: 'GitHub', position: 'right', className: 'nav-right-icon nav-icon-only nav-link-github'},
       ],
+    },
+    footer: {
+      style: 'dark',
+      copyright: `Copyright ${new Date().getFullYear()} <a href="https://meyermedia.eu" target="_blank" rel="noopener noreferrer">Meyer Media</a>`,
     },
   },
 };
