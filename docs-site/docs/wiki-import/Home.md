@@ -3,11 +3,11 @@ title: Home
 description: Einstiegspunkt für End-User, Mod-Developer, Contributors, Sponsoren und den Dialog mit dem Spieleentwickler.
 sidebar_position: 10
 tags:
-	- audience:enduser
-	- audience:moddev
-	- audience:contributor
-	- audience:sponsor
-	- audience:gamedev
+  - audience:enduser
+  - audience:moddev
+  - audience:contributor
+  - audience:sponsor
+  - audience:gamedev
 ---
 
 ## FrikaModdingFramework (FrikaMF)

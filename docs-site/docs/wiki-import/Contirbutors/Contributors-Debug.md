@@ -1,6 +1,6 @@
 ---
 title: Contributors (Debug)
-description: Beitrag zum Framework selbst: Setup, Hook-Workflow, Konventionen, PR-Checks und CI-Verhalten.
+description: "Beitrag zum Framework selbst: Setup, Hook-Workflow, Konventionen, PR-Checks und CI-Verhalten."
 sidebar_position: 40
 tags:
   - audience:contributor
