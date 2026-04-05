@@ -1,7 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useMemo } from 'react';
 import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
+import { motion, type Variants, useReducedMotion } from 'framer-motion';
 import { getHomepageContent } from '../i18n/homepage';
 import gregImage from '../image.png';
 import {
@@ -23,28 +24,60 @@ type FeatureItem = {
   description: string;
 };
 
-function useScrollAnimations() {
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries, obs) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) {
-            return;
-          }
+type DocPathItem = {
+  title: string;
+  description: string;
+  link: string;
+};
 
-          entry.target.classList.remove('fade-in-hidden');
-          entry.target.classList.add('fade-in-visible');
-          obs.unobserve(entry.target);
-        });
+const viewport = { once: true, margin: '-90px' };
+
+function buildVariants(reducedMotion: boolean) {
+  const section: Variants = reducedMotion
+    ? { hidden: { opacity: 0 }, show: { opacity: 1 } }
+    : {
+        hidden: { opacity: 0, y: 26 },
+        show: {
+          opacity: 1,
+          y: 0,
+          transition: { duration: 0.65, ease: [0.16, 1, 0.3, 1] },
+        },
+      };
+
+  const grid: Variants = {
+    hidden: {},
+    show: {
+      transition: {
+        staggerChildren: reducedMotion ? 0 : 0.09,
+        delayChildren: reducedMotion ? 0 : 0.06,
       },
-      { threshold: 0.15 },
-    );
+    },
+  };
 
-    const animated = document.querySelectorAll('.animate-on-scroll');
-    animated.forEach((node) => observer.observe(node));
+  const card: Variants = reducedMotion
+    ? { hidden: { opacity: 0 }, show: { opacity: 1 } }
+    : {
+        hidden: { opacity: 0, y: 18, scale: 0.98 },
+        show: {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          transition: { duration: 0.45, ease: [0.16, 1, 0.3, 1] },
+        },
+      };
 
-    return () => observer.disconnect();
-  }, []);
+  const textReveal: Variants = reducedMotion
+    ? { hidden: { opacity: 0 }, show: { opacity: 1 } }
+    : {
+        hidden: { opacity: 0, y: 18 },
+        show: {
+          opacity: 1,
+          y: 0,
+          transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] },
+        },
+      };
+
+  return { section, grid, card, textReveal };
 }
 
 export default function HomePage(): JSX.Element {
@@ -53,6 +86,8 @@ export default function HomePage(): JSX.Element {
   } = useDocusaurusContext();
 
   const t = getHomepageContent(currentLocale);
+  const reducedMotion = useReducedMotion();
+  const variants = useMemo(() => buildVariants(Boolean(reducedMotion)), [reducedMotion]);
 
   const features: FeatureItem[] = [
     {
@@ -77,133 +112,187 @@ export default function HomePage(): JSX.Element {
     },
   ];
 
-  useScrollAnimations();
+  const docPaths: DocPathItem[] = [
+    { title: t.docsEndUserTitle, description: t.docsEndUserDescription, link: '/wiki-import/End-User-Release' },
+    { title: t.docsModDevsTitle, description: t.docsModDevsDescription, link: '/wiki-import/Mod-Developer-Debug' },
+    { title: t.docsContributorsTitle, description: t.docsContributorsDescription, link: '/wiki-import/Contirbutors/Contributors-Debug' },
+    { title: t.docsCapabilityTitle, description: t.docsCapabilityDescription, link: '/wiki-import/Framework-Features-Use-Cases' },
+  ];
 
   return (
     <Layout
       title="Frika Mod Framework"
       description="Community docs for FrikaMF, standalone Rust stacks, multiplayer, and plugins.">
-      <main
-        style={{
-          backgroundColor: 'var(--color-app-bg)',
-          backgroundImage:
-            'radial-gradient(circle at 12% 6%, rgba(226, 58, 113, 0.2), transparent 36%), radial-gradient(circle at 88% 10%, rgba(226, 58, 113, 0.16), transparent 34%), radial-gradient(circle at 50% 100%, rgba(173, 20, 87, 0.14), transparent 45%)',
-        }}>
-        {/* Hero Section */}
-        <section className="flex min-h-[60vh] flex-col items-center justify-center px-4 py-20 text-center">
-          <h1 className="homepage-logo-title mb-8 text-3xl font-black text-white md:text-5xl leading-none">
+      <main className="bg-app-bg bg-hero-gradient min-h-screen text-gray-200">
+        <section className="hero-motion-wrap relative flex min-h-[68vh] flex-col items-center justify-center overflow-hidden px-4 py-20 text-center">
+          <div className="hero-particles" aria-hidden="true" />
+          <div className="hero-orb hero-orb-pink" aria-hidden="true" />
+          <div className="hero-orb hero-orb-green" aria-hidden="true" />
+
+          <motion.h1
+            className="homepage-logo-title text-reveal-glow mb-8 text-4xl font-black leading-none tracking-tight text-white md:text-6xl"
+            initial="hidden"
+            whileInView="show"
+            viewport={viewport}
+            variants={variants.textReveal}>
             FRIKA MOD <span className="text-amber-700">🍪</span>
             <br />
             FRAMEWORK
-          </h1>
+          </motion.h1>
 
-          <h2 className="mb-4 fade-in-hidden animate-on-scroll text-2xl font-extrabold text-white md:text-4xl tracking-tight" style={{ transitionDelay: '100ms' }}>
+          <motion.h2
+            className="mb-4 max-w-3xl text-2xl font-extrabold tracking-tight text-white md:text-4xl"
+            initial="hidden"
+            whileInView="show"
+            viewport={viewport}
+            variants={variants.textReveal}
+            transition={{ delay: reducedMotion ? 0 : 0.08 }}>
             {t.heroLine1}
             <br />
             <span className="text-gray-400">{t.heroLine2}</span>
-          </h2>
+          </motion.h2>
 
-          <p className="mb-10 fade-in-hidden animate-on-scroll max-w-lg text-base font-medium text-gray-300 md:text-lg" style={{ transitionDelay: '200ms' }}>
+          <motion.p
+            className="mb-10 max-w-lg text-base font-medium text-gray-400 md:text-lg"
+            initial="hidden"
+            whileInView="show"
+            viewport={viewport}
+            variants={variants.textReveal}
+            transition={{ delay: reducedMotion ? 0 : 0.14 }}>
             {t.heroSub1}
             <br />
             {t.heroSub2}
-          </p>
+          </motion.p>
 
-          <div className="flex flex-wrap items-center justify-center gap-3 fade-in-hidden animate-on-scroll" style={{ transitionDelay: '300ms' }}>
-            <Link to="/mods/framework" className="app-btn-primary px-8 py-4 rounded-full text-lg font-bold shadow-lg transition-all hover:scale-105">
+          <motion.div
+            className="flex flex-wrap items-center justify-center gap-3"
+            initial="hidden"
+            whileInView="show"
+            viewport={viewport}
+            variants={variants.textReveal}
+            transition={{ delay: reducedMotion ? 0 : 0.22 }}>
+            <Link to="/mods/framework" className="btn-primary px-8 py-4 rounded-full text-lg font-bold shadow-lg shadow-accent-green/20">
               {t.ctaStart}
             </Link>
-            <Link to="/mods/standalone" className="app-card px-8 py-4 rounded-full text-lg font-bold border transition-all hover:border-opacity-100" style={{ borderColor: 'var(--color-nav-pill)' }}>
+            <Link to="/mods/standalone" className="btn-outline px-8 py-4 rounded-full text-lg font-bold">
               {t.ctaMods}
             </Link>
-          </div>
+          </motion.div>
         </section>
 
-        {/* Features Grid */}
-        <section id="features" className="border-t px-4 py-20" style={{ borderColor: 'var(--color-card-border)', backgroundColor: 'var(--color-app-bg)' }}>
-          <div className="mx-auto grid max-w-6xl grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
-            {features.map((feature, index) => (
-              <article
+        <motion.section
+          id="features"
+          className="section-border px-4 py-20"
+          initial="hidden"
+          whileInView="show"
+          viewport={viewport}
+          variants={variants.section}>
+          <motion.div className="mx-auto grid max-w-6xl grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4" variants={variants.grid}>
+            {features.map((feature) => (
+              <motion.article
                 key={feature.title}
-                className="app-card fade-in-hidden animate-on-scroll p-5 rounded-xl text-gray-200 transition-colors"
-                style={{ transitionDelay: `${index * 100}ms` }}>
+                className="app-card app-card-motion app-card-glow p-5 rounded-xl text-gray-200"
+                variants={variants.card}
+                whileHover={
+                  reducedMotion
+                    ? undefined
+                    : {
+                        y: -6,
+                        rotateX: 2,
+                        rotateY: -2,
+                        scale: 1.01,
+                        transition: { type: 'spring', stiffness: 280, damping: 18 },
+                      }
+                }
+                style={{ transformStyle: 'preserve-3d' }}>
                 <h3 className="mb-2 flex items-center gap-2 text-lg font-bold text-white">
-                  {feature.icon}
+                  <span className="text-accent-pink">{feature.icon}</span>
                   <span>{feature.title}</span>
                 </h3>
                 <p className="text-sm font-medium text-gray-400">{feature.description}</p>
-              </article>
+              </motion.article>
             ))}
-          </div>
-        </section>
+          </motion.div>
+        </motion.section>
 
-        {/* Documentation Paths Section */}
-        <section id="docs" className="border-t px-4 py-20" style={{ borderColor: 'var(--color-card-border)', backgroundColor: 'var(--color-app-bg)' }}>
+        <motion.section
+          id="docs"
+          className="section-border px-4 py-20"
+          initial="hidden"
+          whileInView="show"
+          viewport={viewport}
+          variants={variants.section}>
           <div className="mx-auto max-w-5xl text-center">
-            <h2 className="mb-10 fade-in-hidden animate-on-scroll text-3xl font-bold text-white">{t.docsPaths}</h2>
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-              <Link to="/wiki-import/End-User-Release" className="app-card rounded-lg p-5 text-left text-gray-200 transition-all hover:border-opacity-100 block">
-                <div className="mb-2 text-lg font-bold text-white">{t.docsEndUserTitle}</div>
-                <div className="text-sm text-gray-400">{t.docsEndUserDescription}</div>
-              </Link>
-              <Link to="/wiki-import/Mod-Developer-Debug" className="app-card rounded-lg p-5 text-left text-gray-200 transition-all hover:border-opacity-100 block">
-                <div className="mb-2 text-lg font-bold text-white">{t.docsModDevsTitle}</div>
-                <div className="text-sm text-gray-400">{t.docsModDevsDescription}</div>
-              </Link>
-              <Link to="/wiki-import/Contirbutors/Contributors-Debug" className="app-card rounded-lg p-5 text-left text-gray-200 transition-all hover:border-opacity-100 block">
-                <div className="mb-2 text-lg font-bold text-white">{t.docsContributorsTitle}</div>
-                <div className="text-sm text-gray-400">{t.docsContributorsDescription}</div>
-              </Link>
-              <Link to="/wiki-import/Framework-Features-Use-Cases" className="app-card rounded-lg p-5 text-left text-gray-200 transition-all hover:border-opacity-100 block">
-                <div className="mb-2 text-lg font-bold text-white">{t.docsCapabilityTitle}</div>
-                <div className="text-sm text-gray-400">{t.docsCapabilityDescription}</div>
-              </Link>
-            </div>
+            <motion.h2 className="mb-10 text-3xl font-bold text-white" variants={variants.textReveal}>
+              {t.docsPaths}
+            </motion.h2>
+            <motion.div className="grid grid-cols-1 gap-4 md:grid-cols-2" variants={variants.grid}>
+              {docPaths.map((doc) => (
+                <motion.div key={doc.link} variants={variants.card}>
+                  <Link to={doc.link} className="app-card app-card-motion app-card-glow rounded-lg p-5 text-left text-gray-200 block group">
+                    <div className="mb-2 text-lg font-bold text-white transition-colors group-hover:text-accent-pink">{doc.title}</div>
+                    <div className="text-sm text-gray-400">{doc.description}</div>
+                  </Link>
+                </motion.div>
+              ))}
+            </motion.div>
           </div>
-        </section>
+        </motion.section>
 
-        {/* Ecosystem Coverage Section */}
-        <section id="ecosystem" className="border-t px-4 py-20" style={{ borderColor: 'var(--color-card-border)', backgroundColor: 'var(--color-app-bg)' }}>
+        <motion.section
+          id="ecosystem"
+          className="section-border px-4 py-20"
+          initial="hidden"
+          whileInView="show"
+          viewport={viewport}
+          variants={variants.section}>
           <div className="mx-auto max-w-6xl">
-            <h2 className="mb-8 text-center text-3xl font-bold text-white">{t.ecosystemTitle}</h2>
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-              <article className="app-card p-6 rounded-xl border-t-2 flex flex-col h-full" style={{ borderTopColor: 'var(--color-accent-pink)' }}>
+            <motion.h2 className="mb-8 text-center text-3xl font-bold text-white" variants={variants.textReveal}>
+              {t.ecosystemTitle}
+            </motion.h2>
+            <motion.div className="grid grid-cols-1 gap-4 md:grid-cols-3" variants={variants.grid}>
+              <motion.article className="app-card app-card-motion app-card-glow p-6 rounded-xl border-t-2 flex flex-col h-full" style={{ borderTopColor: 'var(--color-accent-pink)' }} variants={variants.card}>
                 <h3 className="mb-2 flex items-center gap-2 text-lg font-bold text-white">
-                  <FaCode /> {t.ecosystemCoreTitle}
+                  <FaCode className="text-accent-pink" /> {t.ecosystemCoreTitle}
                 </h3>
                 <p className="text-sm text-gray-400 mb-6 grow">{t.ecosystemCoreDescription}</p>
-                <Link to="/wiki-import/Framework-Features-Use-Cases" className="text-sm font-semibold transition-colors hover:text-white" style={{ color: 'var(--color-accent-pink)' }}>
-                  {t.ecosystemCoreCta}
+                <Link to="/wiki-import/Framework-Features-Use-Cases" className="text-sm font-semibold text-accent-pink transition-colors hover:text-white">
+                  {t.ecosystemCoreCta} &rarr;
                 </Link>
-              </article>
+              </motion.article>
 
-              <article className="app-card p-6 rounded-xl border-t-2 flex flex-col h-full border-t-orange-500/50">
+              <motion.article className="app-card app-card-motion app-card-glow p-6 rounded-xl border-t-2 flex flex-col h-full border-t-orange-500/50" variants={variants.card}>
                 <h3 className="mb-2 flex items-center gap-2 text-lg font-bold text-white">
-                  <FaServer /> {t.ecosystemRustTitle}
+                  <FaServer className="text-orange-500" /> {t.ecosystemRustTitle}
                 </h3>
                 <p className="text-sm text-gray-400 mb-6 grow">{t.ecosystemRustDescription}</p>
-                <Link to="/wiki-import/Lua-FFI-Start-Developing" className="text-sm font-semibold transition-colors hover:text-white" style={{ color: 'var(--color-accent-pink)' }}>
-                  {t.ecosystemRustCta}
+                <Link to="/wiki-import/Lua-FFI-Start-Developing" className="text-sm font-semibold text-accent-pink transition-colors hover:text-white">
+                  {t.ecosystemRustCta} &rarr;
                 </Link>
-              </article>
+              </motion.article>
 
-              <article className="app-card p-6 rounded-xl border-t-2 flex flex-col h-full border-t-blue-500/50">
+              <motion.article className="app-card app-card-motion app-card-glow p-6 rounded-xl border-t-2 flex flex-col h-full border-t-blue-500/50" variants={variants.card}>
                 <h3 className="mb-2 flex items-center gap-2 text-lg font-bold text-white">
-                  <FaPeopleGroup /> {t.ecosystemMultiplayerTitle}
+                  <FaPeopleGroup className="text-blue-500" /> {t.ecosystemMultiplayerTitle}
                 </h3>
                 <p className="text-sm text-gray-400 mb-6 grow">{t.ecosystemMultiplayerDescription}</p>
-                <Link to="/wiki-import/Steamworks-P2P-Multiplayer-Roadmap" className="text-sm font-semibold transition-colors hover:text-white" style={{ color: 'var(--color-accent-pink)' }}>
-                  {t.ecosystemMultiplayerCta}
+                <Link to="/wiki-import/Steamworks-P2P-Multiplayer-Roadmap" className="text-sm font-semibold text-accent-pink transition-colors hover:text-white">
+                  {t.ecosystemMultiplayerCta} &rarr;
                 </Link>
-              </article>
-            </div>
+              </motion.article>
+            </motion.div>
           </div>
-        </section>
+        </motion.section>
 
-        {/* Greg Story Section */}
-        <section id="greg-story" className="border-t px-4 py-20" style={{ borderColor: 'var(--color-card-border)', backgroundColor: 'var(--color-app-bg)' }}>
+        <motion.section
+          id="greg-story"
+          className="section-border px-4 py-20"
+          initial="hidden"
+          whileInView="show"
+          viewport={viewport}
+          variants={variants.section}>
           <div className="mx-auto max-w-6xl">
-            <div className="app-card rounded-2xl p-6 md:p-8 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+            <motion.div className="app-card app-card-glow rounded-2xl p-6 md:p-8 flex flex-col md:flex-row md:items-center md:justify-between gap-6" variants={variants.card}>
               <div>
                 <h2 className="mb-4 text-2xl font-bold text-white md:text-3xl">{t.gregTitle}</h2>
                 <p className="mb-4 text-gray-300 text-sm md:text-base leading-relaxed max-w-md">
@@ -214,61 +303,73 @@ export default function HomePage(): JSX.Element {
                 </p>
                 <p className="text-lg font-bold text-white italic">{t.gregQuote}</p>
               </div>
-              <div className="shrink-0">
+              <motion.div className="shrink-0" whileHover={reducedMotion ? undefined : { rotate: 1.2, y: -3 }}>
                 <div className="w-32 h-40 md:w-48 md:h-56 overflow-hidden rounded-lg border" style={{ borderColor: 'var(--color-card-border)', backgroundColor: 'rgba(226, 58, 113, 0.05)' }}>
                   <img src={gregImage} alt="Greg" className="h-full w-full object-cover" />
                 </div>
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
           </div>
-        </section>
+        </motion.section>
 
-        {/* Community Section */}
-        <section id="community" className="border-t px-4 py-16" style={{ borderColor: 'var(--color-card-border)', backgroundColor: 'var(--color-app-bg)' }}>
+        <motion.section
+          id="community"
+          className="section-border px-4 py-16"
+          initial="hidden"
+          whileInView="show"
+          viewport={viewport}
+          variants={variants.section}>
           <div className="mx-auto max-w-6xl">
-            <div className="mb-6 rounded-xl p-4 border" style={{ borderColor: 'rgba(202, 165, 61, 0.4)', backgroundColor: 'rgba(202, 165, 61, 0.08)' }}>
+            <motion.div className="mb-6 rounded-xl p-4 border" style={{ borderColor: 'rgba(202, 165, 61, 0.4)', backgroundColor: 'rgba(202, 165, 61, 0.08)' }} variants={variants.card}>
               <div className="text-sm font-semibold uppercase tracking-wide text-amber-200">{t.comingSoon}</div>
               <div className="mt-1 text-base font-medium text-amber-100">{t.comingSoonText}</div>
-            </div>
+            </motion.div>
 
-            <div className="app-card p-6 rounded-xl flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+            <motion.div className="app-card app-card-glow p-6 rounded-xl flex flex-col md:flex-row md:items-center md:justify-between gap-6" variants={variants.card}>
               <div>
                 <h3 className="text-2xl font-bold text-white">{t.communityTitle}</h3>
                 <p className="mt-2 text-gray-400">{t.communityText}</p>
               </div>
               <div className="flex flex-wrap gap-3">
-                <Link to="https://frikadellental.de" className="inline-flex items-center gap-2 rounded border px-4 py-2 font-bold text-white transition-colors" style={{ borderColor: 'var(--color-card-border)', backgroundColor: 'var(--color-card-bg)' }}>
+                <Link to="https://frikadellental.de" className="btn-social">
                   <FaArrowUpRightFromSquare /> frikadellental.de
                 </Link>
-                <Link to="/mods/standalone" className="inline-flex items-center gap-2 rounded border px-4 py-2 font-bold text-white transition-colors" style={{ borderColor: 'var(--color-card-border)', backgroundColor: 'var(--color-card-bg)' }}>
+                <Link to="/mods/standalone" className="btn-social">
                   <FaShop /> {t.availableModsLabel}
                 </Link>
-                <Link to="https://github.com/mleem97/FrikaModFramework" className="inline-flex items-center gap-2 rounded border px-4 py-2 font-bold text-white transition-colors" style={{ borderColor: 'var(--color-card-border)', backgroundColor: 'var(--color-card-bg)' }}>
+                <Link to="https://github.com/mleem97/FrikaModFramework" className="btn-social">
                   <FaGithub /> {t.repositoryLabel}
                 </Link>
-                <Link to="https://discord.gg/greg" className="inline-flex items-center gap-2 rounded px-4 py-2 font-bold text-white transition-colors" style={{ backgroundColor: '#5865F2' }}>
+                <Link to="https://discord.gg/greg" className="btn-social bg-[#5865F2] border-transparent text-white hover:bg-[#4752C4]">
                   <FaDiscord /> {t.joinLabel}
                 </Link>
               </div>
-            </div>
+            </motion.div>
           </div>
-        </section>
+        </motion.section>
 
-        {/* Support Section */}
-        <section id="support" className="border-t px-4 py-16" style={{ borderColor: 'var(--color-card-border)', backgroundColor: 'var(--color-app-bg)' }}>
+        <motion.section
+          id="support"
+          className="section-border px-4 py-16"
+          initial="hidden"
+          whileInView="show"
+          viewport={viewport}
+          variants={variants.section}>
           <div className="mx-auto max-w-6xl flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
               <h3 className="text-2xl font-bold text-white">{t.supportTitle}</h3>
               <p className="text-gray-400">{t.supportText}</p>
             </div>
-            <Link
-              to="https://github.com/mleem97/FrikaModFramework/issues"
-              className="inline-flex items-center gap-2 rounded px-5 py-3 font-bold text-white transition-colors"
-              style={{ backgroundColor: 'var(--color-accent-pink)' }}>
-              <FaLifeRing /> {t.supportCta}
-            </Link>
+            <motion.div whileHover={reducedMotion ? undefined : { y: -2, scale: 1.01 }}>
+              <Link
+                to="https://github.com/mleem97/FrikaModFramework/issues"
+                className="inline-flex items-center gap-2 rounded px-5 py-3 font-bold text-white transition-colors shadow-lg shadow-accent-pink/20"
+                style={{ backgroundColor: 'var(--color-accent-pink)' }}>
+                <FaLifeRing /> {t.supportCta}
+              </Link>
+            </motion.div>
           </div>
-        </section>
+        </motion.section>
       </main>
 
     </Layout>
