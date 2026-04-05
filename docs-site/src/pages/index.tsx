@@ -270,20 +270,6 @@ export default function HomePage(): JSX.Element {
         </section>
       </main>
 
-      <footer className="border-t py-8" style={{ borderColor: 'var(--color-card-border)', backgroundColor: 'var(--color-card-bg)' }}>
-        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-4 text-sm text-gray-500 md:flex-row">
-          <div className="font-bold flex items-center gap-2">
-            <span className="bg-white/10 px-2 py-1 rounded text-white">FRIKA MOD 🍪</span>
-          </div>
-          <div>
-            © 2026{' '}
-            <a href="https://github.com/mleem97/FrikaModFramework" className="transition-colors hover:text-[var(--color-accent-pink)]">
-              FrikaModFramework
-            </a>{' '}
-            & FrikaModFramework Project. All Rights Reserved.
-          </div>
-        </div>
-      </footer>
     </Layout>
   );
 }
