@@ -1,11 +1,11 @@
 // @ts-check
 
 const config = {
-  title: 'FrikaModFramework',
-  tagline: 'Build Better Mods, Faster.',
+  title: 'GregFramework Docs',
+  tagline: 'Community-driven docs for frameworks, plugins, and multiplayer stacks',
   favicon: 'img/logo.svg',
-  url: 'https://mleem97.github.io',
-  baseUrl: '/FrikaModFramework/',
+  url: 'https://gregframework.eu',
+  baseUrl: '/',
   onBrokenLinks: 'warn',
   onBrokenMarkdownLinks: 'warn',
   i18n: {
@@ -43,13 +43,17 @@ const config = {
   themeConfig: {
     image: 'img/logo.svg',
     navbar: {
-      title: 'FMF.',
+      title: 'GregFramework Docs',
+      hideOnScroll: false,
+      style: 'dark',
       items: [
         {to: '/', label: 'Start', position: 'left'},
         {to: '/docs', label: 'Docs Hub', position: 'left'},
-        {to: '/audiences/newbies', label: 'Newbies', position: 'left'},
-        {to: '/audiences/intermediates', label: 'Intermediates', position: 'left'},
-        {to: '/audiences/professionals', label: 'Pros', position: 'left'},
+        {to: '/wiki-import/Framework-Features-Use-Cases', label: 'Ecosystem', position: 'left'},
+        {to: '/wiki-import/Framework-Features-Use-Cases', label: 'Framework Core', position: 'left'},
+        {to: '/wiki-import/Lua-FFI-Start-Developing', label: 'Rust FFI', position: 'left'},
+        {to: '/wiki-import/Steamworks-P2P-Multiplayer-Roadmap', label: 'Multiplayer', position: 'left'},
+        {href: 'https://datacentermods.com', label: 'Mod-Store', position: 'right'},
         {href: 'https://github.com/mleem97/FrikaModFramework/issues', label: 'Support', position: 'right'},
         {href: 'https://github.com/mleem97/FrikaModFramework', label: 'GitHub', position: 'right'},
       ],

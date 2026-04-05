@@ -9,7 +9,9 @@ import {
   FaGithub,
   FaLifeRing,
   FaPeopleGroup,
+  FaShop,
   FaScrewdriverWrench,
+  FaServer,
 } from 'react-icons/fa6';
 
 type FeatureItem = {
@@ -36,8 +38,8 @@ const features: FeatureItem[] = [
   },
   {
     icon: <FaPeopleGroup className="text-xl" />,
-    title: 'Community Project',
-    description: 'Unofficial and community-driven with open support channels.',
+    title: 'Community Ecosystem',
+    description: 'Core framework docs plus standalone plugin and ecosystem docs.',
   },
 ];
 
@@ -70,41 +72,15 @@ export default function HomePage(): JSX.Element {
 
   return (
     <Layout
-      title="FrikaModFramework"
-      description="Streamlined. Flexible. Frikatadelle Approved. Build Better Mods, Faster.">
-      <header className="border-b border-brandPink-900 bg-brandDark/80 backdrop-blur-md">
-        <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-4">
-          <div className="text-xl font-black tracking-tight text-white">FMF.</div>
-          <div className="hidden items-center gap-7 text-sm font-semibold text-gray-400 md:flex">
-            <a href="#features" className="transition-colors hover:text-brandPink-500">
-              FEATURES
-            </a>
-            <a href="#docs" className="transition-colors hover:text-brandPink-500">
-              DOCUMENTATION
-            </a>
-            <a href="#community" className="transition-colors hover:text-brandPink-500">
-              COMMUNITY
-            </a>
-            <a href="#support" className="transition-colors hover:text-brandPink-500">
-              SUPPORT
-            </a>
-          </div>
-          <Link
-            to="https://github.com/mleem97/FrikaModFramework"
-            className="inline-flex items-center gap-2 rounded border border-gray-700 bg-gray-800 px-4 py-2 text-sm font-bold text-white transition-colors hover:border-gray-500 hover:bg-gray-700">
-            <FaGithub className="text-base" />
-            GITHUB
-          </Link>
-        </div>
-      </header>
-
+      title="GregFramework Docs"
+      description="Cross-framework modding docs for GregFramework, standalone Rust stacks, multiplayer, and community plugins.">
       <main className="bg-brandDark">
         <section className="flex min-h-[70vh] flex-col items-center justify-center bg-linear-to-b from-brandPink-800 to-brandDark px-4 py-24 text-center">
           <div className="mb-8 select-none drop-shadow-2xl fade-in-hidden animate-on-scroll">
             <h1 className="inline-block -rotate-2 rounded-md border-4 border-brandDark bg-gray-100 px-4 py-2 text-5xl font-black text-brandDark md:text-7xl">
-              FRIKA MOD <span className="text-brandBrown">🍪</span>
+              GREG FRAMEWORK <span className="text-brandBrown">🍪</span>
               <br />
-              FRAMEWORK
+              DOCS PORTAL
             </h1>
           </div>
 
@@ -113,29 +89,29 @@ export default function HomePage(): JSX.Element {
             style={{ transitionDelay: '100ms' }}>
             THE DEFINITIVE GAME
             <br />
-            MODDING FRAMEWORK.
+            MODDING DOCS HUB.
           </h2>
 
           <p
             className="mb-8 max-w-2xl fade-in-hidden animate-on-scroll text-lg font-medium text-gray-300 drop-shadow-sm md:text-xl"
             style={{ transitionDelay: '200ms' }}>
-            Streamlined. Flexible. Frikatadelle Approved.
+            Streamlined. Flexible. Community-curated.
             <br />
-            Build Better Mods, Faster.
+            Covering GregFramework, Rust stacks, multiplayer and plugins.
           </p>
 
           <div className="flex flex-wrap items-center justify-center gap-3">
             <Link
-              to="https://github.com/mleem97/FrikaModFramework"
+              to="https://gregframework.eu"
               className="fade-in-hidden animate-on-scroll rounded-full bg-green-600 px-8 py-4 text-lg font-bold text-white shadow-lg shadow-green-900/50 transition-all hover:scale-105 hover:bg-green-500"
               style={{ transitionDelay: '300ms' }}>
-              GET STARTED ON GITHUB
+              OPEN gregframework.eu
             </Link>
             <Link
-              to="/docs"
+              to="https://datacentermods.com"
               className="fade-in-hidden animate-on-scroll rounded-full border border-brandPink-900 bg-brandDark px-8 py-4 text-lg font-bold text-white transition-all hover:border-brandPink-500"
               style={{ transitionDelay: '350ms' }}>
-              OPEN DOCS HUB
+              VISIT datacentermods.com
             </Link>
           </div>
         </section>
@@ -181,15 +157,63 @@ export default function HomePage(): JSX.Element {
           </div>
         </section>
 
+        <section id="ecosystem" className="border-t border-brandPink-900 bg-brandDark px-4 py-20">
+          <div className="mx-auto max-w-6xl">
+            <h2 className="mb-8 text-center text-4xl font-bold text-white">Ecosystem Coverage</h2>
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+              <article className="rounded-xl border border-brandPink-900 bg-gray-900 p-6">
+                <h3 className="mb-2 flex items-center gap-2 text-lg font-bold text-white">
+                  <FaCode />
+                  GregFramework Core
+                </h3>
+                <p className="text-sm text-gray-400">Hook system, FFI bridge, event contracts and runtime architecture.</p>
+                <Link to="/wiki-import/Framework-Features-Use-Cases" className="mt-3 inline-block text-sm font-semibold text-brandPink-500 hover:text-brandPink-300">
+                  Open core docs →
+                </Link>
+              </article>
+
+              <article className="rounded-xl border border-brandPink-900 bg-gray-900 p-6">
+                <h3 className="mb-2 flex items-center gap-2 text-lg font-bold text-white">
+                  <FaServer />
+                  Standalone Rust Frameworks
+                </h3>
+                <p className="text-sm text-gray-400">Rust/FFI implementation guides for external and standalone runtimes.</p>
+                <Link to="/wiki-import/Lua-FFI-Start-Developing" className="mt-3 inline-block text-sm font-semibold text-brandPink-500 hover:text-brandPink-300">
+                  Open Rust/FFI docs →
+                </Link>
+              </article>
+
+              <article className="rounded-xl border border-brandPink-900 bg-gray-900 p-6">
+                <h3 className="mb-2 flex items-center gap-2 text-lg font-bold text-white">
+                  <FaPeopleGroup />
+                  Multiplayer & Plugins
+                </h3>
+                <p className="text-sm text-gray-400">Multiplayer roadmap, plugin docs, and community module references.</p>
+                <Link to="/wiki-import/Steamworks-P2P-Multiplayer-Roadmap" className="mt-3 inline-block text-sm font-semibold text-brandPink-500 hover:text-brandPink-300">
+                  Open multiplayer docs →
+                </Link>
+              </article>
+            </div>
+          </div>
+        </section>
+
         <section id="community" className="border-t border-brandPink-900 bg-brandDark px-4 py-16">
           <div className="mx-auto flex max-w-6xl flex-col items-start justify-between gap-6 rounded-xl border border-brandPink-900 bg-gray-900 p-6 md:flex-row md:items-center">
             <div>
               <h3 className="text-2xl font-bold text-white">Community & Maintainers</h3>
               <p className="mt-2 text-gray-400">
-                FrikaMF is unofficial and community-driven. Follow updates in the repo and join discussions via issues.
+                This portal is designed for framework docs and community-built plugins across the Data Center ecosystem.
               </p>
             </div>
             <div className="flex flex-wrap gap-3">
+              <Link to="https://gregframework.eu" className="inline-flex items-center gap-2 rounded border border-gray-700 bg-gray-800 px-4 py-2 font-bold text-white transition-colors hover:border-gray-500 hover:bg-gray-700">
+                <FaArrowUpRightFromSquare />
+                gregframework.eu
+              </Link>
+              <Link to="https://datacentermods.com" className="inline-flex items-center gap-2 rounded border border-gray-700 bg-gray-800 px-4 py-2 font-bold text-white transition-colors hover:border-gray-500 hover:bg-gray-700">
+                <FaShop />
+                Mod-Store
+              </Link>
               <Link to="https://github.com/mleem97/FrikaModFramework" className="inline-flex items-center gap-2 rounded border border-gray-700 bg-gray-800 px-4 py-2 font-bold text-white transition-colors hover:border-gray-500 hover:bg-gray-700">
                 <FaGithub />
                 Repository
@@ -210,7 +234,7 @@ export default function HomePage(): JSX.Element {
           <div className="mx-auto flex max-w-6xl flex-col items-start justify-between gap-4 md:flex-row md:items-center">
             <div>
               <h3 className="text-2xl font-bold text-white">Support</h3>
-              <p className="text-gray-400">Report bugs, request features, and track current workstreams.</p>
+              <p className="text-gray-400">Report bugs, request docs for new community plugins, and track workstreams.</p>
             </div>
             <Link
               to="https://github.com/mleem97/FrikaModFramework/issues"
