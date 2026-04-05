@@ -12,7 +12,7 @@ const config = {
       onBrokenMarkdownLinks: 'warn',
     },
   },
-  scripts: ['/js/auto-locale.js', '/js/canonical-host.js'],
+  scripts: ['/js/canonical-host.js'],
   i18n: {
     defaultLocale: 'en',
     locales: ['en', 'de', 'fr', 'es', 'ru', 'ja'],
