@@ -5,6 +5,7 @@ using System.IO;
 using System.Threading.Tasks;
 using HarmonyLib;
 using FrikaMF.Plugins;
+using AssetExporter;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -123,6 +124,13 @@ public class Core : MelonMod
     private float _nextHarmonyGuardAt;
     private float _nextHotReloadAt;
 
+#if DEBUG
+    private readonly Il2CppEventCatalogService _il2CppEventCatalog = new Il2CppEventCatalogService();
+    private readonly Il2CppGameplayIndexService _il2CppGameplayIndex = new Il2CppGameplayIndexService();
+    private readonly RuntimeHookService _runtimeHookService = new RuntimeHookService();
+    private readonly GameSignalSnapshotService _gameSignalSnapshot = new GameSignalSnapshotService();
+#endif
+
     public override void OnInitializeMelon()
     {
         try
@@ -187,6 +195,25 @@ public class Core : MelonMod
             LoggerInstance.Msg("Modloader initialization complete.");
             LoggerInstance.Msg("Hotkeys: Ctrl+Shift+R reload Rust mods (Main Menu only)");
             LoggerInstance.Msg("API: Access game systems via ModigApi (Player, Network, Time, Localisation, UI, World)");
+            ModFramework.Events.Publish(new ModInitializedEvent(DateTime.UtcNow, FrikaMF.ReleaseVersion.Current));
+
+#if DEBUG
+            try
+            {
+                string diagnosticsDir = Path.Combine(MelonEnvironment.GameRootDirectory, "FrikaFM", "Diagnostics");
+                string snapshotPath = _gameSignalSnapshot.ExportAll(
+                    diagnosticsDir,
+                    _il2CppEventCatalog,
+                    _il2CppGameplayIndex,
+                    _runtimeHookService);
+                LoggerInstance.Msg($"FrikaMF: IL2CPP diagnostics snapshot written to {snapshotPath}");
+            }
+            catch (Exception ex)
+            {
+                LoggerInstance.Warning($"FrikaMF: IL2CPP diagnostics snapshot failed: {ex.Message}");
+                CrashLog.LogException("Il2CppDiagnostics", ex);
+            }
+#endif
             CrashLog.Log("step: OnInitializeMelon complete");
         }
         catch (Exception ex)

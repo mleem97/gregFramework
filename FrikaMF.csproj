@@ -18,22 +18,30 @@
 
   <Target Name="DetectGameDir" BeforeTargets="ResolveAssemblyReferences">
     <PropertyGroup>
+      <RepoMelonLoaderDir>$(MSBuildProjectDirectory)\lib\references\MelonLoader</RepoMelonLoaderDir>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(MelonLoaderDir)' == '' and Exists('$(RepoMelonLoaderDir)\net6\MelonLoader.dll')">
+      <MelonLoaderDir>$(RepoMelonLoaderDir)</MelonLoaderDir>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(MelonLoaderDir)' == ''">
       <GameDir Condition="'$(GameDir)' == '' and '$(DATA_CENTER_GAME_DIR)' != ''">$(DATA_CENTER_GAME_DIR)</GameDir>
     </PropertyGroup>
 
     <Exec
-      Condition="'$(GameDir)' == '' and Exists('$(FindDataCenterPathScript)')"
+      Condition="'$(MelonLoaderDir)' == '' and '$(GameDir)' == '' and Exists('$(FindDataCenterPathScript)')"
       Command="pwsh -NoProfile -ExecutionPolicy Bypass -File &quot;$(FindDataCenterPathScript)&quot;"
       ConsoleToMsBuild="true"
       IgnoreExitCode="true">
       <Output TaskParameter="ConsoleOutput" ItemName="_DetectedGameDirOutput" />
     </Exec>
 
-    <PropertyGroup>
+    <PropertyGroup Condition="'$(MelonLoaderDir)' == ''">
       <GameDirAutoDetected Condition="'$(GameDir)' == '' and '@(_DetectedGameDirOutput)' != ''">@(_DetectedGameDirOutput->'%(Identity)')</GameDirAutoDetected>
       <GameDir Condition="'$(GameDir)' == '' and '$(GameDirAutoDetected)' != ''">$(GameDirAutoDetected)</GameDir>
       <GameDir Condition="'$(GameDir)' == ''">C:\$(DefaultSteamGamePath)</GameDir>
-      <MelonLoaderDir Condition="'$(MelonLoaderDir)' == ''">$(GameDir)\MelonLoader</MelonLoaderDir>
+      <MelonLoaderDir>$(GameDir)\MelonLoader</MelonLoaderDir>
+    </PropertyGroup>
+    <PropertyGroup>
       <ReferencePath>$(MelonLoaderDir)\net6;$(MelonLoaderDir)\Il2CppAssemblies</ReferencePath>
       <AssemblySearchPaths>{CandidateAssemblyFiles};{HintPathFromItem};$(MelonLoaderDir)\net6;$(MelonLoaderDir)\Il2CppAssemblies;{TargetFrameworkDirectory};{RawFileName}</AssemblySearchPaths>
     </PropertyGroup>
@@ -254,12 +262,7 @@
     <Compile Remove="Main.cs" />
     <Compile Remove="Main.CI.cs" />
     <Compile Remove="StandalonePlugins\**\*.cs" />
-    <Compile Remove="FrikaMF\GameSignalSnapshotService.cs" />
-    <Compile Remove="FrikaMF\Il2CppEventCatalogService.cs" />
-    <Compile Remove="FrikaMF\Il2CppGameplayIndexService.cs" />
-    <Compile Remove="FrikaMF\ModEventFramework.cs" />
-    <Compile Remove="FrikaMF\RuntimeHookService.cs" />
-    <Compile Remove="FrikaMF\Events\**\*.cs" />
+    <Compile Remove="Templates\**\*.cs" />
     <Compile Remove="FrikaMF\TestMods\FrameworkDependencyTest.cs" />
     <Compile Remove="JoniML\**\*.cs" />
     <Compile Remove="il2cpp-unpack\**\*.cs" />
@@ -271,12 +274,6 @@
     <None Include="Main.cs" />
     <None Include="Main.CI.cs" />
     <None Include="StandalonePlugins\**\*.cs" />
-    <None Include="FrikaMF\GameSignalSnapshotService.cs" />
-    <None Include="FrikaMF\Il2CppEventCatalogService.cs" />
-    <None Include="FrikaMF\Il2CppGameplayIndexService.cs" />
-    <None Include="FrikaMF\ModEventFramework.cs" />
-    <None Include="FrikaMF\RuntimeHookService.cs" />
-    <None Include="FrikaMF\Events\**\*.cs" />
     <None Include="FrikaMF\TestMods\FrameworkDependencyTest.cs" />
     <None Include="FrikaMF\DC2WebBridge.cs" />
     <None Include="FrikaMF\UiModernizer.cs" />
