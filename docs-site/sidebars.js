@@ -63,6 +63,7 @@ const sidebars = {
       type: 'category',
       label: 'Contributors',
       items: [
+        'contributors/luminescent-design-system',
         'contributors/docusaurus-workflow',
         'contributors/plugin-submission-audit',
       ],
