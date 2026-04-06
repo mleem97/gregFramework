@@ -1,6 +1,5 @@
 # AI Usage Policy & Disclaimer
 
-- Canonical wiki page: [`AI-USAGE.md`](./.wiki/AI-USAGE.md)
 - Contributor guide: [`CONTRIBUTING.md`](./CONTRIBUTING.md)
 
 ## 🇬🇧 English Version
