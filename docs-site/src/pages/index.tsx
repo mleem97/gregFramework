@@ -129,27 +129,26 @@ export default function HomePage(): JSX.Element {
 
   return (
     <Layout
-      title="Frika Mod Framework"
       description="Community docs for FrikaMF, standalone Rust stacks, multiplayer, and plugins.">
-      <main className="bg-app-bg bg-hero-gradient min-h-screen text-gray-200">
+      <main className="bg-background text-on-surface font-sans min-h-screen editorial-bleed bg-hero-gradient">
         <section className="hero-motion-wrap relative flex min-h-[68vh] flex-col items-center justify-center overflow-hidden px-4 py-20 text-center">
           <div className="hero-particles" aria-hidden="true" />
           <div className="hero-orb hero-orb-pink" aria-hidden="true" />
           <div className="hero-orb hero-orb-green" aria-hidden="true" />
 
           <motion.h1
-            className="homepage-logo-title text-reveal-glow mb-8 text-4xl font-black leading-none tracking-tight text-white md:text-6xl"
+            className="homepage-logo-title text-reveal-glow mb-8 text-4xl font-black leading-none tracking-tight text-on-surface md:text-6xl"
             initial="hidden"
             whileInView="show"
             viewport={viewport}
             variants={variants.textReveal}>
-            FRIKA MOD <span className="text-amber-700">🍪</span>
+            FRIKA MOD <span className="text-primary">🍪</span>
             <br />
-            FRAMEWORK
+            <span className="text-gradient-brand">FRAMEWORK</span>
           </motion.h1>
 
           <motion.h2
-            className="mb-4 max-w-3xl text-2xl font-extrabold tracking-tight text-white md:text-4xl"
+            className="mb-4 max-w-3xl font-headline text-2xl font-bold tracking-tight text-on-surface md:text-4xl"
             initial="hidden"
             whileInView="show"
             viewport={viewport}
@@ -157,11 +156,11 @@ export default function HomePage(): JSX.Element {
             transition={{ delay: reducedMotion ? 0 : 0.08 }}>
             {t.heroLine1}
             <br />
-            <span className="text-gray-400">{t.heroLine2}</span>
+            <span className="text-on-surface-variant">{t.heroLine2}</span>
           </motion.h2>
 
           <motion.p
-            className="mb-10 max-w-lg text-base font-medium text-gray-400 md:text-lg"
+            className="mb-10 max-w-lg text-base font-medium text-on-surface-variant md:text-lg"
             initial="hidden"
             whileInView="show"
             viewport={viewport}
@@ -179,10 +178,10 @@ export default function HomePage(): JSX.Element {
             viewport={viewport}
             variants={variants.textReveal}
             transition={{ delay: reducedMotion ? 0 : 0.22 }}>
-            <Link to="/wiki/mods/framework" className="btn-primary px-8 py-4 rounded-full text-lg font-bold shadow-lg shadow-accent-green/20">
+            <Link to="/wiki/mods/framework" className="btn-primary hero-glow px-8 py-4 rounded-xl text-lg">
               {t.ctaStart}
             </Link>
-            <Link to="/mods" className="btn-outline px-8 py-4 rounded-full text-lg font-bold">
+            <Link to="/mods" className="btn-outline px-8 py-4 rounded-xl text-lg">
               {t.ctaMods}
             </Link>
           </motion.div>
@@ -190,7 +189,7 @@ export default function HomePage(): JSX.Element {
 
         <motion.section
           id="features"
-          className="section-border px-4 py-20"
+          className="section-surface-alt px-4 py-20"
           initial="hidden"
           whileInView="show"
           viewport={viewport}
@@ -199,7 +198,7 @@ export default function HomePage(): JSX.Element {
             {features.map((feature) => (
               <motion.article
                 key={feature.title}
-                className="app-card app-card-motion app-card-glow p-5 rounded-xl text-gray-200"
+                className="app-card app-card-motion app-card-glow glass-card p-5 rounded-xl text-on-surface"
                 variants={variants.card}
                 whileHover={
                   reducedMotion
@@ -213,11 +212,11 @@ export default function HomePage(): JSX.Element {
                       }
                 }
                 style={{ transformStyle: 'preserve-3d' }}>
-                <h3 className="mb-2 flex items-center gap-2 text-lg font-bold text-white">
-                  <span className="text-accent-pink">{feature.icon}</span>
+                <h3 className="mb-2 flex items-center gap-2 font-headline text-lg font-bold text-on-surface">
+                  <span className="text-primary">{feature.icon}</span>
                   <span>{feature.title}</span>
                 </h3>
-                <p className="text-sm font-medium text-gray-400">{feature.description}</p>
+                <p className="text-sm font-medium text-on-surface-variant">{feature.description}</p>
               </motion.article>
             ))}
           </motion.div>
@@ -225,21 +224,21 @@ export default function HomePage(): JSX.Element {
 
         <motion.section
           id="docs"
-          className="section-border px-4 py-20"
+          className="px-4 py-20"
           initial="hidden"
           whileInView="show"
           viewport={viewport}
           variants={variants.section}>
           <div className="mx-auto max-w-5xl text-center">
-            <motion.h2 className="mb-10 text-3xl font-bold text-white" variants={variants.textReveal}>
+            <motion.h2 className="mb-10 font-headline text-3xl font-bold text-on-surface" variants={variants.textReveal}>
               Knowledge Architecture
             </motion.h2>
             <motion.div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3" variants={variants.grid}>
               {knowledgePaths.map((doc) => (
                 <motion.div key={doc.link} variants={variants.card}>
-                  <Link to={doc.link} className="app-card app-card-motion app-card-glow rounded-lg p-5 text-left text-gray-200 block group">
-                    <div className="mb-2 text-lg font-bold text-white transition-colors group-hover:text-accent-pink">{doc.title}</div>
-                    <div className="text-sm text-gray-400">{doc.description}</div>
+                  <Link to={doc.link} className="app-card app-card-motion app-card-glow rounded-lg p-5 text-left text-on-surface block group">
+                    <div className="mb-2 font-headline text-lg font-bold text-on-surface transition-colors group-hover:text-primary">{doc.title}</div>
+                    <div className="text-sm text-on-surface-variant">{doc.description}</div>
                   </Link>
                 </motion.div>
               ))}
@@ -249,21 +248,21 @@ export default function HomePage(): JSX.Element {
 
         <motion.section
           id="ecosystem"
-          className="section-border px-4 py-20"
+          className="section-surface-alt px-4 py-20"
           initial="hidden"
           whileInView="show"
           viewport={viewport}
           variants={variants.section}>
           <div className="mx-auto max-w-5xl text-center">
-            <motion.h2 className="mb-10 text-3xl font-bold text-white" variants={variants.textReveal}>
+            <motion.h2 className="mb-10 font-headline text-3xl font-bold text-on-surface" variants={variants.textReveal}>
               Workflows
             </motion.h2>
             <motion.div className="grid grid-cols-1 gap-4 md:grid-cols-2" variants={variants.grid}>
               {workflowPaths.map((doc) => (
                 <motion.div key={doc.link} variants={variants.card}>
-                  <Link to={doc.link} className="app-card app-card-motion app-card-glow rounded-lg p-5 text-left text-gray-200 block group">
-                    <div className="mb-2 text-lg font-bold text-white transition-colors group-hover:text-accent-pink">{doc.title}</div>
-                    <div className="text-sm text-gray-400">{doc.description}</div>
+                  <Link to={doc.link} className="app-card app-card-motion app-card-glow rounded-lg p-5 text-left text-on-surface block group">
+                    <div className="mb-2 font-headline text-lg font-bold text-on-surface transition-colors group-hover:text-primary">{doc.title}</div>
+                    <div className="text-sm text-on-surface-variant">{doc.description}</div>
                   </Link>
                 </motion.div>
               ))}
@@ -273,7 +272,7 @@ export default function HomePage(): JSX.Element {
 
         <motion.section
           id="greg-story"
-          className="section-border px-4 py-20"
+          className="px-4 py-20"
           initial="hidden"
           whileInView="show"
           viewport={viewport}
@@ -281,17 +280,17 @@ export default function HomePage(): JSX.Element {
           <div className="mx-auto max-w-6xl">
             <motion.div className="app-card app-card-glow rounded-2xl p-6 md:p-8 flex flex-col md:flex-row md:items-center md:justify-between gap-6" variants={variants.card}>
               <div>
-                <h2 className="mb-4 text-2xl font-bold text-white md:text-3xl">{t.gregTitle}</h2>
-                <p className="mb-4 text-gray-300 text-sm md:text-base leading-relaxed max-w-md">
+                <h2 className="mb-4 font-headline text-2xl font-bold text-on-surface md:text-3xl">{t.gregTitle}</h2>
+                <p className="mb-4 text-on-surface-variant text-sm md:text-base leading-relaxed max-w-md">
                   {t.gregText1}
                 </p>
-                <p className="mb-4 text-gray-300 text-sm md:text-base leading-relaxed max-w-md">
+                <p className="mb-4 text-on-surface-variant text-sm md:text-base leading-relaxed max-w-md">
                   {t.gregText2}
                 </p>
-                <p className="text-lg font-bold text-white italic">{t.gregQuote}</p>
+                <p className="font-headline text-lg font-bold text-secondary italic">{t.gregQuote}</p>
               </div>
               <motion.div className="shrink-0" whileHover={reducedMotion ? undefined : { rotate: 1.2, y: -3 }}>
-                <div className="w-32 h-40 md:w-48 md:h-56 overflow-hidden rounded-lg border" style={{ borderColor: 'var(--color-card-border)', backgroundColor: 'rgba(226, 58, 113, 0.05)' }}>
+                <div className="w-32 h-40 md:w-48 md:h-56 overflow-hidden rounded-xl border-2 border-primary/25">
                   <img src={gregImage} alt="Greg" className="h-full w-full object-cover" />
                 </div>
               </motion.div>
@@ -301,21 +300,23 @@ export default function HomePage(): JSX.Element {
 
         <motion.section
           id="community"
-          className="section-border px-4 py-16"
+          className="px-4 py-16"
           initial="hidden"
           whileInView="show"
           viewport={viewport}
           variants={variants.section}>
           <div className="mx-auto max-w-6xl">
-            <motion.div className="mb-6 rounded-xl p-4 border" style={{ borderColor: 'rgba(202, 165, 61, 0.4)', backgroundColor: 'rgba(202, 165, 61, 0.08)' }} variants={variants.card}>
-              <div className="text-sm font-semibold uppercase tracking-wide text-amber-200">{t.comingSoon}</div>
-              <div className="mt-1 text-base font-medium text-amber-100">{t.comingSoonText}</div>
+            <motion.div
+              className="mb-6 rounded-xl border border-outline-variant/15 bg-surface-container-high p-4"
+              variants={variants.card}>
+              <div className="text-sm font-semibold uppercase tracking-wide text-tertiary">{t.comingSoon}</div>
+              <div className="mt-1 text-base font-medium text-on-surface">{t.comingSoonText}</div>
             </motion.div>
 
             <motion.div className="app-card app-card-glow p-6 rounded-xl flex flex-col md:flex-row md:items-center md:justify-between gap-6" variants={variants.card}>
               <div>
-                <h3 className="text-2xl font-bold text-white">{t.communityTitle}</h3>
-                <p className="mt-2 text-gray-400">{t.communityText}</p>
+                <h3 className="font-headline text-2xl font-bold text-on-surface">{t.communityTitle}</h3>
+                <p className="mt-2 text-on-surface-variant">{t.communityText}</p>
               </div>
               <div className="flex flex-wrap gap-3">
                 <Link to="https://frikadellental.de" className="btn-social">
@@ -337,21 +338,20 @@ export default function HomePage(): JSX.Element {
 
         <motion.section
           id="support"
-          className="section-border px-4 py-16"
+          className="section-surface-alt px-4 py-16"
           initial="hidden"
           whileInView="show"
           viewport={viewport}
           variants={variants.section}>
           <div className="mx-auto max-w-6xl flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
-              <h3 className="text-2xl font-bold text-white">{t.supportTitle}</h3>
-              <p className="text-gray-400">{t.supportText}</p>
+              <h3 className="font-headline text-2xl font-bold text-on-surface">{t.supportTitle}</h3>
+              <p className="text-on-surface-variant">{t.supportText}</p>
             </div>
             <motion.div whileHover={reducedMotion ? undefined : { y: -2, scale: 1.01 }}>
               <Link
                 to="https://github.com/mleem97/gregFramework/issues"
-                className="inline-flex items-center gap-2 rounded px-5 py-3 font-bold text-white transition-colors shadow-lg shadow-accent-pink/20"
-                style={{ backgroundColor: 'var(--color-accent-pink)' }}>
+                className="btn-primary inline-flex items-center gap-2 rounded-xl px-5 py-3">
                 <FaLifeRing /> {t.supportCta}
               </Link>
             </motion.div>
