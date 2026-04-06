@@ -8,7 +8,7 @@
 ## Checklist
 
 - [ ] Conventional Commit used
-- [ ] Versioning checked (`XX.XX.XXXX`)
+- [ ] Versioning checked (`X.X.X`)
 - [ ] `CHANGELOG.md` updated when needed
 - [ ] Wiki updated for affected areas
 - [ ] Build/test executed locally
