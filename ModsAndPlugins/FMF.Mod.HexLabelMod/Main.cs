@@ -21,17 +21,27 @@ namespace FMF.HexLabelMod;
 
 public sealed class HexLabelMelon : MelonMod
 {
+    private const float LabelScanIntervalSeconds = 1.5f;
+    private const float DeepScanIntervalSeconds = 10f;
+    private const int SteamLogProbeLineLimit = 400;
     private const string AllowedSteamId64 = "76561198032682009";
     private const string LabelObjectName = "HexLabel_White";
     private const string RackLabelObjectName = "RackHexLabel_White";
-    private static HexPositionConfig _config = HexPositionConfig.CreateDefault();
+    private static readonly Regex SteamIdRegex = new(
+        @"(?<!\d)7656119\d{10}(?!\d)",
+        RegexOptions.Compiled
+    );
+    private static volatile HexPositionConfig _config = HexPositionConfig.CreateDefault();
 
     private HarmonyLib.Harmony _harmony;
     private float _scanTimer;
+    private float _deepScanTimer;
     private float _configReloadTimer;
     private float _steamPermissionRecheckTimer;
     private float _startupWaitTimer;
     private int _configReloadRunning;
+    private CableSpinner[] _cachedSpinners = Array.Empty<CableSpinner>();
+    private Rack[] _cachedRacks = Array.Empty<Rack>();
     private bool _isFullyInitialized;
     private bool _startupWaitMessageShown;
     private bool _liveReloadEnabled;
@@ -48,6 +58,8 @@ public sealed class HexLabelMelon : MelonMod
         }
 
         _config = HexPositionConfig.CreateDefault();
+        _cachedSpinners = Array.Empty<CableSpinner>();
+        _cachedRacks = Array.Empty<Rack>();
         _isFullyInitialized = false;
         _liveReloadEnabled = false;
         _liveReloadAllowed = false;
@@ -69,8 +81,8 @@ public sealed class HexLabelMelon : MelonMod
         }
 
         _config = LoadOrCreateConfig();
-        EnsureConfigFileExists();
         TryResolveLiveReloadPermission();
+    RefreshObjectCaches();
 
         _harmony = new HarmonyLib.Harmony("de.mleem.hexlabelmod");
         _harmony.PatchAll(typeof(HexLabelMelon).Assembly);
@@ -106,6 +118,13 @@ public sealed class HexLabelMelon : MelonMod
         }
 
         _scanTimer += Time.deltaTime;
+        _deepScanTimer += Time.deltaTime;
+
+        if (_cachedSpinners.Length == 0 || _cachedRacks.Length == 0 || _deepScanTimer >= DeepScanIntervalSeconds)
+        {
+            _deepScanTimer = 0f;
+            RefreshObjectCaches();
+        }
 
         if (!_liveReloadAllowed)
         {
@@ -128,7 +147,7 @@ public sealed class HexLabelMelon : MelonMod
             _ = ReloadConfigAsync();
         }
 
-        if (_scanTimer < 1.5f)
+        if (_scanTimer < LabelScanIntervalSeconds)
             return;
 
         _scanTimer = 0f;
@@ -199,6 +218,8 @@ public sealed class HexLabelMelon : MelonMod
         if (spinner == null)
             return;
 
+        var config = _config;
+
         if (!TryGetSpinnerHex(spinner, out var hex))
             return;
 
@@ -206,7 +227,7 @@ public sealed class HexLabelMelon : MelonMod
         if (sourceLabel == null)
             return;
 
-        var parent = sourceLabel.transform != null ? sourceLabel.transform.parent : spinner.transform;
+        var parent = sourceLabel.transform.parent ?? spinner.transform;
         if (parent == null)
             return;
 
@@ -225,42 +246,68 @@ public sealed class HexLabelMelon : MelonMod
         if (label == null)
             return;
 
+        var targetFontMin = config.SpinnerFontMin;
+        var targetFontMax = config.SpinnerFontMax;
+        var targetFontSize = Mathf.Clamp(sourceLabel.fontSize * config.SpinnerFontScale, targetFontMin, targetFontMax);
+        var targetAnchoredPosition = sourceLabel.rectTransform.anchoredPosition + new Vector2(config.SpinnerOffsetX, config.SpinnerOffsetY);
+
+        var alreadyConfigured = string.Equals(label.text, hex, StringComparison.Ordinal)
+            && Mathf.Approximately(label.fontSizeMin, targetFontMin)
+            && Mathf.Approximately(label.fontSizeMax, targetFontMax)
+            && Mathf.Approximately(label.fontSize, targetFontSize)
+            && label.enableWordWrapping == false
+            && label.enableAutoSizing
+            && label.alignment == TextAlignmentOptions.Center
+            && label.color == Color.white
+            && Mathf.Approximately(label.alpha, 1f)
+            && Vector2.Distance(label.rectTransform.anchoredPosition, targetAnchoredPosition) < 0.01f;
+
+        if (alreadyConfigured)
+            return;
+
         label.color = Color.white;
         label.alpha = 1f;
         label.text = hex;
         label.enableAutoSizing = true;
-        label.fontSizeMin = _config.SpinnerFontMin;
-        label.fontSizeMax = _config.SpinnerFontMax;
-        label.fontSize = Mathf.Clamp(sourceLabel.fontSize * _config.SpinnerFontScale, _config.SpinnerFontMin, _config.SpinnerFontMax);
+        label.fontSizeMin = targetFontMin;
+        label.fontSizeMax = targetFontMax;
+        label.fontSize = targetFontSize;
         label.enableWordWrapping = false;
         label.alignment = TextAlignmentOptions.Center;
 
         var rt = label.rectTransform;
         if (rt != null)
-            rt.anchoredPosition = sourceLabel.rectTransform.anchoredPosition + new Vector2(_config.SpinnerOffsetX, _config.SpinnerOffsetY);
+            rt.anchoredPosition = targetAnchoredPosition;
     }
 
     private void TryApplyToAllSpinners()
     {
         try
         {
-            var spinners = UnityEngine.Object.FindObjectsOfType<CableSpinner>();
-            if (spinners == null)
-                return;
+            for (var i = 0; i < _cachedSpinners.Length; i++)
+                EnsureLabel(_cachedSpinners[i]);
 
-            for (var i = 0; i < spinners.Count; i++)
-                EnsureLabel(spinners[i]);
-
-            var racks = UnityEngine.Object.FindObjectsOfType<Rack>();
-            if (racks == null)
-                return;
-
-            for (var i = 0; i < racks.Count; i++)
-                EnsureRackLabel(racks[i]);
+            for (var i = 0; i < _cachedRacks.Length; i++)
+                EnsureRackLabel(_cachedRacks[i]);
         }
         catch (Exception ex)
         {
             LoggerInstance.Warning($"HexLabel scan failed: {ex.Message}");
+        }
+    }
+
+    private void RefreshObjectCaches()
+    {
+        try
+        {
+            _cachedSpinners = UnityEngine.Object.FindObjectsOfType<CableSpinner>();
+            _cachedRacks = UnityEngine.Object.FindObjectsOfType<Rack>();
+        }
+        catch (Exception ex)
+        {
+            LoggerInstance.Warning($"HexLabel deep scan failed: {ex.Message}");
+            _cachedSpinners = Array.Empty<CableSpinner>();
+            _cachedRacks = Array.Empty<Rack>();
         }
     }
 
@@ -373,6 +420,8 @@ public sealed class HexLabelMelon : MelonMod
         if (rack == null)
             return;
 
+        var config = _config;
+
         if (!TryGetRackHex(rack, out var hex))
             hex = "#FFFFFF";
 
@@ -397,20 +446,37 @@ public sealed class HexLabelMelon : MelonMod
         if (label == null)
             return;
 
+        var targetScale = Vector3.one * config.RackScale;
+        var hasWorldPosition = TryGetRackBackRightBottomPosition(rack, out var worldPos, config);
+        var targetRotation = Quaternion.LookRotation(-rack.transform.forward, rack.transform.up);
+
+        var alreadyConfigured = string.Equals(label.text, hex, StringComparison.Ordinal)
+            && label.color == Color.white
+            && label.anchor == TextAnchor.MiddleCenter
+            && label.alignment == TextAlignment.Center
+            && label.fontSize == config.RackFontSize
+            && Mathf.Approximately(label.characterSize, config.RackCharacterSize)
+            && (!hasWorldPosition || Vector3.Distance(label.transform.position, worldPos) < 0.001f)
+            && Quaternion.Angle(label.transform.rotation, targetRotation) < 0.01f
+            && Vector3.Distance(label.transform.localScale, targetScale) < 0.0001f;
+
+        if (alreadyConfigured)
+            return;
+
         label.text = hex;
         label.color = Color.white;
         label.anchor = TextAnchor.MiddleCenter;
         label.alignment = TextAlignment.Center;
-        label.fontSize = _config.RackFontSize;
-        label.characterSize = _config.RackCharacterSize;
+        label.fontSize = config.RackFontSize;
+        label.characterSize = config.RackCharacterSize;
 
-        if (!TryGetRackBackRightBottomPosition(rack, out var worldPos))
+        if (!hasWorldPosition)
             return;
 
         var t = label.transform;
         t.position = worldPos;
-        t.rotation = Quaternion.LookRotation(-rack.transform.forward, rack.transform.up);
-        t.localScale = Vector3.one * _config.RackScale;
+        t.rotation = targetRotation;
+        t.localScale = targetScale;
     }
 
     private static bool TryGetRackHex(Rack rack, out string hex)
@@ -454,7 +520,7 @@ public sealed class HexLabelMelon : MelonMod
         return false;
     }
 
-    private static bool TryGetRackBackRightBottomPosition(Rack rack, out Vector3 pos)
+    private static bool TryGetRackBackRightBottomPosition(Rack rack, out Vector3 pos, HexPositionConfig config)
     {
         pos = default;
 
@@ -492,9 +558,9 @@ public sealed class HexLabelMelon : MelonMod
             var downExtent = ProjectExtent(bounds.extents, -rack.transform.up);
 
             pos = bounds.center
-                + rack.transform.right * (rightExtent + _config.RackOffsetRight)
-                + (-rack.transform.forward) * (backExtent + _config.RackOffsetBack)
-                + (-rack.transform.up) * (downExtent + _config.RackOffsetDown);
+                + rack.transform.right * (rightExtent + config.RackOffsetRight)
+                + (-rack.transform.forward) * (backExtent + config.RackOffsetBack)
+                + (-rack.transform.up) * (downExtent + config.RackOffsetDown);
 
             return true;
         }
@@ -621,12 +687,22 @@ public sealed class HexLabelMelon : MelonMod
             if (!File.Exists(logPath))
                 return null;
 
-            var content = File.ReadAllText(logPath);
-            var match = Regex.Match(content, @"(?<!\d)7656119\d{10}(?!\d)");
-            if (!match.Success)
-                return null;
+            using var stream = new FileStream(logPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+            using var reader = new StreamReader(stream);
 
-            return match.Value;
+            var lineCount = 0;
+            while (!reader.EndOfStream && lineCount++ < SteamLogProbeLineLimit)
+            {
+                var line = reader.ReadLine();
+                if (string.IsNullOrWhiteSpace(line))
+                    continue;
+
+                var match = SteamIdRegex.Match(line);
+                if (match.Success)
+                    return match.Value;
+            }
+
+            return null;
         }
         catch
         {
@@ -642,14 +718,24 @@ public sealed class HexLabelMelon : MelonMod
             if (!File.Exists(logPath))
                 return false;
 
-            var content = File.ReadAllText(logPath);
+            using var stream = new FileStream(logPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+            using var reader = new StreamReader(stream);
 
-            var hasSteamMarker = content.Contains("SteamInternal_SetMinidumpSteamID:", StringComparison.Ordinal)
-                                 || content.Contains("Caching Steam ID:", StringComparison.Ordinal);
+            var lineCount = 0;
+            while (!reader.EndOfStream && lineCount++ < SteamLogProbeLineLimit)
+            {
+                var line = reader.ReadLine();
+                if (string.IsNullOrWhiteSpace(line))
+                    continue;
 
-            var hasSteamId = Regex.IsMatch(content, @"(?<!\d)7656119\d{10}(?!\d)");
+                var hasSteamMarker = line.Contains("SteamInternal_SetMinidumpSteamID:", StringComparison.Ordinal)
+                    || line.Contains("Caching Steam ID:", StringComparison.Ordinal);
 
-            return hasSteamMarker || hasSteamId;
+                if (hasSteamMarker || SteamIdRegex.IsMatch(line))
+                    return true;
+            }
+
+            return false;
         }
         catch
         {
@@ -671,21 +757,6 @@ public sealed class HexLabelMelon : MelonMod
             _liveReloadAllowed = true;
         }
     }
-
-    private static void EnsureConfigFileExists()
-    {
-        var path = GetConfigPath();
-        if (File.Exists(path))
-            return;
-
-        var defaultConfig = HexPositionConfig.CreateDefault();
-        var dir = Path.GetDirectoryName(path);
-        if (!string.IsNullOrWhiteSpace(dir))
-            Directory.CreateDirectory(dir);
-
-        File.WriteAllText(path, defaultConfig.ToConfigText());
-    }
-
     private sealed class HexPositionConfig
     {
         public float SpinnerOffsetX;
