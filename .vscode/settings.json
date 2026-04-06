@@ -1,0 +1,6 @@
+{
+    "i18n-ally.localesPaths": [
+        "docs-site/src/i18n"
+    ],
+    "todo-tree.tree.scanMode": "workspace only"
+}
