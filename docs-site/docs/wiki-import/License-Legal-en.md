@@ -12,7 +12,7 @@ tags:
 
 ## License & Legal
 
-- License terms: [`LICENSE.txt`](https://github.com/mleem97/FrikaModFramework/blob/master/LICENSE.txt)
+- License terms: [`LICENSE.txt`](https://github.com/mleem97/gregFramework/blob/master/LICENSE.txt)
 - FrikaMF is unofficial and community-driven.
 - No affiliation with WASEKU.
 
@@ -48,3 +48,4 @@ public override void OnApplicationQuit()
     LoggerInstance.Msg("Framework shutdown");
 }
 ```
+

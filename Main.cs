@@ -44,7 +44,7 @@ namespace AssetExporter
 #else
             MelonLogger.Msg("Release-Modus aktiv: nur Game-Kommunikation/Framework-Basis, keine Dev-Exports/Hooks.");
 #endif
-            MelonLogger.Msg("Projekt: https://github.com/mleem97/FrikaModFramework");
+            MelonLogger.Msg("Projekt: https://github.com/mleem97/gregFramework");
             ModFramework.Events.Publish(new ModInitializedEvent(DateTime.UtcNow, FrikaMF.ReleaseVersion.Current));
 
             RunAutoHookCommandIfRequested();

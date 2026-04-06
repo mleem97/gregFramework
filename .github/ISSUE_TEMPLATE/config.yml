@@ -1,5 +1,6 @@
 blank_issues_enabled: false
 contact_links:
   - name: Support
-    url: https://github.com/mleem97/FrikaModFramework/blob/master/SUPPORT.md
+    url: https://github.com/mleem97/gregFramework/blob/master/SUPPORT.md
     about: Use support guidance before opening a new issue.
+

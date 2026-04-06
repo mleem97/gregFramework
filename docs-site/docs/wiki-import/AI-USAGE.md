@@ -1,7 +1,7 @@
 # AI Usage Policy & Disclaimer
 
-- Root policy file: [`AI_POLICY.md`](https://github.com/mleem97/FrikaModFramework/blob/master/AI_POLICY.md)
-- Contributor guide: [`CONTRIBUTING.md`](https://github.com/mleem97/FrikaModFramework/blob/master/CONTRIBUTING.md)
+- Root policy file: [`AI_POLICY.md`](https://github.com/mleem97/gregFramework/blob/master/AI_POLICY.md)
+- Contributor guide: [`CONTRIBUTING.md`](https://github.com/mleem97/gregFramework/blob/master/CONTRIBUTING.md)
 
 ## 🇬🇧 English Version
 
@@ -199,3 +199,4 @@ Bevor du einen PR einreichst, bei dem KI-Tools in erheblichem Umfang beteiligt w
 - [ ] Ich habe verifiziert, dass die Dokumentation das tatsächliche Verhalten des Codes widerspiegelt
 - [ ] Ich habe gegen die aktuelle stabile Version von MelonLoader getestet
 - [ ] Ich bin bereit, jeden Teil meiner Einreichung im Review zu diskutieren und zu verteidigen
+
