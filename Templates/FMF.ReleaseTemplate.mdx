@@ -1,0 +1,70 @@
+---
+title: <ReleaseName>
+description: <Short release summary>
+sidebar_label: <ReleaseName>
+tags: [release, fmf, <mod-or-plugin>]
+---
+
+import Admonition from '@theme/Admonition';
+
+## Release Overview
+
+- **Module:** `<ModuleId>`
+- **Type:** `<Plugin|Mod>`
+- **Version:** `<XX.XX.XXXX>`
+- **Framework Requirement:** `<min FMF version>`
+- **Game:** `Waseku / Data Center`
+
+<Admonition type="info" title="Compatibility">
+Tested with the target game build and FMF release listed above.
+</Admonition>
+
+## Download
+
+- **Primary Artifact:** `<https://your-release-url>`
+- **SHA256:** `<paste-checksum-here>`
+
+## Installation
+
+1. Copy `<ArtifactName>.dll` into `Data Center/Mods`.
+1. Start the game once.
+1. Verify in `MelonLoader/Latest.log` that the module initialized successfully.
+
+## Changelog
+
+### Added
+
+- <new capability>
+
+### Changed
+
+- <behavior update>
+
+### Fixed
+
+- <bug fix>
+
+## Configuration
+
+```json
+{
+  "enabled": true,
+  "exampleOption": "value"
+}
+```
+
+## Security & Audit
+
+- **Source Repository:** `<https://github.com/owner/repo.git>`
+- **Static Checks:** `<pass/fail + notes>`
+- **Manual Review:** `<reviewer + date>`
+
+## Known Limitations
+
+- <limitation 1>
+- <limitation 2>
+
+## Support
+
+- **Issues:** `<https://github.com/owner/repo/issues>`
+- **Discord:** `<community channel>`
