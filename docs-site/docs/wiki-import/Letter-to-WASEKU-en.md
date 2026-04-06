@@ -32,7 +32,7 @@ We are open to discussing stable modding surfaces or future official API opportu
 
 ## Contact
 
-- `https://github.com/mleem97/FrikaModFramework`
+- `https://github.com/mleem97/gregFramework`
 
 ## Technical sample
 
@@ -56,3 +56,4 @@ public sealed class SceneObserver : MelonMod
     }
 }
 ```
+

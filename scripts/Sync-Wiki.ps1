@@ -1,6 +1,6 @@
 param(
     [Parameter()]
-    [string]$WikiRepoUrl = 'https://github.com/mleem97/FrikaModFramework.wiki.git',
+    [string]$WikiRepoUrl = 'https://github.com/mleem97/gregFramework.wiki.git',
 
     [Parameter()]
     [string]$SourceWikiPath = '.wiki',
@@ -114,3 +114,4 @@ finally {
         Remove-Item -LiteralPath $tempRoot -Recurse -Force -ErrorAction SilentlyContinue
     }
 }
+

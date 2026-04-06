@@ -14,7 +14,7 @@ tags:
 
 ## Lizenz
 
-- Es gilt die projektweite Lizenz in [`LICENSE.txt`](https://github.com/mleem97/FrikaModFramework/blob/master/LICENSE.txt).
+- Es gilt die projektweite Lizenz in [`LICENSE.txt`](https://github.com/mleem97/gregFramework/blob/master/LICENSE.txt).
 - FrikaMF ist ein **inoffizielles Community-Projekt**.
 - Keine Affiliation mit WASEKU.
 
@@ -56,3 +56,4 @@ public override void OnApplicationQuit()
     LoggerInstance.Msg("Framework shutdown");
 }
 ```
+

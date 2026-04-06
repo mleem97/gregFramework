@@ -44,8 +44,8 @@ FrikaMF ist ein inoffizielles, community-getriebenes Modding-Framework für das 
 
 ## Referenzen
 
-- Repository: `https://github.com/mleem97/FrikaModFramework`
-- Wiki-Remote: `https://github.com/mleem97/FrikaModFramework.wiki.git`
+- Repository: `https://github.com/mleem97/gregFramework`
+- Wiki-Remote: `https://github.com/mleem97/gregFramework.wiki.git`
 
 ## Technische Referenz (Direktlinks)
 
@@ -56,3 +56,4 @@ FrikaMF ist ein inoffizielles, community-getriebenes Modding-Framework für das 
 - [Modding Guide](ModDevs/Guides/Getting-Started)
 - [Architecture](/wiki/wiki-import/Architecture)
 - [Setup](Setup)
+

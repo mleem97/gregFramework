@@ -1,8 +1,8 @@
 # Frikadelle Modding Framework (MelonLoader)
 
-[![.NET CI](https://github.com/mleem97/FrikaModFramework/actions/workflows/dotnet-ci.yml/badge.svg?branch=master)](https://github.com/mleem97/FrikaModFramework/actions/workflows/dotnet-ci.yml)
-[![Commit Lint](https://github.com/mleem97/FrikaModFramework/actions/workflows/commitlint.yml/badge.svg?branch=master)](https://github.com/mleem97/FrikaModFramework/actions/workflows/commitlint.yml)
-[![Last Commit](https://img.shields.io/github/last-commit/mleem97/FrikaModFramework/master)](https://github.com/mleem97/FrikaModFramework/commits/master)
+[![.NET CI](https://github.com/mleem97/gregFramework/actions/workflows/dotnet-ci.yml/badge.svg?branch=master)](https://github.com/mleem97/gregFramework/actions/workflows/dotnet-ci.yml)
+[![Commit Lint](https://github.com/mleem97/gregFramework/actions/workflows/commitlint.yml/badge.svg?branch=master)](https://github.com/mleem97/gregFramework/actions/workflows/commitlint.yml)
+[![Last Commit](https://img.shields.io/github/last-commit/mleem97/gregFramework/master)](https://github.com/mleem97/gregFramework/commits/master)
 [![License: Custom-NC--NR](https://img.shields.io/badge/license-Custom%20NC--NR-red.svg)](LICENSE.txt)
 
 | ![Dein Bildbeschreibung](https://github.com/user-attachments/assets/fa08a58e-714b-4090-97d4-2d62714956ed) | `FrikaModFramework` is a modding framework for `Data Center` using MelonLoader. |
@@ -87,3 +87,4 @@ Highlighted contributors for feature inspiration:
 ## License
 
 See `LICENSE.txt` for full terms.
+

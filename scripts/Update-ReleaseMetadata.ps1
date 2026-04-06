@@ -181,8 +181,8 @@ This project uses framework release versions in `XX.XX.XXXX` format.
         $changelog = $requiredHeader + $changelog.TrimStart()
     }
 
-    $releaseLinkLine = "[${NewVersion}]: https://github.com/mleem97/FrikaModFramework/compare/$previousTag...$newTag"
-    $unreleasedLinkLine = "[Unreleased]: https://github.com/mleem97/FrikaModFramework/compare/$newTag...HEAD"
+    $releaseLinkLine = "[${NewVersion}]: https://github.com/mleem97/gregFramework/compare/$previousTag...$newTag"
+    $unreleasedLinkLine = "[Unreleased]: https://github.com/mleem97/gregFramework/compare/$newTag...HEAD"
 
     $firstReleaseHeadingPattern = '(?m)^## \[\d{2}\.\d{2}\.\d{4}\]\s*-\s*\d{4}-\d{2}-\d{2}\s*$'
     if ([regex]::IsMatch($changelog, $firstReleaseHeadingPattern)) {
@@ -263,3 +263,4 @@ function Update-ReleaseMetadata {
 }
 
 Update-ReleaseMetadata -Bump $Bump -Version $Version -Summary $Summary -SkipChangelog:$SkipChangelog
+

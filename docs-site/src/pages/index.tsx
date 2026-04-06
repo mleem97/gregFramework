@@ -324,7 +324,7 @@ export default function HomePage(): JSX.Element {
                 <Link to="/mods" className="btn-social">
                   <FaShop /> {t.availableModsLabel}
                 </Link>
-                <Link to="https://github.com/mleem97/FrikaModFramework" className="btn-social">
+                <Link to="https://github.com/mleem97/gregFramework" className="btn-social">
                   <FaGithub /> {t.repositoryLabel}
                 </Link>
                 <Link to="https://discord.gg/greg" className="btn-social bg-[#5865F2] border-transparent text-white hover:bg-[#4752C4]">
@@ -349,7 +349,7 @@ export default function HomePage(): JSX.Element {
             </div>
             <motion.div whileHover={reducedMotion ? undefined : { y: -2, scale: 1.01 }}>
               <Link
-                to="https://github.com/mleem97/FrikaModFramework/issues"
+                to="https://github.com/mleem97/gregFramework/issues"
                 className="inline-flex items-center gap-2 rounded px-5 py-3 font-bold text-white transition-colors shadow-lg shadow-accent-pink/20"
                 style={{ backgroundColor: 'var(--color-accent-pink)' }}>
                 <FaLifeRing /> {t.supportCta}
@@ -362,3 +362,4 @@ export default function HomePage(): JSX.Element {
     </Layout>
   );
 }
+

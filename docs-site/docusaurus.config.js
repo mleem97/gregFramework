@@ -32,7 +32,7 @@ const config = {
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
           routeBasePath: '/wiki',
-          editUrl: 'https://github.com/mleem97/FrikaModFramework/tree/master/docs-site/',
+          editUrl: 'https://github.com/mleem97/gregFramework/tree/master/docs-site/',
         },
         blog: false,
         theme: {
@@ -69,43 +69,43 @@ const config = {
             from: ['/plugins', '/standalone-mods'],
           },
           {
-            to: 'https://github.com/mleem97/FrikaModFramework/releases/latest/download/FFM.Plugin.AssetExporter.dll',
+            to: 'https://github.com/mleem97/gregFramework/releases/latest/download/FFM.Plugin.AssetExporter.dll',
             from: ['/plugin/FFM.Plugin.AssetExporter.dll'],
           },
           {
-            to: 'https://github.com/mleem97/FrikaModFramework/releases/latest/download/FFM.Plugin.Multiplayer.dll',
+            to: 'https://github.com/mleem97/gregFramework/releases/latest/download/FFM.Plugin.Multiplayer.dll',
             from: ['/plugin/FFM.Plugin.Multiplayer.dll'],
           },
           {
-            to: 'https://github.com/mleem97/FrikaModFramework/releases/latest/download/FFM.Plugin.PlayerModels.dll',
+            to: 'https://github.com/mleem97/gregFramework/releases/latest/download/FFM.Plugin.PlayerModels.dll',
             from: ['/plugin/FFM.Plugin.PlayerModels.dll'],
           },
           {
-            to: 'https://github.com/mleem97/FrikaModFramework/releases/latest/download/FFM.Plugin.Sysadmin.dll',
+            to: 'https://github.com/mleem97/gregFramework/releases/latest/download/FFM.Plugin.Sysadmin.dll',
             from: ['/plugin/FFM.Plugin.Sysadmin.dll'],
           },
           {
-            to: 'https://github.com/mleem97/FrikaModFramework/releases/latest/download/FFM.Plugin.WebUIBridge.dll',
+            to: 'https://github.com/mleem97/gregFramework/releases/latest/download/FFM.Plugin.WebUIBridge.dll',
             from: ['/plugin/FFM.Plugin.WebUIBridge.dll'],
           },
           {
-            to: 'https://github.com/mleem97/FrikaModFramework/releases/latest/download/FMF.ConsoleInputGuard.dll',
+            to: 'https://github.com/mleem97/gregFramework/releases/latest/download/FMF.ConsoleInputGuard.dll',
             from: ['/mod/FMF.ConsoleInputGuard.dll'],
           },
           {
-            to: 'https://github.com/mleem97/FrikaModFramework/releases/latest/download/FMF.GregifyEmployees.dll',
+            to: 'https://github.com/mleem97/gregFramework/releases/latest/download/FMF.GregifyEmployees.dll',
             from: ['/mod/FMF.GregifyEmployees.dll'],
           },
           {
-            to: 'https://github.com/mleem97/FrikaModFramework/releases/latest/download/FMF.HexLabelMod.dll',
+            to: 'https://github.com/mleem97/gregFramework/releases/latest/download/FMF.HexLabelMod.dll',
             from: ['/mod/FMF.HexLabelMod.dll'],
           },
           {
-            to: 'https://github.com/mleem97/FrikaModFramework/releases/latest/download/FMF.JoniMLCompatMod.dll',
+            to: 'https://github.com/mleem97/gregFramework/releases/latest/download/FMF.JoniMLCompatMod.dll',
             from: ['/mod/FMF.JoniMLCompatMod.dll', '/mod/FMF.LangCompatBridge.dll'],
           },
           {
-            to: 'https://github.com/mleem97/FrikaModFramework/releases/latest/download/FMF.UIReplacementMod.dll',
+            to: 'https://github.com/mleem97/gregFramework/releases/latest/download/FMF.UIReplacementMod.dll',
             from: ['/mod/FMF.UIReplacementMod.dll'],
           },
         ],
@@ -155,8 +155,8 @@ const config = {
         },
         {to: '/mods', label: 'Mods', position: 'right', className: 'nav-right-icon nav-icon-only nav-link-mods', 'aria-label': 'Mods'},
         {href: 'https://discord.gg/greg', label: 'Discord', position: 'right', className: 'nav-right-icon nav-icon-only nav-link-discord', 'aria-label': 'Discord'},
-        {href: 'https://github.com/mleem97/FrikaModFramework/issues', label: 'Support', position: 'right', className: 'nav-right-icon nav-icon-only nav-link-support', 'aria-label': 'Support'},
-        {href: 'https://github.com/mleem97/FrikaModFramework', label: 'GitHub', position: 'right', className: 'nav-right-icon nav-icon-only nav-link-github', 'aria-label': 'GitHub'},
+        {href: 'https://github.com/mleem97/gregFramework/issues', label: 'Support', position: 'right', className: 'nav-right-icon nav-icon-only nav-link-support', 'aria-label': 'Support'},
+        {href: 'https://github.com/mleem97/gregFramework', label: 'GitHub', position: 'right', className: 'nav-right-icon nav-icon-only nav-link-github', 'aria-label': 'GitHub'},
       ],
     },
     footer: {
@@ -167,7 +167,7 @@ const config = {
           items: [
             {
               label: 'GitHub',
-              href: 'https://github.com/mleem97/FrikaModFramework',
+              href: 'https://github.com/mleem97/gregFramework',
               className: 'footer-link-icon footer-link-github',
             },
             {
@@ -177,7 +177,7 @@ const config = {
             },
             {
               label: 'Support',
-              href: 'https://github.com/mleem97/FrikaModFramework/issues',
+              href: 'https://github.com/mleem97/gregFramework/issues',
               className: 'footer-link-icon footer-link-support',
             },
           ],
@@ -189,3 +189,4 @@ const config = {
 };
 
 module.exports = config;
+

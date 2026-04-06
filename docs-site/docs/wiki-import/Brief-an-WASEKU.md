@@ -45,7 +45,7 @@ Wir sind offen für:
 
 ## Kontakt
 
-- Repository: `https://github.com/mleem97/FrikaModFramework`
+- Repository: `https://github.com/mleem97/gregFramework`
 - Maintainer-Kontakt über GitHub Issues/Discussions
 
 ## Technischer Anhang (Kurzbeispiel)
@@ -72,3 +72,4 @@ public sealed class SceneObserver : MelonMod
     }
 }
 ```
+

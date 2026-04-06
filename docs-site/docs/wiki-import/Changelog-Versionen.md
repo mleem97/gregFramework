@@ -14,7 +14,7 @@ tags:
 
 Die verbindliche Versionshistorie liegt in der Repository-Datei:
 
-- [`CHANGELOG.md`](https://github.com/mleem97/FrikaModFramework/blob/master/CHANGELOG.md)
+- [`CHANGELOG.md`](https://github.com/mleem97/gregFramework/blob/master/CHANGELOG.md)
 
 ## Versionierung
 
@@ -57,3 +57,4 @@ pub const ABI_VERSION: u32 = 5;
 ```csharp
 public const uint API_VERSION = 5;
 ```
+

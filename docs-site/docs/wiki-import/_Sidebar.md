@@ -74,5 +74,6 @@
 
 - [Roadmap](ROADMAP)
 - [Task List](TASKLIST)
-- [Repository](https://github.com/mleem97/FrikaModFramework)
-- [Contributing](https://github.com/mleem97/FrikaModFramework/blob/master/CONTRIBUTING.md)
+- [Repository](https://github.com/mleem97/gregFramework)
+- [Contributing](https://github.com/mleem97/gregFramework/blob/master/CONTRIBUTING.md)
+
