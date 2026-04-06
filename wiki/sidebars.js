@@ -11,6 +11,7 @@ const sidebars = {
         'wiki/framework/architecture',
         'wiki/framework/fmf-hooks',
         'wiki/mods/hexmod',
+        'wiki/tools/workshop-uploader',
       ],
     },
     {
