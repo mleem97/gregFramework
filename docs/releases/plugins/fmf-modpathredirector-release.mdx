@@ -1,0 +1,40 @@
+---
+title: FMF.ModPathRedirector Release
+sidebar_label: FMF.ModPathRedirector Release
+description: Download and install the MelonLoader Workshop download plugin for Data Center.
+---
+
+import ModReleasePage from '@site/src/components/ModReleasePage';
+
+<ModReleasePage
+  title="FMF.ModPathRedirector"
+  kind="plugin"
+  dllName="FMF.ModPathRedirector.dll"
+  releaseReady={true}
+  version="1.3.0"
+  author="DataCenterExporter / FrikaMF Community"
+  category="MelonLoader plugin"
+  dependencies={['MelonLoader', 'Steam (client)', 'Data Center']}
+  codeLanguages={['C#']}
+  description="MelonLoader plugin that calls steam_api64.dll (Steam flat UGC API) to trigger Workshop downloads for subscribed items. Does not redirect native mod paths — Workshop content still syncs to Data Center_Data/StreamingAssets/Mods/workshop_<ID>/."
+  banner="Workshop download helper (MelonLoader Plugins/)"
+  releaseNotesPath="/wiki/tools/workshop-uploader"
+  installation={
+    <ol>
+      <li>
+        Download <code>FMF.ModPathRedirector.dll</code> from the latest{' '}
+        <a href="https://github.com/mleem97/gregFramework/releases/latest">GitHub release</a> (or use the button on this page — redirects to the same asset).
+      </li>
+      <li>
+        Copy the DLL into your game folder: <code>&lt;GameRoot&gt;/Plugins/</code> — the same directory as <code>Data Center.exe</code>, <strong>not</strong> <code>Mods/</code> (that folder is for MelonMods).
+      </li>
+      <li>
+        Ensure <code>steam_api64.dll</code> is next to the game executable (Steam ships it with the game). Start the game with MelonLoader; the plugin waits until Steam is running, then requests downloads for subscribed Workshop items.
+      </li>
+    </ol>
+  }
+/>
+
+:::info GitHub asset
+The **Download DLL** button and `/plugin/FMF.ModPathRedirector.dll` route resolve to `https://github.com/mleem97/gregFramework/releases/latest/download/FMF.ModPathRedirector.dll`. That file is attached automatically when you publish a release via the `release-assets.yml` workflow (push a `v*` tag or run the workflow manually).
+:::
