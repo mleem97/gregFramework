@@ -6,6 +6,8 @@ description: Monorepo layout, design system, Docusaurus workflow, plugin audits.
 
 # Contributors (workflow)
 
+**Mitwirkende am Repository** — Framework, Website, CI, Plugins. Überblick über alle Rollen (inkl. Spieler, Moddevs, Sponsoren): [By audience](/wiki/topics/audiences/overview).
+
 Operational docs for people changing the framework, site, or release pipeline.
 
 - [Repository inventory](/wiki/contributors/repo-inventory) — current layout snapshot.
