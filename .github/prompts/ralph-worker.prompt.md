@@ -24,6 +24,7 @@ Execute exactly one atomic Ralph task per run with strict scope discipline.
 	- Run tests expecting initial failure (red).
 	- Implement minimal code to satisfy acceptance criteria (green).
 	- Run required checks again (verify).
+	- Prefer building against **`lib/references/`** when present (after `tools/refresh_refs.py`); it is the authoritative interop surface for C# work in this repo.
 
 5. **Quality Gate**
 	- Confirm all acceptance criteria are satisfied.
@@ -32,6 +33,7 @@ Execute exactly one atomic Ralph task per run with strict scope discipline.
 6. **Commit Atomically**
 	- Commit only touched files for this task.
 	- Use English Conventional Commit format.
+	- For IL2CPP hook or interop fixes after a game update, prefer: `fix(game-update): fix hook for [ClassName]` (use the actual affected game or framework type name).
 
 7. **Complete**
 	- Rename `.lock` -> `.done`.

@@ -52,6 +52,15 @@ Every `.todo` must include:
 	- `.github/copilot-instructions.md`
 	- `.gemini/instructions.md`
 
+## Game update detection (Live-Sync)
+
+When the user reports a **game update**, MelonLoader regenerates interop assemblies. Atomize work as follows:
+
+1. **Refresh references:** Instruct running `python tools/refresh_refs.py` (after the game has been launched once so `MelonLoader/Il2CppAssemblies` exists). Compare `lib/references/MANIFEST.txt` and run `python tools/diff_assembly_metadata.py` against the saved snapshot in `lib/references/.previous/` (see tool help and `--save-snapshot`).
+2. **Metadata / API surface:** Treat changes to `Assembly-CSharp.dll` (hash and manifest diffs) as the primary signal for broken Harmony hooks or IL2CPP type references.
+3. **Broken hooks:** Cross-check framework and plugin code that patches game types; list concrete `.todo` tasks per failing class or patch site.
+4. **Dispatch:** Emit `.ralph/tasks/*.todo` files so workers can fix compilation and hooks with minimal scope.
+
 ## Mandatory Pause Points
 
 1. After presenting plan synopsis.
