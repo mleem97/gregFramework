@@ -1,0 +1,21 @@
+---
+title: HexMod (pilot layout)
+sidebar_label: HexMod pilot
+---
+
+# HexMod
+
+Pilot documentation for the **Hex Label** mod using the `HexMod/` top-level layout.
+
+## Source of truth (build)
+
+C# project: [`mods/FMF.Mod.HexLabelMod`](https://github.com/mleem97/gregFramework/tree/master/mods/FMF.Mod.HexLabelMod) (same repo).
+
+## Workshop upload
+
+1. Build the mod DLL into a folder (e.g. `HexMod/workshop/build/`).
+2. Update `workshop/hexmod.vdf` `contentfolder` to that folder.
+3. Add `assets/preview.png`.
+4. Run [`tools/steam-workshop-upload/upload.sh`](../../tools/steam-workshop-upload/upload.sh) (see script README).
+
+Steam Guard: expect interactive prompts when not using a cached sentry.

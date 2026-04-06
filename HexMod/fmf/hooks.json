@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "modId": "FMF.HexLabelMod",
+  "description": "Pilot registry for HexLabelMod — align with FrikaModFramework/fmf_hooks.json over time.",
+  "hooks": [
+    {
+      "name": "FMF.UI.Notification",
+      "role": "subscribe",
+      "note": "Example placeholder; replace with real hooks used by HexLabelMod."
+    }
+  ]
+}

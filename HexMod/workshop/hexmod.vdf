@@ -1,0 +1,11 @@
+"workshopitem"
+{
+  "appid"           "4170200"
+  "publishedfileid" "0"
+  "contentfolder"   "./build"
+  "previewfile"     "../assets/preview.png"
+  "visibility"      "0"
+  "title"           "Hex Label Mod (FMF)"
+  "description"     "Cable/rack hex color labels for Data Center. Built with Frika Mod Framework."
+  "changenote"      "Initial workshop layout from repo templates."
+}
