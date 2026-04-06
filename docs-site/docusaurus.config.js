@@ -32,18 +32,6 @@ const config = {
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
           routeBasePath: '/wiki',
-          createRedirects(existingPath) {
-            if (existingPath === '/wiki') {
-              return ['/docs'];
-            }
-
-            if (existingPath.startsWith('/wiki/')) {
-              const legacyPath = existingPath.replace('/wiki', '');
-              return [legacyPath];
-            }
-
-            return undefined;
-          },
           editUrl: 'https://github.com/mleem97/FrikaModFramework/tree/master/docs-site/',
         },
         blog: false,
@@ -59,6 +47,18 @@ const config = {
     [
       '@docusaurus/plugin-client-redirects',
       {
+        createRedirects(existingPath) {
+          if (existingPath === '/wiki') {
+            return ['/docs'];
+          }
+
+          if (existingPath.startsWith('/wiki/')) {
+            const legacyPath = existingPath.replace('/wiki', '');
+            return [legacyPath];
+          }
+
+          return undefined;
+        },
         redirects: [
           {
             to: '/wiki/mods/framework',
