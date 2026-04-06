@@ -40,10 +40,10 @@ jobs:
           $projects = @(
             'FrikaMF.csproj',
             'References/il2cpp-unpack/Assembly-CSharp/Assembly-CSharp.csproj',
-            'ModsAndPlugins/FMF.Mod.HexLabelMod/FMF.HexLabelMod.csproj',
-            'ModsAndPlugins/FMF.Mod.GregifyEmployees/FMF.GregifyEmployees.csproj',
-            'ModsAndPlugins/FMF.ConsoleInputGuard/FMF.ConsoleInputGuard.csproj',
-            'ModsAndPlugins/FMF.Plugin.LangCompatBridge/FMF.JoniMLCompatMod.csproj',
+            'mods/FMF.Mod.HexLabelMod/FMF.HexLabelMod.csproj',
+            'mods/FMF.Mod.GregifyEmployees/FMF.GregifyEmployees.csproj',
+            'mods/FMF.ConsoleInputGuard/FMF.ConsoleInputGuard.csproj',
+            'mods/FMF.Plugin.LangCompatBridge/FMF.JoniMLCompatMod.csproj',
             'Templates/StandaloneModTemplate/StandaloneModTemplate.csproj'
           )
 

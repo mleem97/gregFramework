@@ -11,5 +11,5 @@ Framework-compatible standalone migration of the former root `JoniML` mod.
 ## Build
 
 ```powershell
-dotnet build .\StandaloneMods\FMF.JoniMLCompatMod\FMF.JoniMLCompatMod.csproj
+dotnet build .\mods\FMF.Plugin.LangCompatBridge\FMF.JoniMLCompatMod.csproj
 ```

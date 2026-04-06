@@ -18,6 +18,7 @@ This project uses framework release versions in `XX.XX.XXXX` format.
 
 ### Changed
 
+- Repository layout: former `ModsAndPlugins/` split into top-level `mods/` (gameplay mods) and `plugins/` (`FFM.Plugin.*`); `FrikaMF.sln` references `plugins\...`; `FrikaMF.csproj` excludes `WorkshopUploader/**` from the default compile glob.
 - `FrikaMF.csproj` prefers `lib/references/MelonLoader` when present; excludes `Templates/**` from compile; ships IL2CPP catalog/hook diagnostics from `Core` (debug snapshot).
 - Maintain Keep a Changelog structure and release metadata automation.
 

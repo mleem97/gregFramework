@@ -22,4 +22,4 @@ body:
     id: scope
     attributes:
       label: Scope
-      description: Mention impacted modules (`FrikaMF/JoniMF`, `StandaloneMods`, docs, etc.).
+      description: Mention impacted modules (`FrikaMF`, `mods/`, `plugins/`, docs, etc.).

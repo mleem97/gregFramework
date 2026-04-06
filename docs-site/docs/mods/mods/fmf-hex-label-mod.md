@@ -11,7 +11,7 @@ Overlays cable spinner and rack color hex labels directly in-world.
 
 - Category: Mod
 - Primary Language: C#
-- Project Path: `ModsAndPlugins/FMF.Mod.HexLabelMod`
+- Project Path: `mods/FMF.Mod.HexLabelMod`
 
 ## Release
 

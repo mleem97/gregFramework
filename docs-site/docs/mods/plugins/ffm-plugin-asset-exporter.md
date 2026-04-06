@@ -11,7 +11,7 @@ Provides export-focused tooling for asset-related workflows in Data Center pipel
 
 - Category: Plugin
 - Primary Language: C#
-- Project Path: `ModsAndPlugins/FFM.Plugin.AssetExporter`
+- Project Path: `plugins/FFM.Plugin.AssetExporter`
 
 ## Release
 

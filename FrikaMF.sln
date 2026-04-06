@@ -5,15 +5,15 @@ VisualStudioVersion = 17.14.37111.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FrikaMF", "FrikaMF.csproj", "{73B346A1-72BC-4F8C-BDAF-C2E88AB9CF69}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FFM.Plugin.Multiplayer", "StandaloneMods\FFM.Plugin.Multiplayer\FFM.Plugin.Multiplayer.csproj", "{E6D8D7AD-8D3F-4B1B-97A4-5D6F8F2E0D21}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FFM.Plugin.Multiplayer", "plugins\FFM.Plugin.Multiplayer\FFM.Plugin.Multiplayer.csproj", "{E6D8D7AD-8D3F-4B1B-97A4-5D6F8F2E0D21}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FFM.Plugin.Sysadmin", "StandaloneMods\FFM.Plugin.Sysadmin\FFM.Plugin.Sysadmin.csproj", "{A4E7C117-6B5D-4B93-9EAA-3F6B57F04A11}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FFM.Plugin.Sysadmin", "plugins\FFM.Plugin.Sysadmin\FFM.Plugin.Sysadmin.csproj", "{A4E7C117-6B5D-4B93-9EAA-3F6B57F04A11}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FFM.Plugin.AssetExporter", "StandaloneMods\FFM.Plugin.AssetExporter\FFM.Plugin.AssetExporter.csproj", "{B94A2C75-9A9F-4B40-B31A-2CFE7F98D302}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FFM.Plugin.AssetExporter", "plugins\FFM.Plugin.AssetExporter\FFM.Plugin.AssetExporter.csproj", "{B94A2C75-9A9F-4B40-B31A-2CFE7F98D302}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FFM.Plugin.WebUIBridge", "StandaloneMods\FFM.Plugin.WebUIBridge\FFM.Plugin.WebUIBridge.csproj", "{CE7A3418-3D0E-4C36-9DAB-DA10C8D115A8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FFM.Plugin.WebUIBridge", "plugins\FFM.Plugin.WebUIBridge\FFM.Plugin.WebUIBridge.csproj", "{CE7A3418-3D0E-4C36-9DAB-DA10C8D115A8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FFM.Plugin.PlayerModels", "StandaloneMods\FFM.Plugin.PlayerModels\FFM.Plugin.PlayerModels.csproj", "{55617471-4812-4318-89EE-4D683627C0B1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FFM.Plugin.PlayerModels", "plugins\FFM.Plugin.PlayerModels\FFM.Plugin.PlayerModels.csproj", "{55617471-4812-4318-89EE-4D683627C0B1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkshopUploader", "WorkshopUploader\WorkshopUploader.csproj", "{BF379205-BC69-4114-9119-5A9F789D2D06}"
 EndProject

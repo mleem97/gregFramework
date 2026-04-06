@@ -15,7 +15,8 @@ This page is the **source of truth snapshot** for how the DataCenterExporter / g
 |------|------|------|
 | Framework core | [`FrikaMF.csproj`](https://github.com/mleem97/gregFramework/blob/master/FrikaMF.csproj) (root) | MelonLoader mod hosting runtime hooks, Harmony, bridge, events |
 | Workshop tooling | [`WorkshopUploader/`](https://github.com/mleem97/gregFramework/tree/master/WorkshopUploader) | Steam Workshop upload helper (local/CI) |
-| Mods & plugins (sources) | [`ModsAndPlugins/`](https://github.com/mleem97/gregFramework/tree/master/ModsAndPlugins) | Standalone mods and FFM plugins (HexLabel, LangCompat, etc.) |
+| Mods (sources) | [`mods/`](https://github.com/mleem97/gregFramework/tree/master/mods) | Gameplay mods (`FMF.*`, `FMF.Mod.*` folders) |
+| Plugins (sources) | [`plugins/`](https://github.com/mleem97/gregFramework/tree/master/plugins) | Framework plugins (`FFM.Plugin.*`) |
 | Templates | [`Templates/`](https://github.com/mleem97/gregFramework/tree/master/Templates) | Scaffolds for new mods/plugins |
 | Documentation site | [`docs-site/`](https://github.com/mleem97/gregFramework/tree/master/docs-site) | Docusaurus wiki, landing, `/mods` catalog |
 | Scripts | [`scripts/`](https://github.com/mleem97/gregFramework/tree/master/scripts) | Release metadata, changelog (e.g. `Update-ReleaseMetadata.ps1`) |
@@ -27,27 +28,25 @@ This page is the **source of truth snapshot** for how the DataCenterExporter / g
 |---------|----------|-------------------|
 | FrikaMF | `./FrikaMF.csproj` | Yes |
 | WorkshopUploader | `WorkshopUploader/WorkshopUploader.csproj` | Yes |
-| FFM.Plugin.* (x5) | `ModsAndPlugins/FFM.Plugin.*/` | **No** — solution still references **missing** `StandaloneMods/FFM.Plugin.*/*.csproj` |
-| FMF.HexLabelMod | `ModsAndPlugins/FMF.Mod.HexLabelMod/` | No |
-| FMF.ConsoleInputGuard | `ModsAndPlugins/FMF.ConsoleInputGuard/` | No |
-| FMF.GregifyEmployees | `ModsAndPlugins/FMF.Mod.GregifyEmployees/` | No |
-| FMF.JoniMLCompatMod | `ModsAndPlugins/FMF.Plugin.LangCompatBridge/` | No |
+| FFM.Plugin.* (x5) | `plugins/FFM.Plugin.*/` | Yes — paths in [`FrikaMF.sln`](https://github.com/mleem97/gregFramework/blob/master/FrikaMF.sln) use `plugins\...` |
+| FMF.HexLabelMod | `mods/FMF.Mod.HexLabelMod/` | No (build standalone or add to solution) |
+| FMF.ConsoleInputGuard | `mods/FMF.ConsoleInputGuard/` | No |
+| FMF.GregifyEmployees | `mods/FMF.Mod.GregifyEmployees/` | No |
+| FMF.JoniMLCompatMod | `mods/FMF.Plugin.LangCompatBridge/` | No |
 | Templates | `Templates/FMF.*`, `Templates/StandaloneModTemplate/` | No |
 
 ## Build status (framework project)
 
-- `dotnet build FrikaMF.csproj` may **fail** on a clean machine because the SDK default glob picks up **`WorkshopUploader/`** WinForms sources next to the project file (missing `UseWindowsForms` / desktop targeting in that layout). CI or a future refactor should either exclude that folder from `FrikaMF.csproj` or build `WorkshopUploader` as its own project only.
-- `dotnet build FrikaMF.sln` additionally fails while solution entries point at missing `StandaloneMods\FFM.Plugin.*` paths (see above).
+- `FrikaMF.csproj` explicitly **excludes** `WorkshopUploader/**` from compile (that app builds only via `WorkshopUploader/WorkshopUploader.csproj` / solution).
+- `dotnet build FrikaMF.sln` builds framework, `WorkshopUploader`, and plugin projects under `plugins\` (MelonLoader/game refs still required locally unless `CI=true`).
 
 ## `FrikaMF.sln` drift (action items)
 
-1. **Broken project paths**: The solution references `StandaloneMods\FFM.Plugin.*\` but the repo currently holds matching projects under **`ModsAndPlugins/`**. Either:
-   - Re-point solution entries to `ModsAndPlugins\...`, or
-   - Restore `StandaloneMods/` layout and move projects (see [Monorepo target layout](./monorepo-target-layout.md)).
+1. **Mods not in solution**: Standalone mod projects under `mods/` are intentionally omitted from the solution to keep the graph small; add them if you want `dotnet build` for every module in one shot.
 
 2. **Templates in `FrikaMF.csproj`**: Template sources under `Templates/` may fail `dotnet build FrikaMF.csproj` with `CS0122` if `Core` visibility does not match template expectations — treat templates as **samples** until the project graph is cleaned up.
 
-3. **Full solution build**: `dotnet build FrikaMF.sln` fails until (1) is fixed.
+3. **WorkshopUploader vs `FrikaMF.csproj`**: Building the framework project alone can still pick up adjacent WinForms sources — prefer `dotnet build FrikaMF.sln` or isolate `WorkshopUploader` in CI.
 
 ## Documentation (Docusaurus)
 

@@ -99,7 +99,8 @@ jobs:
             }
 
             if (hasMatch([
-              /^StandaloneMods\//,
+              /^mods\//,
+              /^plugins\//,
               /^docs-site\/docs\/mods\/standalone\//,
               /^Templates\/StandaloneModTemplate\//
             ])) {

@@ -261,6 +261,7 @@
   <ItemGroup>
     <Compile Remove="Main.cs" />
     <Compile Remove="Main.CI.cs" />
+    <Compile Remove="WorkshopUploader\**\*.cs" />
     <Compile Remove="StandalonePlugins\**\*.cs" />
     <Compile Remove="Templates\**\*.cs" />
     <Compile Remove="FrikaMF\TestMods\FrameworkDependencyTest.cs" />
@@ -273,6 +274,7 @@
     <Compile Remove="**\bin\**\*.cs" />
     <None Include="Main.cs" />
     <None Include="Main.CI.cs" />
+    <None Include="WorkshopUploader\**\*.cs" />
     <None Include="StandalonePlugins\**\*.cs" />
     <None Include="FrikaMF\TestMods\FrameworkDependencyTest.cs" />
     <None Include="FrikaMF\DC2WebBridge.cs" />

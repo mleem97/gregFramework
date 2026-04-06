@@ -11,7 +11,7 @@ Extends player model handling and related rendering/gameplay presentation behavi
 
 - Category: Plugin
 - Primary Language: C#
-- Project Path: `ModsAndPlugins/FFM.Plugin.PlayerModels`
+- Project Path: `plugins/FFM.Plugin.PlayerModels`
 
 ## Release
 

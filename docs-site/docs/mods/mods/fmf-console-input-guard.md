@@ -11,7 +11,7 @@ Provides guardrails around console input handling and accidental interactions.
 
 - Category: Mod
 - Primary Language: C#
-- Project Path: `ModsAndPlugins/FMF.ConsoleInputGuard`
+- Project Path: `mods/FMF.ConsoleInputGuard`
 
 ## Release
 

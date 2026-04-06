@@ -2,7 +2,7 @@ import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 
 const projectRoot = resolve(process.cwd());
-const runtimeDir = resolve(projectRoot, '..', '..', '..', 'ModsAndPlugins', 'MyCustomUIMod', 'MyCustomUIMod');
+const runtimeDir = resolve(projectRoot, '..', '..', '..', 'mods', 'MyCustomUIMod', 'MyCustomUIMod');
 
 const html = `
 <div class='fmf-shell'>

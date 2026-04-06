@@ -11,7 +11,7 @@ Contains multiplayer-oriented plugin functionality for FrikaMF ecosystems.
 
 - Category: Plugin
 - Primary Language: C#
-- Project Path: `ModsAndPlugins/FFM.Plugin.Multiplayer`
+- Project Path: `plugins/FFM.Plugin.Multiplayer`
 
 ## Release
 

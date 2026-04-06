@@ -11,7 +11,7 @@ Provides sysadmin-focused controls and quality-of-life command utilities.
 
 - Category: Plugin
 - Primary Language: C#
-- Project Path: `ModsAndPlugins/FFM.Plugin.Sysadmin`
+- Project Path: `plugins/FFM.Plugin.Sysadmin`
 
 ## Release
 

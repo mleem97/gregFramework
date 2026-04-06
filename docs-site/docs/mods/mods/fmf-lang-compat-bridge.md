@@ -11,7 +11,7 @@ Provides language/localization compatibility bridging for mixed mod stacks.
 
 - Category: Mod
 - Primary Language: C#
-- Project Path: `ModsAndPlugins/FMF.Plugin.LangCompatBridge`
+- Project Path: `mods/FMF.Plugin.LangCompatBridge`
 
 ## Release
 

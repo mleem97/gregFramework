@@ -10,5 +10,5 @@ Prevents accidental `P`-hotkey actions while typing into UI text inputs.
 ## Build
 
 ```powershell
-dotnet build .\StandaloneMods\FMF.ConsoleInputGuard\FMF.ConsoleInputGuard.csproj -c Release /p:GameDir="C:\Program Files (x86)\Steam\steamapps\common\Data Center" -v minimal
+dotnet build .\mods\FMF.ConsoleInputGuard\FMF.ConsoleInputGuard.csproj -c Release /p:GameDir="C:\Program Files (x86)\Steam\steamapps\common\Data Center" -v minimal
 ```

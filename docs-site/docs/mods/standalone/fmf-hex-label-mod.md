@@ -5,7 +5,7 @@ sidebar_label: FMF.HexLabelMod
 
 <!-- markdownlint-disable MD060 -->
 
-`ModsAndPlugins/FMF.Mod.HexLabelMod`
+`mods/FMF.Mod.HexLabelMod`
 
 ## Purpose
 
@@ -78,7 +78,7 @@ Pressing **Ctrl+F1** toggles live config reload (6-second interval), allowing yo
 ## Build
 
 ```powershell
-dotnet build .\ModsAndPlugins\FMF.Mod.HexLabelMod\FMF.HexLabelMod.csproj
+dotnet build .\mods\FMF.Mod.HexLabelMod\FMF.HexLabelMod.csproj
 ```
 
 Output lands in the standard MelonLoader `Mods/` folder as configured in the `.csproj`.
@@ -94,11 +94,11 @@ Output lands in the standard MelonLoader `Mods/` folder as configured in the `.c
 ## Notes
 
 - Original gameplay behavior is unaffected.
-- This mod runs from `ModsAndPlugins/FMF.Mod.HexLabelMod` and no longer from the repository root.
+- This mod runs from `mods/FMF.Mod.HexLabelMod` and no longer from the repository root.
 - The config file is fully rewritten if any expected keys are missing (for example, after an update adds new keys).
 - FMF assembly presence is no longer required as a startup gate.
 
 ## Sources
 
-- Module path: `ModsAndPlugins/FMF.Mod.HexLabelMod`
+- Module path: `mods/FMF.Mod.HexLabelMod`
 - Relatedocs: [`Standalone Mods`](/wiki/wiki-import/StandaloneMods)

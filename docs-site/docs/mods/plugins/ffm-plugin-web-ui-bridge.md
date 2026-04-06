@@ -11,7 +11,7 @@ Bridges runtime data to web interfaces for dashboards and remote overlays.
 
 - Category: Plugin
 - Primary Language: C#
-- Project Path: `ModsAndPlugins/FFM.Plugin.WebUIBridge`
+- Project Path: `plugins/FFM.Plugin.WebUIBridge`
 
 ## Release
 

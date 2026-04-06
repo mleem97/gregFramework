@@ -37,17 +37,17 @@ flowchart LR
 | Phase | Scope | Exit criteria |
 |-------|--------|---------------|
 | **1** | Docs, `tools/`, naming wiki, hook catalog script | Docusaurus build green; script generates catalog |
-| **2** | `git mv` ModsAndPlugins → `mods/` / `plugins/` (or `packages/mods`) | Update `.csproj` paths, `moduleCatalog.ts`, README links |
+| **2** | `git mv` former `ModsAndPlugins/` → `mods/` / `plugins/` | Done — `.csproj` relative paths unchanged (depth preserved); CI/docs updated |
 | **3** | Optional: isolate framework sources under `framework/` | `dotnet build` for solution subset green |
 | **4** | CI matrix: docs + dotnet; `plugin-client-redirects` for old URLs | PR checks match local workflow |
 
-## Path updates checklist (when moving trees)
+## Path updates checklist (Phase 2 applied)
 
-- [ ] `FrikaMF.sln` project paths
-- [ ] Relative paths in `README.md`, `CHANGELOG.md`
-- [ ] [`docs-site/src/data/moduleCatalog.ts`](https://github.com/mleem97/gregFramework/blob/master/docs-site/src/data/moduleCatalog.ts) `wikiPath` / `releasePath`
-- [ ] [`docs-site/docusaurus.config.js`](https://github.com/mleem97/gregFramework/blob/master/docs-site/docusaurus.config.js) redirects
-- [ ] Wiki pages that mention old paths (search for `ModsAndPlugins`)
+- [x] `FrikaMF.sln` project paths (`plugins\FFM.Plugin.*`)
+- [x] `.github/workflows` (CodeQL, release assets, Discord feed)
+- [x] Contributor docs and mod/plugin wiki pages (`Project Path` lines)
+- [ ] [`docs-site/docusaurus.config.js`](https://github.com/mleem97/gregFramework/blob/master/docs-site/docusaurus.config.js) redirects (only if public URLs must map old paths)
+- [ ] Historical wiki-import pages may still mention `StandaloneMods/` — update when editing those files
 
 ## Related
 

@@ -21,7 +21,7 @@ public sealed class CompatMain : MelonMod
         }
 
         LoggerInstance.Msg("FMF JoniML Compat Mod initialized.");
-        LoggerInstance.Msg("Legacy root JoniML code has been migrated into StandaloneMods and replaced by framework-compatible compatibility behavior.");
+        LoggerInstance.Msg("Legacy root JoniML code has been migrated into the repo mod tree (see mods/FMF.Plugin.LangCompatBridge) and replaced by framework-compatible compatibility behavior.");
     }
 
     private static bool IsFrameworkLoaded()

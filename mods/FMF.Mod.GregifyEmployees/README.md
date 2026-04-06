@@ -18,5 +18,5 @@ This standalone mod replaces all employee visuals with Greg (employee 1) and sup
 ## Build
 
 ```powershell
-dotnet build .\StandaloneMods\FMF.GregifyEmployees\FMF.GregifyEmployees.csproj
+dotnet build .\mods\FMF.Mod.GregifyEmployees\FMF.GregifyEmployees.csproj
 ```
