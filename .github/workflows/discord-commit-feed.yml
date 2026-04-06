@@ -1,0 +1,216 @@
+name: "Discord Commit Feed"
+
+on:
+  push:
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  pick-runner:
+    name: Pick Runner (60s fallback)
+    runs-on: ubuntu-latest
+    outputs:
+      runs_on: ${{ steps.select.outputs.runs_on }}
+      runner_choice: ${{ steps.select.outputs.runner_choice }}
+      waited_seconds: ${{ steps.select.outputs.waited_seconds }}
+    steps:
+      - name: Select self-hosted runner or fallback
+        id: select
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const timeoutMs = 60_000;
+            const intervalMs = 5_000;
+            const start = Date.now();
+
+            let foundSelfHosted = false;
+            let waitedMs = 0;
+
+            while (Date.now() - start < timeoutMs) {
+              const res = await github.rest.actions.listSelfHostedRunnersForRepo({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                per_page: 100
+              });
+
+              const available = (res.data.runners || []).some((runner) => runner.status === 'online' && runner.busy === false);
+              if (available) {
+                foundSelfHosted = true;
+                break;
+              }
+
+              await new Promise((resolve) => setTimeout(resolve, intervalMs));
+            }
+
+            waitedMs = Date.now() - start;
+
+            const runsOn = foundSelfHosted ? ['self-hosted'] : ['ubuntu-latest'];
+            const runnerChoice = foundSelfHosted ? 'self-hosted' : 'ubuntu-latest';
+            const waitedSeconds = Math.round(waitedMs / 1000);
+
+            core.setOutput('runs_on', JSON.stringify(runsOn));
+            core.setOutput('runner_choice', runnerChoice);
+            core.setOutput('waited_seconds', String(waitedSeconds));
+
+  notify-discord:
+    name: Send Commit Feed to Discord
+    needs: pick-runner
+    runs-on: ${{ fromJSON(needs.pick-runner.outputs.runs_on) }}
+    timeout-minutes: 10
+    steps:
+      - name: Build Discord payload
+        id: payload
+        uses: actions/github-script@v7
+        env:
+          RUNNER_CHOICE: ${{ needs.pick-runner.outputs.runner_choice }}
+          WAITED_SECONDS: ${{ needs.pick-runner.outputs.waited_seconds }}
+        with:
+          script: |
+            const commits = context.payload.commits || [];
+            const commitCount = commits.length;
+
+            const changedFiles = [];
+            for (const commit of commits) {
+              for (const file of (commit.added || [])) changedFiles.push(file);
+              for (const file of (commit.modified || [])) changedFiles.push(file);
+              for (const file of (commit.removed || [])) changedFiles.push(file);
+            }
+
+            const uniqueChangedFiles = Array.from(new Set(changedFiles));
+
+            const hasMatch = (patterns) => {
+              return uniqueChangedFiles.some((file) => patterns.some((rx) => rx.test(file)));
+            };
+
+            const updateTypes = [];
+
+            if (hasMatch([
+              /^FrikaMF\//,
+              /^FrikaMF\.csproj$/,
+              /^FrikaMF\.sln$/,
+              /^Main\.cs$/,
+              /^Main\.CI\.cs$/,
+              /^scripts\//
+            ])) {
+              updateTypes.push('Framework Update');
+            }
+
+            if (hasMatch([
+              /^StandaloneMods\//,
+              /^docs-site\/docs\/mods\/standalone\//,
+              /^Templates\/StandaloneModTemplate\//
+            ])) {
+              updateTypes.push('Plugin Update');
+            }
+
+            if (hasMatch([
+              /^docs-site\/docs\/mods\//,
+              /^Data Center\/Mods\//,
+              /^Data Center_Data\/StreamingAssets\/Mods\//
+            ])) {
+              updateTypes.push('Mod Update');
+            }
+
+            if (hasMatch([
+              /^docs-site\/docs\/wiki\//,
+              /^docs-site\/docs\/wiki-import\//,
+              /^docs\/wiki\//,
+              /^\.wiki\//,
+              /^README\.md$/,
+              /^CHANGELOG\.md$/
+            ])) {
+              updateTypes.push('Wiki Update');
+            }
+
+            if (updateTypes.length === 0) {
+              updateTypes.push('Other Update');
+            }
+
+            const colorByType = {
+              'Framework Update': 5793266,
+              'Plugin Update': 5763719,
+              'Mod Update': 16705372,
+              'Wiki Update': 15418782,
+              'Other Update': 9807270
+            };
+
+            const typePriority = ['Framework Update', 'Plugin Update', 'Mod Update', 'Wiki Update', 'Other Update'];
+            const primaryType = typePriority.find((t) => updateTypes.includes(t)) || 'Other Update';
+            const embedColor = colorByType[primaryType];
+
+            const shortBranch = (context.ref || '').replace('refs/heads/', '');
+            const compareUrl = context.payload.compare || `https://github.com/${context.repo.owner}/${context.repo.repo}/commits/${encodeURIComponent(shortBranch)}`;
+            const actor = context.actor || 'unknown';
+
+            const visibleCommits = commits.slice(0, 20);
+            const commitLines = visibleCommits.map((commit) => {
+              const sha = (commit.id || '').slice(0, 7);
+              const message = String(commit.message || '').split('\n')[0].trim() || '(no message)';
+              const author = (commit.author && commit.author.name) ? commit.author.name : 'unknown';
+              return `• \`${sha}\` ${message} — **${author}**`;
+            });
+
+            if (commitCount > visibleCommits.length) {
+              commitLines.push(`• ... und ${commitCount - visibleCommits.length} weitere Commits`);
+            }
+
+            const topAreas = Array.from(new Set(
+              uniqueChangedFiles.map((file) => file.split('/').slice(0, 2).join('/'))
+            )).slice(0, 8);
+
+            const payload = {
+              username: 'FrikaMF Commit Feed',
+              avatar_url: 'https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png',
+              embeds: [
+                {
+                  title: `🚀 Neue Commits in ${context.repo.owner}/${context.repo.repo}`,
+                  description: `**Typen:** ${updateTypes.map((t) => `\`${t}\``).join(' • ')}`,
+                  color: embedColor,
+                  fields: [
+                    { name: 'Branch', value: `\`${shortBranch || 'unknown'}\``, inline: true },
+                    { name: 'Commits', value: `\`${String(commitCount)}\``, inline: true },
+                    { name: 'Actor', value: `\`${actor}\``, inline: true },
+                    { name: 'Runner', value: `\`${process.env.RUNNER_CHOICE}\``, inline: true },
+                    { name: 'Wartezeit', value: `\`${process.env.WAITED_SECONDS}s\``, inline: true },
+                    { name: 'Vergleich', value: `[Open Compare](${compareUrl})`, inline: true },
+                    {
+                      name: 'Geänderte Bereiche',
+                      value: topAreas.length > 0 ? topAreas.map((x) => `\`${x}\``).join(' • ') : '`(keine Dateiliste im Event)`',
+                      inline: false
+                    }
+                  ],
+                  timestamp: new Date().toISOString(),
+                  footer: {
+                    text: `Push von ${actor}`
+                  }
+                },
+                {
+                  title: '🧾 Commit-Details',
+                  description: commitLines.join('\n') || 'Keine Commit-Details im Push-Event verfügbar.',
+                  color: embedColor
+                }
+              ]
+            };
+
+            core.setOutput('webhook_payload', JSON.stringify(payload));
+
+      - name: Send payload to Discord webhook
+        if: ${{ success() }}
+        shell: pwsh
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+
+          if ([string]::IsNullOrWhiteSpace($env:DISCORD_WEBHOOK_URL)) {
+            throw 'Secret DISCORD_WEBHOOK_URL ist nicht gesetzt.'
+          }
+
+          $payload = @'
+          ${{ steps.payload.outputs.webhook_payload }}
+          '@
+
+          Invoke-RestMethod -Method Post -Uri $env:DISCORD_WEBHOOK_URL -ContentType 'application/json' -Body $payload
