@@ -35,9 +35,10 @@ const config = {
       'classic',
       {
         docs: {
+          path: '../docs',
           sidebarPath: require.resolve('./sidebars.js'),
           routeBasePath: '/wiki',
-          editUrl: 'https://github.com/mleem97/gregFramework/tree/master/wiki/',
+          editUrl: 'https://github.com/mleem97/gregFramework/tree/master/docs/',
         },
         blog: false,
         theme: {
