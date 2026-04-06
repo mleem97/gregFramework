@@ -8,13 +8,15 @@ Desktop helper for **Steam Workshop** (Steamworks integration pending) and **Dev
 dotnet build WorkshopUploader.csproj -c Debug
 ```
 
-## Publish (single-file, win-x64)
+Targets **.NET 9** with **.NET MAUI** (Windows).
+
+## Publish (single-file, win10-x64)
 
 ```bash
 dotnet publish WorkshopUploader.csproj -c Release
 ```
 
-Output: `bin/Release/net6.0-windows/win-x64/publish/WorkshopUploader.exe`
+Output: `bin/Release/net9.0-windows10.0.19041.0/win10-x64/publish/WorkshopUploader.exe`
 
 To ship the name `full.exe`, rename the published exe or add a publish profile.
 

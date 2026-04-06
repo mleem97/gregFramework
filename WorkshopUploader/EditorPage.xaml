@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="WorkshopUploader.EditorPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="Project">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="16" Spacing="12">
+            <Label x:Name="PathLabel" Style="{StaticResource SubHeadline}" />
+
+            <Label Text="Title" FontAttributes="Bold" />
+            <Entry x:Name="TitleEntry" TextChanged="OnTitleChanged" MaxLength="128" />
+            <Label x:Name="TitleCountLabel" FontSize="11" Opacity="0.7" />
+
+            <Label Text="Description" FontAttributes="Bold" />
+            <Editor x:Name="DescriptionEditor" AutoSize="TextChanges" TextChanged="OnDescriptionChanged" />
+            <Label x:Name="DescriptionCountLabel" FontSize="11" Opacity="0.7" />
+
+            <Label Text="Visibility" FontAttributes="Bold" />
+            <Picker x:Name="VisibilityPicker" Title="Visibility" />
+
+            <Label Text="Preview image (preview.png)" FontAttributes="Bold" />
+            <HorizontalStackLayout Spacing="8">
+                <Button Clicked="OnPickPreview" Text="Choose file…" />
+                <Label x:Name="PreviewPathLabel" VerticalOptions="Center" LineBreakMode="TailTruncation" />
+            </HorizontalStackLayout>
+
+            <Label x:Name="PublishedIdLabel" FontSize="12" />
+
+            <Button Clicked="OnSave" Text="Save metadata.json" />
+            <Button Clicked="OnPublish" Text="Publish to Steam" />
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>
