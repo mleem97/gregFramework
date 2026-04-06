@@ -101,5 +101,4 @@ Output lands in the standard MelonLoader `Mods/` folder as configured in the `.c
 ## Sources
 
 - Module path: `ModsAndPlugins/FMF.Mod.HexLabelMod`
-- Related docs: [`Standalone Mods`](/wiki/wiki-import/StandaloneMods)
-
+- Relatedocs: [`Standalone Mods`](/wiki/wiki-import/StandaloneMods)

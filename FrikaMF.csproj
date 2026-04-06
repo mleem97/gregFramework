@@ -7,7 +7,7 @@
     <PlatformTarget>x64</PlatformTarget>
     <AssemblyName>FrikaModdingFramework</AssemblyName>
     <RootNamespace>FrikaMF</RootNamespace>
-    <Description>MelonLoader mod that provides a Rust FFI bridge for Data Center</Description>
+    <Description>MelonLoader plugin that provides a Rust FFI bridge for Data Center</Description>
     <NoWarn>CS1701;CS1702</NoWarn>
   </PropertyGroup>
 

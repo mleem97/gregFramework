@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using MelonLoader;
 
-[assembly: MelonInfo(typeof(TemplateStandaloneMod.TemplateMod), "FMF Template Mod", "00.01.0008", "mleem97")]
+[assembly: MelonInfo(typeof(TemplateStandaloneMod.TemplateMod), "FMF Template Mod", "0.0.1", "mleem97")]
 [assembly: MelonGame("Waseku", "Data Center")]
 
 namespace TemplateStandaloneMod;

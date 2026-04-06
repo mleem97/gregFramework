@@ -378,6 +378,7 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+.legacy/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
@@ -432,3 +433,4 @@ References/UI-Images/20260401204123_1.jpg
 References/UI-Images/20260403201650_1.jpg
 References/UI-Images/20260403201650_2.jpg
 References/UI-Images/20260403201651_1.jpg
+Refactoring.md
