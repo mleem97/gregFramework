@@ -116,6 +116,8 @@ export default function HomePage(): JSX.Element {
     { title: 'Framework Core', description: 'Runtime hooks, bridge, events and architecture.', link: '/wiki/mods/framework' },
     { title: 'Plugin Wiki', description: 'Plugin-specific docs and release pages.', link: '/wiki/mods/plugins' },
     { title: 'Mod Wiki', description: 'Gameplay mods, release state and module docs.', link: '/wiki/mods/mods' },
+    { title: 'FMF Hooks Catalog', description: 'Auto-generated hook strings and event-id map from framework sources.', link: '/wiki/reference/fmf-hooks-catalog' },
+    { title: 'Release Channels', description: 'Steam Workshop for discovery; GitHub for beta and alternate DLLs.', link: '/wiki/reference/release-channels' },
     { title: 'Unified Roadmap', description: 'Consolidated roadmap with duplicate tracks removed.', link: '/wiki/roadmap/unified-roadmap' },
     { title: 'Mods Catalog', description: 'Dynamic /mods catalog with wiki and download links.', link: '/mods' },
   ];
@@ -123,6 +125,7 @@ export default function HomePage(): JSX.Element {
   const workflowPaths: DocPathItem[] = [
     { title: 'End-User Docs', description: 'Install, update and troubleshooting paths.', link: '/wiki/wiki-import/EndUser/End-User-Release' },
     { title: 'Mod Developer Docs', description: 'Setup, debug and hook integration guides.', link: '/wiki/wiki-import/ModDevs/Mod-Developer-Debug' },
+    { title: 'Repo Inventory', description: 'Monorepo layout, projects, and solution drift for contributors.', link: '/wiki/contributors/repo-inventory' },
     { title: 'Contributor Workflow', description: 'Contribution standards and repository workflow.', link: '/wiki/contributors/docusaurus-workflow' },
     { title: 'Plugin Security Audit', description: 'Git-link submission and malicious-code audit process.', link: '/wiki/contributors/plugin-submission-audit' },
   ];

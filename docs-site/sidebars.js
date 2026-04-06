@@ -57,12 +57,17 @@ const sidebars = {
       items: [
         'reference/wiki-mapping',
         'reference/mod-store-vision',
+        'reference/fmf-hook-naming',
+        'reference/fmf-hooks-catalog',
+        'reference/release-channels',
       ],
     },
     {
       type: 'category',
       label: 'Contributors',
       items: [
+        'contributors/repo-inventory',
+        'contributors/monorepo-target-layout',
         'contributors/luminescent-design-system',
         'contributors/docusaurus-workflow',
         'contributors/plugin-submission-audit',
