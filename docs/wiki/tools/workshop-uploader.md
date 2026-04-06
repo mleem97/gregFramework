@@ -51,7 +51,7 @@ description: Windows desktop app for managing Steam Workshop content, browsing m
 - **Windows 10** (version 1809+).
 - **Steam** with a signed-in account that **owns Data Center** (App ID **4170200**).
 - **No additional dependencies** — the release is fully self-contained (includes .NET runtime and Windows App SDK).
-- `steam_api64.dll` and `steam_appid.txt` must be next to the exe (included in the release build).
+- `steam_appid.txt` must be next to the executable (included in the release build). The app loads **`steam_api64.dll`** from **`Data Center_Data/Plugins/x86_64/`** in the Data Center install when possible; otherwise it uses the copy shipped next to the uploader.
 
 ## Paths and directories {#paths}
 
@@ -304,12 +304,14 @@ For now, only **passive objects** are supported for shop items (`objectType: 0`)
 
 ### ModPathRedirector — Workshop download at MelonLoader init {#mod-path-redirector}
 
+**Release & download:** [FMF.ModPathRedirector Release](/wiki/releases/plugins/fmf-modpathredirector-release) — installation steps and GitHub download (`FMF.ModPathRedirector.dll`).
+
 The game loads native mods from `Data Center_Data\StreamingAssets\Mods\`. Workshop items are copied into subfolders named `workshop_<PublishedFileId>` under that path (see [Steam install path](#steam-install-path)).
 
-**ModPathRedirector** is a **MelonLoader plugin** (not a MelonMod): install the DLL under **`{GameRoot}/Plugins/`**. It does **not** change native mod paths. After the game has initialized the Il2Cpp Steam API, it asks Steam to **download** any subscribed Workshop items that are missing or need an update, so content is ready when the game's `ModLoader.SyncWorkshopThenLoadAll()` runs. (Steam is not ready during early plugin callbacks, so the plugin waits until `SteamUGC` calls succeed.)
+**ModPathRedirector** is a **MelonLoader plugin** (not a MelonMod): install the DLL under **`{GameRoot}/Plugins/`**. It does **not** change native mod paths. It calls **`steam_api64.dll`** directly (Steam flat API: `SteamAPI_ISteamUGC_*` on the same `ISteamUGC` instance as the game — same process, same Steam session). The game ships this DLL under **`Data Center_Data/Plugins/x86_64/`** (Unity’s native plugin folder); the plugin loads it from there first, then falls back to **`steam_api64.dll`** next to the executable if present. It waits until the Steam client is running, then triggers **`DownloadItem`** for subscribed Workshop content that needs a fetch or update.
 
 **What it does:**
-- Subscribes to `MelonEvents.OnUpdate` from `OnApplicationStarted` and calls `SteamUGC.DownloadItem` once Steam is initialized (retries each frame until ready or a timeout)
+- On each frame (from `OnApplicationStarted`), waits for `SteamAPI_IsSteamRunning` and resolves `SteamAPI_SteamUGC_v0xx` → `ISteamUGC*`, then calls the native UGC APIs (no Il2Cpp Steamworks wrapper)
 - Leaves `ModLoader.LoadAllMods` / `CopyDirectory` unchanged — Workshop sync still uses `Data Center_Data/StreamingAssets/Mods/workshop_<ID>/`
 
 **Installation:**
@@ -321,6 +323,9 @@ The game loads native mods from `Data Center_Data\StreamingAssets\Mods\`. Worksh
 ```
 Data Center/
   Data Center_Data/
+    Plugins/
+      x86_64/
+        steam_api64.dll          ← shipped with the game (Steam API; ModPathRedirector loads this)
     StreamingAssets/
       Mods/
         my_cool_mod/             ← manual native mod
@@ -710,7 +715,7 @@ Yes. The game's `ModLoader` has built-in DLL loading via the `dlls` array in `co
 Only for MelonLoader and FMF mods. **Vanilla/native mods** (using `config.json`) work without any additional tools — just subscribe and play. Mark your project as "Needs FrikaModFramework" if applicable — the app will add an installation notice to the description automatically.
 
 **Q: Can I change where native mods are loaded from?**
-Yes. Install the [ModPathRedirector](#mod-path-redirector) MelonLoader plugin into `{GameRoot}/Plugins/`. It triggers Steam Workshop downloads once the Steam API is ready (shortly after startup) so subscribed items can be fetched before the game's mod sync; files still land under `Data Center_Data/StreamingAssets/Mods/workshop_<ID>/`.
+Yes. Install the [ModPathRedirector](#mod-path-redirector) MelonLoader plugin into `{GameRoot}/Plugins/`. It uses `steam_api64.dll` to trigger Workshop downloads once the Steam client is up; files still land under `Data Center_Data/StreamingAssets/Mods/workshop_<ID>/`.
 
 ### Mod Store
 
@@ -723,7 +728,7 @@ Yes. Browse or search for mods, then click **Subscribe**. Steam will download th
 ### Troubleshooting
 
 **Q: The app won't start / crashes on launch.**
-- Ensure `steam_api64.dll` and `steam_appid.txt` are next to the executable.
+- Ensure `steam_appid.txt` is next to the executable; `steam_api64.dll` should resolve from the Data Center install (`Data Center_Data/Plugins/x86_64/`) or from the uploader folder.
 - Steam must be running and logged in.
 - Check the Windows Event Viewer (Application log) for .NET crash details.
 - On Windows 10 < 1809, the app may not work due to WinUI requirements.

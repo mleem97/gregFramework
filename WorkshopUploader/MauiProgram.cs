@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Logging;
 using WorkshopUploader.Localization;
 using WorkshopUploader.Services;
+using WorkshopUploader.Steam;
 
 namespace WorkshopUploader;
 
@@ -55,6 +56,8 @@ public static class MauiProgram
 			{
 				// ignored — Steam init may still work if cwd is already correct
 			}
+
+			SteamApiNativeLoader.TryPreload();
 
 			if (HeadlessRunner.TryHandle(Environment.GetCommandLineArgs(), out var exitCode))
 			{

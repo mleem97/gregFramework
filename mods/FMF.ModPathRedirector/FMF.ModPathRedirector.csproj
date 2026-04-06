@@ -16,26 +16,11 @@
     <Error
       Condition="!Exists('$(MelonLoaderDir)\net6\MelonLoader.dll')"
       Text="Missing MelonLoader net6 assemblies at '$(MelonLoaderDir)\net6'. Set /p:GameDir='C:\path\to\Data Center' (or DATA_CENTER_GAME_DIR), then run the game once with MelonLoader installed." />
-    <Error
-      Condition="!Exists('$(MelonLoaderDir)\Il2CppAssemblies\Il2Cppcom.rlabrecque.steamworks.net.dll')"
-      Text="Missing Il2Cpp Steamworks assembly at '$(MelonLoaderDir)\Il2CppAssemblies'. Start the game once after installing MelonLoader so interop assemblies are generated." />
   </Target>
 
   <ItemGroup Condition="Exists('$(MelonLoaderDir)\net6\MelonLoader.dll')">
     <Reference Include="MelonLoader">
       <HintPath>$(MelonLoaderDir)\net6\MelonLoader.dll</HintPath>
-      <Private>false</Private>
-    </Reference>
-    <Reference Include="Il2CppInterop.Runtime">
-      <HintPath>$(MelonLoaderDir)\net6\Il2CppInterop.Runtime.dll</HintPath>
-      <Private>false</Private>
-    </Reference>
-    <Reference Include="Il2Cppmscorlib">
-      <HintPath>$(MelonLoaderDir)\Il2CppAssemblies\Il2Cppmscorlib.dll</HintPath>
-      <Private>false</Private>
-    </Reference>
-    <Reference Include="Il2Cppcom.rlabrecque.steamworks.net">
-      <HintPath>$(MelonLoaderDir)\Il2CppAssemblies\Il2Cppcom.rlabrecque.steamworks.net.dll</HintPath>
       <Private>false</Private>
     </Reference>
   </ItemGroup>

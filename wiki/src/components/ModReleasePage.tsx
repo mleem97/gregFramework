@@ -17,6 +17,8 @@ type ModReleasePageProps = {
   releaseReady?: boolean;
   banner?: string;
   releaseNotesPath?: string;
+  /** If set, replaces the default installation steps (e.g. MelonLoader `Plugins/` vs `Mods/`). */
+  installation?: React.ReactNode;
 };
 
 function toTitleCase(value: ReleaseKind): string {
@@ -36,6 +38,7 @@ export default function ModReleasePage({
   releaseReady = false,
   banner,
   releaseNotesPath,
+  installation,
 }: ModReleasePageProps): JSX.Element {
   const downloadPath = `/${kind}/${dllName}`;
   const downloadUrl =
@@ -66,17 +69,19 @@ export default function ModReleasePage({
           <h2>
             <Translate id="modRelease.installationTitle">Installation</Translate>
           </h2>
-          <ol>
-            <li>
-              <Translate id="modRelease.installStepOne">Download the release DLL.</Translate>
-            </li>
-            <li>
-              <Translate id="modRelease.installStepTwo">Copy it to your Data Center `Mods/` folder.</Translate>
-            </li>
-            <li>
-              <Translate id="modRelease.installStepThree">Start the game with MelonLoader.</Translate>
-            </li>
-          </ol>
+          {installation ?? (
+            <ol>
+              <li>
+                <Translate id="modRelease.installStepOne">Download the release DLL.</Translate>
+              </li>
+              <li>
+                <Translate id="modRelease.installStepTwo">Copy it to your Data Center `Mods/` folder.</Translate>
+              </li>
+              <li>
+                <Translate id="modRelease.installStepThree">Start the game with MelonLoader.</Translate>
+              </li>
+            </ol>
+          )}
 
           <h2>
             <Translate id="modRelease.dllRouteTitle">Direct DLL Route</Translate>

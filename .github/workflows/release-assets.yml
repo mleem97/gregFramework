@@ -60,6 +60,7 @@ jobs:
           dotnet restore .\mods\FMF.Mod.HexLabelMod\FMF.HexLabelMod.csproj
           dotnet restore .\mods\FMF.Plugin.LangCompatBridge\FMF.JoniMLCompatMod.csproj
           dotnet restore .\mods\FMF.Mod.GregifyEmployees\FMF.GregifyEmployees.csproj
+          dotnet restore .\mods\FMF.ModPathRedirector\FMF.ModPathRedirector.csproj
 
       - name: Build release DLLs
         shell: pwsh
@@ -68,6 +69,7 @@ jobs:
           dotnet build .\mods\FMF.Mod.HexLabelMod\FMF.HexLabelMod.csproj -c Release --no-restore
           dotnet build .\mods\FMF.Plugin.LangCompatBridge\FMF.JoniMLCompatMod.csproj -c Release --no-restore
           dotnet build .\mods\FMF.Mod.GregifyEmployees\FMF.GregifyEmployees.csproj -c Release --no-restore
+          dotnet build .\mods\FMF.ModPathRedirector\FMF.ModPathRedirector.csproj -c Release --no-restore
 
       - name: Collect assets
         id: assets
@@ -80,7 +82,8 @@ jobs:
             ".\framework\bin\Release\net6.0\FrikaModdingFramework.dll",
             ".\mods\FMF.Mod.HexLabelMod\bin\Release\net6.0\FMF.HexLabelMod.dll",
             ".\mods\FMF.Plugin.LangCompatBridge\bin\Release\net6.0\FMF.JoniMLCompatMod.dll",
-            ".\mods\FMF.Mod.GregifyEmployees\bin\Release\net6.0\FMF.GregifyEmployees.dll"
+            ".\mods\FMF.Mod.GregifyEmployees\bin\Release\net6.0\FMF.GregifyEmployees.dll",
+            ".\mods\FMF.ModPathRedirector\bin\Release\net6.0\FMF.ModPathRedirector.dll"
           )
 
           foreach ($file in $files) {
@@ -158,5 +161,6 @@ jobs:
             ${{ steps.assets.outputs.assetDir }}\FMF.HexLabelMod.dll
             ${{ steps.assets.outputs.assetDir }}\FMF.JoniMLCompatMod.dll
             ${{ steps.assets.outputs.assetDir }}\FMF.GregifyEmployees.dll
+            ${{ steps.assets.outputs.assetDir }}\FMF.ModPathRedirector.dll
             ${{ steps.bundle.outputs.bundleZip }}
           generate_release_notes: true

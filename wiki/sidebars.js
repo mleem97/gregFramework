@@ -68,6 +68,7 @@ const sidebars = {
             'releases/plugins/ffm-plugin-player-models-release',
             'releases/plugins/ffm-plugin-sysadmin-release',
             'releases/plugins/ffm-plugin-web-ui-bridge-release',
+            'releases/plugins/fmf-modpathredirector-release',
           ],
         },
         {

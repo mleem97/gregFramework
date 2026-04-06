@@ -1,115 +1,113 @@
 using System;
-using Il2CppInterop.Runtime.InteropTypes.Arrays;
-using Il2CppSteamworks;
 using MelonLoader;
 
-[assembly: MelonInfo(typeof(ModPathRedirector.ModPathRedirectorMod), "ModPathRedirector", "1.2.1", "DataCenterExporter")]
+[assembly: MelonInfo(typeof(ModPathRedirector.ModPathRedirectorMod), "ModPathRedirector", "1.3.0", "DataCenterExporter")]
 [assembly: MelonGame("Waseku", "Data Center")]
 
 namespace ModPathRedirector;
 
 /// <summary>
-/// MelonLoader <b>plugin</b> (lives in <c>{GameRoot}/Plugins/</c>). Triggers Steam Workshop
-/// downloads for subscribed items once the Il2Cpp Steam API is ready (the game initializes Steam
-/// after plugin load). Native mods use
-/// <c>Data Center_Data/StreamingAssets/Mods/workshop_<PublishedFileId>/</c> (no path redirect).
+/// MelonLoader <b>plugin</b> (<c>{GameRoot}/Plugins/</c>). Uses the game's <c>steam_api64.dll</c>
+/// flat API (same Steam session as the executable). Triggers Workshop downloads for subscribed items
+/// once the Steam client and UGC interface are available.
 /// </summary>
 public sealed class ModPathRedirectorMod : MelonPlugin
 {
-    private const int MaxFramesWaitForSteam = 1200; // ~20s @ 60fps
+	private const int MaxFramesWaitForSteam = 1200;
 
-    private int _waitFrames;
-    private bool _workshopTriggered;
+	private int _waitFrames;
+	private bool _workshopTriggered;
 
-    /// <summary>
-    /// Subscribe after startup; Steam is not initialized during <see cref="OnPreModsLoaded"/>.
-    /// </summary>
-    public override void OnApplicationStarted()
-    {
-        MelonEvents.OnUpdate.Subscribe(OnUpdateTryTriggerWorkshop, 100);
-    }
+	public override void OnApplicationStarted()
+	{
+		MelonEvents.OnUpdate.Subscribe(OnUpdateTryTriggerWorkshop, 100);
+	}
 
-    private void OnUpdateTryTriggerWorkshop()
-    {
-        if (_workshopTriggered)
-            return;
+	private void OnUpdateTryTriggerWorkshop()
+	{
+		if (_workshopTriggered)
+			return;
 
-        if (_waitFrames++ > MaxFramesWaitForSteam)
-        {
-            _workshopTriggered = true;
-            MelonEvents.OnUpdate.Unsubscribe(OnUpdateTryTriggerWorkshop);
-            LoggerInstance.Warning(
-                "Steam not ready in time; skipped Workshop download trigger (subscribed items may sync when the game loads them).");
-            return;
-        }
+		if (_waitFrames++ > MaxFramesWaitForSteam)
+		{
+			_workshopTriggered = true;
+			MelonEvents.OnUpdate.Unsubscribe(OnUpdateTryTriggerWorkshop);
+			LoggerInstance.Warning(
+				"Timed out waiting for Steam; skipped Workshop download trigger.");
+			return;
+		}
 
-        try
-        {
-            TriggerWorkshopDownloads();
-            _workshopTriggered = true;
-            MelonEvents.OnUpdate.Unsubscribe(OnUpdateTryTriggerWorkshop);
-        }
-        catch (InvalidOperationException ex)
-        {
-            var msg = ex.Message ?? "";
-            if (msg.Contains("initialized", StringComparison.OrdinalIgnoreCase) ||
-                msg.Contains("Steamworks", StringComparison.OrdinalIgnoreCase))
-            {
-                // Game has not called SteamAPI_Init yet — try next frame.
-                return;
-            }
+		if (!SteamFlatUgc.TryEnsureUgc(out var steamRunning))
+		{
+			if (!steamRunning)
+				return;
 
-            _workshopTriggered = true;
-            MelonEvents.OnUpdate.Unsubscribe(OnUpdateTryTriggerWorkshop);
-            LoggerInstance.Warning($"Workshop download trigger failed: {ex.Message}");
-        }
-        catch (Exception ex)
-        {
-            _workshopTriggered = true;
-            MelonEvents.OnUpdate.Unsubscribe(OnUpdateTryTriggerWorkshop);
-            LoggerInstance.Warning($"Workshop download trigger failed: {ex.Message}");
-        }
-    }
+			if (SteamFlatUgc.FailedResolve)
+			{
+				_workshopTriggered = true;
+				MelonEvents.OnUpdate.Unsubscribe(OnUpdateTryTriggerWorkshop);
+				LoggerInstance.Warning(
+					"Could not resolve ISteamUGC from steam_api64.dll (no matching SteamAPI_SteamUGC_v0xx export).");
+			}
 
-    private void TriggerWorkshopDownloads()
-    {
-        var count = SteamUGC.GetNumSubscribedItems();
-        if (count == 0)
-        {
-            LoggerInstance.Msg("No subscribed Workshop items.");
-            return;
-        }
+			return;
+		}
 
-        var items = new Il2CppStructArray<PublishedFileId_t>((long)count);
-        var filled = SteamUGC.GetSubscribedItems(items, count);
+		try
+		{
+			TriggerWorkshopDownloads();
+			_workshopTriggered = true;
+			MelonEvents.OnUpdate.Unsubscribe(OnUpdateTryTriggerWorkshop);
+		}
+		catch (Exception ex)
+		{
+			_workshopTriggered = true;
+			MelonEvents.OnUpdate.Unsubscribe(OnUpdateTryTriggerWorkshop);
+			LoggerInstance.Warning($"Workshop download trigger failed: {ex.Message}");
+		}
+	}
 
-        var pending = 0;
-        for (int i = 0; i < (int)filled; i++)
-        {
-            var id = items[i];
-            var state = SteamUGC.GetItemState(id);
+	private void TriggerWorkshopDownloads()
+	{
+		var count = SteamFlatUgc.GetNumSubscribedItems();
+		if (count == 0)
+		{
+			LoggerInstance.Msg("No subscribed Workshop items.");
+			return;
+		}
 
-            var installed = (state & (uint)EItemState.k_EItemStateInstalled) != 0;
-            var downloading = (state & (uint)EItemState.k_EItemStateDownloading) != 0;
-            var downloadPending = (state & (uint)EItemState.k_EItemStateDownloadPending) != 0;
-            var needsUpdate = (state & (uint)EItemState.k_EItemStateNeedsUpdate) != 0;
+		var items = new ulong[count];
+		var filled = SteamFlatUgc.GetSubscribedItems(items, count);
 
-            if (installed && !needsUpdate)
-                continue;
+		var pending = 0u;
+		for (var i = 0; i < (int)filled; i++)
+		{
+			var id = items[i];
+			var state = SteamFlatUgc.GetItemState(id);
 
-            if (!downloading && !downloadPending)
-            {
-                SteamUGC.DownloadItem(id, true);
-                pending++;
-                LoggerInstance.Msg($"  Triggered download: workshop_{id.m_PublishedFileId}");
-            }
-        }
+			var installed = (state & SteamFlatUgc.ItemState.Installed) != 0;
+			var downloading = (state & SteamFlatUgc.ItemState.Downloading) != 0;
+			var downloadPending = (state & SteamFlatUgc.ItemState.DownloadPending) != 0;
+			var needsUpdate = (state & SteamFlatUgc.ItemState.NeedsUpdate) != 0;
 
-        if (pending > 0)
-            LoggerInstance.Msg(
-                $"Triggered {pending} Workshop download(s). " +
-                "The game will copy items into StreamingAssets/Mods/workshop_<ID> when ready.");
-        else
-            LoggerInstance.Msg($"All {filled} subscribed Workshop item(s) are up to date.");
-    }
+			if (installed && !needsUpdate)
+				continue;
+
+			if (!downloading && !downloadPending)
+			{
+				if (SteamFlatUgc.DownloadItem(id, true))
+				{
+					pending++;
+					LoggerInstance.Msg($"  Triggered download: workshop_{id}");
+				}
+			}
+		}
+
+		if (pending > 0)
+			LoggerInstance.Msg(
+				$"Triggered {pending} Workshop download(s). " +
+				"The game will copy items into StreamingAssets/Mods/workshop_<ID> when ready.");
+		else
+			LoggerInstance.Msg($"All {filled} subscribed Workshop item(s) are up to date.");
+	}
 }

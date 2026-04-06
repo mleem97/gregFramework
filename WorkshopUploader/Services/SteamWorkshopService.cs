@@ -27,6 +27,7 @@ public sealed class SteamWorkshopService
 
 			try
 			{
+				SteamApiNativeLoader.TryPreload();
 				SteamClient.Init(SteamConstants.DataCenterAppId, true);
 				_initialized = true;
 				LastSteamConnectionHint = string.Empty;

@@ -11,6 +11,7 @@ This project uses framework release versions in `XX.XX.XXXX` format.
 
 ### Added
 
+- Wiki release page `docs/releases/plugins/fmf-modpathredirector-release.mdx` (download via `/plugin/FMF.ModPathRedirector.dll` redirect to GitHub latest), `ModReleasePage` optional `installation` prop, and `release-assets.yml` upload for `FMF.ModPathRedirector.dll`.
 - Live-Sync tooling: `tools/refresh_refs.py`, `tools/diff_assembly_metadata.py`, and `lib/references/` layout (vendored MelonLoader interop; gitignored DLLs).
 - Discord backlog bridge (`tools/discord_bridge.py`), `docs/IDEA_BACKLOG.md`, and `tools/auto_issue_creator.py` (GitHub CLI).
 - `WorkshopUploader` WinForms app (Workshop stub + DevServer betas fetch) and docs (`docs/Steam-Workshop-and-Tooling.md`, `docs/devserver-betas.md`).

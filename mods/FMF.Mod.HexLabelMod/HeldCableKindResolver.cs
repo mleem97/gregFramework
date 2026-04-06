@@ -56,6 +56,113 @@ internal static class HeldCableKindResolver
     /// <summary>
     /// Tries to read a cable color string from held / player state (matches save <c>cableColor</c> style).
     /// </summary>
+    /// <summary>
+    /// Rack, cable reel (spinner), or patch cable in hand — returns a display label and hex when possible.
+    /// </summary>
+    public static bool TryGetHeldItemHex(out string hex, out string kindLabel)
+    {
+        hex = null;
+        kindLabel = null;
+
+        try
+        {
+            var pc = PlayerManager.instance?.playerClass;
+            if (pc == null)
+                return false;
+
+            foreach (var m in pc.GetType().GetMembers(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
+            {
+                object val = null;
+                try
+                {
+                    if (m is FieldInfo fi)
+                        val = fi.GetValue(pc);
+                    else if (m is PropertyInfo pi && pi.GetIndexParameters().Length == 0)
+                        val = pi.GetValue(pc);
+                    else
+                        continue;
+                }
+                catch
+                {
+                    continue;
+                }
+
+                if (val == null)
+                    continue;
+
+                if (TryGetHexFromHeldObject(val, out hex, out kindLabel))
+                    return true;
+            }
+        }
+        catch
+        {
+            // ignored
+        }
+
+        var kind = Resolve();
+        if (TryGetHeldCableHex(out hex))
+        {
+            kindLabel = string.IsNullOrEmpty(kind) ? "Kabel" : kind;
+            return true;
+        }
+
+        return false;
+    }
+
+    private static bool TryGetHexFromHeldObject(object val, out string hex, out string kindLabel)
+    {
+        hex = null;
+        kindLabel = null;
+
+        if (val is Rack rack && GameObjectColorHex.TryGetRackHex(rack, out hex))
+        {
+            kindLabel = "Rack";
+            return true;
+        }
+
+        if (val is CableSpinner sp && GameObjectColorHex.TryGetSpinnerHex(sp, out hex))
+        {
+            kindLabel = "Spinner";
+            return true;
+        }
+
+        if (val is GameObject go)
+        {
+            var r = go.GetComponentInParent<Rack>();
+            if (r != null && GameObjectColorHex.TryGetRackHex(r, out hex))
+            {
+                kindLabel = "Rack";
+                return true;
+            }
+
+            var s = go.GetComponentInParent<CableSpinner>();
+            if (s != null && GameObjectColorHex.TryGetSpinnerHex(s, out hex))
+            {
+                kindLabel = "Spinner";
+                return true;
+            }
+        }
+
+        if (val is Component c)
+        {
+            var r = c.GetComponentInParent<Rack>();
+            if (r != null && GameObjectColorHex.TryGetRackHex(r, out hex))
+            {
+                kindLabel = "Rack";
+                return true;
+            }
+
+            var s = c.GetComponentInParent<CableSpinner>();
+            if (s != null && GameObjectColorHex.TryGetSpinnerHex(s, out hex))
+            {
+                kindLabel = "Spinner";
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public static bool TryGetHeldCableHex(out string hex)
     {
         hex = null;

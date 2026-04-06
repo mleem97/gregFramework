@@ -95,6 +95,10 @@ const config = {
             from: ['/plugin/FFM.Plugin.WebUIBridge.dll'],
           },
           {
+            to: 'https://github.com/mleem97/gregFramework/releases/latest/download/FMF.ModPathRedirector.dll',
+            from: ['/plugin/FMF.ModPathRedirector.dll'],
+          },
+          {
             to: 'https://github.com/mleem97/gregFramework/releases/latest/download/FMF.ConsoleInputGuard.dll',
             from: ['/mod/FMF.ConsoleInputGuard.dll'],
           },

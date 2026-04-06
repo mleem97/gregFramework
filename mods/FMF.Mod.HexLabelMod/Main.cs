@@ -57,12 +57,13 @@ public sealed class HexLabelMelon : MelonMod
         _liveReloadAllowed = false;
 
         LoggerInstance.Msg("HexLabelMod waiting for Steam runtime initialization...");
-        HexViewerFeature.Initialize();
+        HexviewerFeature.Initialize();
     }
 
     public override void OnGUI()
     {
-        HexViewerFeature.OnGui();
+        HexviewerFeature.SetHudEnabled(_isFullyInitialized);
+        HexviewerFeature.OnGui();
     }
 
     private void TryInitializeAfterSteamReady()
@@ -87,7 +88,7 @@ public sealed class HexLabelMelon : MelonMod
         _isFullyInitialized = true;
 
         LoggerInstance.Msg($"HexLabelMod initialized. Config: {GetConfigPath()}");
-        LoggerInstance.Msg("Cable color viewer: F2 (hex from scene + save member_values / JSON).");
+        LoggerInstance.Msg("Hexviewer: HUD top-right; full list F2 (scene + save member_values / JSON).");
 
         if (_liveReloadAllowed)
         {
@@ -113,7 +114,8 @@ public sealed class HexLabelMelon : MelonMod
             return;
         }
 
-        HexViewerFeature.Update();
+        HexviewerFeature.Update();
+        HexviewerFeature.UpdateHud();
 
         _scanTimer += Time.deltaTime;
         _deepScanTimer += Time.deltaTime;
@@ -207,7 +209,7 @@ public sealed class HexLabelMelon : MelonMod
 
         var config = _config;
 
-        if (!TryGetSpinnerHex(spinner, out var hex))
+        if (!GameObjectColorHex.TryGetSpinnerHex(spinner, out var hex))
             return;
 
         var sourceLabel = spinner.txtLength;
@@ -298,40 +300,6 @@ public sealed class HexLabelMelon : MelonMod
         }
     }
 
-    private static bool TryGetSpinnerHex(CableSpinner spinner, out string hex)
-    {
-        hex = null;
-
-        var raw = spinner.rgbColor;
-        if (!string.IsNullOrWhiteSpace(raw) && HexColorUtil.TryNormalizeHex(raw, out hex))
-            return true;
-
-        var material = spinner.cableMaterial;
-        if (material == null)
-            return false;
-
-        try
-        {
-            if (material.HasProperty("_BaseColor"))
-            {
-                hex = HexColorUtil.ToHex(material.GetColor("_BaseColor"));
-                return true;
-            }
-
-            if (material.HasProperty("_Color"))
-            {
-                hex = HexColorUtil.ToHex(material.color);
-                return true;
-            }
-        }
-        catch
-        {
-            return false;
-        }
-
-        return false;
-    }
-
     internal static void EnsureRackLabel(Rack rack)
     {
         if (rack == null)
@@ -339,7 +307,7 @@ public sealed class HexLabelMelon : MelonMod
 
         var config = _config;
 
-        if (!TryGetRackHex(rack, out var hex))
+        if (!GameObjectColorHex.TryGetRackHex(rack, out var hex))
             hex = "#FFFFFF";
 
         var root = rack.transform;
@@ -394,47 +362,6 @@ public sealed class HexLabelMelon : MelonMod
         t.position = worldPos;
         t.rotation = targetRotation;
         t.localScale = targetScale;
-    }
-
-    private static bool TryGetRackHex(Rack rack, out string hex)
-    {
-        hex = null;
-
-        try
-        {
-            var renderers = rack.GetComponentsInChildren<Renderer>(true);
-            if (renderers == null || renderers.Count == 0)
-                return false;
-
-            for (var i = 0; i < renderers.Count; i++)
-            {
-                var renderer = renderers[i];
-                if (renderer == null)
-                    continue;
-
-                var mat = renderer.sharedMaterial;
-                if (mat == null)
-                    continue;
-
-                if (mat.HasProperty("_BaseColor"))
-                {
-                    hex = HexColorUtil.ToHex(mat.GetColor("_BaseColor"));
-                    return true;
-                }
-
-                if (mat.HasProperty("_Color"))
-                {
-                    hex = HexColorUtil.ToHex(mat.color);
-                    return true;
-                }
-            }
-        }
-        catch
-        {
-            return false;
-        }
-
-        return false;
     }
 
     private static bool TryGetRackBackRightBottomPosition(Rack rack, out Vector3 pos, HexPositionConfig config)
