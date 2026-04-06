@@ -9,8 +9,16 @@ This project uses framework release versions in `XX.XX.XXXX` format.
 
 ## [Unreleased]
 
+### Added
+
+- Live-Sync tooling: `tools/refresh_refs.py`, `tools/diff_assembly_metadata.py`, and `lib/references/` layout (vendored MelonLoader interop; gitignored DLLs).
+- Discord backlog bridge (`tools/discord_bridge.py`), `docs/IDEA_BACKLOG.md`, and `tools/auto_issue_creator.py` (GitHub CLI).
+- `WorkshopUploader` WinForms app (Workshop stub + DevServer betas fetch) and docs (`docs/Steam-Workshop-and-Tooling.md`, `docs/devserver-betas.md`).
+- Ralph prompts and AI instructions updated for game-update workflows and `lib/references/` as the type surface.
+
 ### Changed
 
+- `FrikaMF.csproj` prefers `lib/references/MelonLoader` when present; excludes `Templates/**` from compile; ships IL2CPP catalog/hook diagnostics from `Core` (debug snapshot).
 - Maintain Keep a Changelog structure and release metadata automation.
 
 ## [00.01.0012] - 2026-04-04

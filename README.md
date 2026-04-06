@@ -25,6 +25,13 @@
 - C# mods: `Data Center/Mods`
 - Rust/native plugins: `Data Center/Mods/RustMods`
 - Content packs: `Data Center/Data Center_Data/StreamingAssets/Mods`
+- Optional Workshop tool (see `WorkshopUploader/README.md`): `Data Center/WorkshopUploader/`
+
+## Developer tooling (Live-Sync)
+
+- `python tools/refresh_refs.py` — copy MelonLoader interop DLLs into `lib/references/` for MSBuild and AI workflows.
+- `python tools/diff_assembly_metadata.py` — compare `Assembly-CSharp` hash/manifest after game updates.
+- `docs/Steam-Workshop-and-Tooling.md` — Workshop + reference workflow notes.
 
 ## Other projects we are working on
 
