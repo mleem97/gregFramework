@@ -3,33 +3,193 @@
     x:Class="WorkshopUploader.EditorPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    Title="Project">
+    xmlns:models="clr-namespace:WorkshopUploader.Models"
+    xmlns:l="clr-namespace:WorkshopUploader.Localization"
+    Title="Workshop item">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </ContentPage.Resources>
 
     <ScrollView>
-        <VerticalStackLayout Padding="16" Spacing="12">
-            <Label x:Name="PathLabel" Style="{StaticResource SubHeadline}" />
+        <VerticalStackLayout Padding="24" Spacing="16">
 
-            <Label Text="Title" FontAttributes="Bold" />
-            <Entry x:Name="TitleEntry" TextChanged="OnTitleChanged" MaxLength="128" />
-            <Label x:Name="TitleCountLabel" FontSize="11" Opacity="0.7" />
+            <!--  Page header  -->
+            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="16">
+                <VerticalStackLayout Grid.Column="0" Spacing="4">
+                    <Label Style="{StaticResource Headline}" Text="{l:Translate Key=Editor_Headline}" />
+                    <Label x:Name="PathLabel" FontSize="12" TextColor="#7FBFB8" LineBreakMode="TailTruncation" />
+                </VerticalStackLayout>
+                <HorizontalStackLayout Grid.Column="1" Spacing="8" VerticalOptions="Center">
+                    <Button Clicked="OnReloadFromDisk" Style="{StaticResource SecondaryButton}" Text="{l:Translate Key=Editor_Reload}" />
+                    <Button Clicked="OnOpenInExplorer" Style="{StaticResource TertiaryButton}" Text="{l:Translate Key=Editor_Explorer}" />
+                </HorizontalStackLayout>
+            </Grid>
 
-            <Label Text="Description" FontAttributes="Bold" />
-            <Editor x:Name="DescriptionEditor" AutoSize="TextChanges" TextChanged="OnDescriptionChanged" />
-            <Label x:Name="DescriptionCountLabel" FontSize="11" Opacity="0.7" />
+            <!--  Two-column main area  -->
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="16" RowDefinitions="Auto,Auto,Auto" RowSpacing="16">
 
-            <Label Text="Visibility" FontAttributes="Bold" />
-            <Picker x:Name="VisibilityPicker" Title="Visibility" />
+                <!--  LEFT COLUMN  -->
 
-            <Label Text="Preview image (preview.png)" FontAttributes="Bold" />
-            <HorizontalStackLayout Spacing="8">
-                <Button Clicked="OnPickPreview" Text="Choose file…" />
-                <Label x:Name="PreviewPathLabel" VerticalOptions="Center" LineBreakMode="TailTruncation" />
-            </HorizontalStackLayout>
+                <!--  Metadata card  -->
+                <Border Grid.Row="0" Grid.Column="0" Padding="20" StrokeThickness="0" BackgroundColor="#001715">
+                    <Border.StrokeShape><RoundRectangle CornerRadius="8" /></Border.StrokeShape>
+                    <VerticalStackLayout Spacing="10">
+                        <Label Style="{StaticResource SectionTitle}" Text="{l:Translate Key=Editor_Metadata}" />
 
-            <Label x:Name="PublishedIdLabel" FontSize="12" />
+                        <Label Text="{l:Translate Key=Editor_Title}" FontAttributes="Bold" FontSize="12" TextColor="#7FBFB8" />
+                        <Entry x:Name="TitleEntry" MaxLength="128" TextChanged="OnTitleChanged" />
+                        <Label x:Name="TitleCountLabel" FontSize="11" TextColor="#5A9E96" />
 
-            <Button Clicked="OnSave" Text="Save metadata.json" />
-            <Button Clicked="OnPublish" Text="Publish to Steam" />
+                        <Label Text="{l:Translate Key=Editor_Description}" FontAttributes="Bold" FontSize="12" TextColor="#7FBFB8" />
+                        <Border Padding="4,2" StrokeThickness="0" BackgroundColor="#001E1C" Margin="0,0,0,2">
+                            <Border.StrokeShape><RoundRectangle CornerRadius="6,6,0,0" /></Border.StrokeShape>
+                            <HorizontalStackLayout Spacing="2">
+                                <Button Text="B" Clicked="OnBbBold" Style="{StaticResource BbButton}" FontAttributes="Bold" />
+                                <Button Text="I" Clicked="OnBbItalic" Style="{StaticResource BbButton}" FontAttributes="Italic" />
+                                <Button Text="U" Clicked="OnBbUnderline" Style="{StaticResource BbButton}" />
+                                <Button Text="S" Clicked="OnBbStrike" Style="{StaticResource BbButton}" />
+                                <BoxView WidthRequest="1" Color="#0D3835" Margin="2,4" />
+                                <Button Text="H1" Clicked="OnBbH1" Style="{StaticResource BbButton}" />
+                                <Button Text="H2" Clicked="OnBbH2" Style="{StaticResource BbButton}" />
+                                <Button Text="H3" Clicked="OnBbH3" Style="{StaticResource BbButton}" />
+                                <BoxView WidthRequest="1" Color="#0D3835" Margin="2,4" />
+                                <Button Text="URL" Clicked="OnBbUrl" Style="{StaticResource BbButton}" />
+                                <Button Text="IMG" Clicked="OnBbImg" Style="{StaticResource BbButton}" />
+                                <BoxView WidthRequest="1" Color="#0D3835" Margin="2,4" />
+                                <Button Text="List" Clicked="OnBbList" Style="{StaticResource BbButton}" />
+                                <Button Text="Code" Clicked="OnBbCode" Style="{StaticResource BbButton}" />
+                                <Button Text="Quote" Clicked="OnBbQuote" Style="{StaticResource BbButton}" />
+                                <Button Text="—" Clicked="OnBbHr" Style="{StaticResource BbButton}" ToolTipProperties.Text="Horizontal rule" />
+                                <Button Text="Spoiler" Clicked="OnBbSpoiler" Style="{StaticResource BbButton}" />
+                                <BoxView WidthRequest="1" Color="#0D3835" Margin="2,4" />
+                                <Button Text="Table" Clicked="OnBbTable" Style="{StaticResource BbButton}" />
+                            </HorizontalStackLayout>
+                        </Border>
+                        <Editor x:Name="DescriptionEditor" AutoSize="TextChanges" HeightRequest="120" TextChanged="OnDescriptionChanged" />
+                        <Label x:Name="DescriptionCountLabel" FontSize="11" TextColor="#5A9E96" />
+
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
+                            <VerticalStackLayout Grid.Column="0" Spacing="4">
+                                <Label Text="{l:Translate Key=Editor_Visibility}" FontAttributes="Bold" FontSize="12" TextColor="#7FBFB8" />
+                                <Picker x:Name="VisibilityPicker" Title="{l:Translate Key=Editor_Visibility}" />
+                            </VerticalStackLayout>
+                            <VerticalStackLayout Grid.Column="1" Spacing="4">
+                                <Label Text="{l:Translate Key=Editor_Tags}" FontAttributes="Bold" FontSize="12" TextColor="#7FBFB8" />
+                                <Entry x:Name="TagsEntry" Placeholder="{l:Translate Key=Editor_TagsPlaceholder}" TextChanged="OnTagsChanged" />
+                                <Label x:Name="TagsHintLabel" FontSize="11" TextColor="#5A9E96" />
+                            </VerticalStackLayout>
+                        </Grid>
+
+                        <BoxView HeightRequest="1" Color="#0D3835" Margin="0,4" />
+
+                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                            <VerticalStackLayout Grid.Column="0" Spacing="2">
+                                <Label Text="{l:Translate Key=Editor_NeedsFmf}" FontAttributes="Bold" FontSize="12" TextColor="#7FBFB8" />
+                                <Label FontSize="11" TextColor="#5A9E96"
+                                    Text="{l:Translate Key=Editor_NeedsFmfHint}" />
+                            </VerticalStackLayout>
+                            <Switch x:Name="NeedsFmfSwitch" Grid.Column="1"
+                                OnColor="#61F4D8" ThumbColor="#C0FCF6"
+                                VerticalOptions="Center" />
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!--  Change Notes (always visible)  -->
+                <Border Grid.Row="1" Grid.Column="0" Padding="20" StrokeThickness="0" BackgroundColor="#001715">
+                    <Border.StrokeShape><RoundRectangle CornerRadius="8" /></Border.StrokeShape>
+                    <VerticalStackLayout Spacing="10">
+                        <Label Style="{StaticResource SectionTitle}" Text="{l:Translate Key=Editor_ChangeNotes}" />
+                        <Label x:Name="ChangeLogHintLabel" FontSize="11" TextColor="#5A9E96"
+                            Text="{l:Translate Key=Editor_ChangeNotesHint}" />
+                        <Editor x:Name="ChangeLogEditor" AutoSize="TextChanges" HeightRequest="80"
+                            Placeholder="{l:Translate Key=Editor_ChangeNotesPlaceholder}" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <!--  RIGHT COLUMN  -->
+
+                <!--  Preview + Content card  -->
+                <Border Grid.Row="0" Grid.Column="1" Padding="20" StrokeThickness="0" BackgroundColor="#001715">
+                    <Border.StrokeShape><RoundRectangle CornerRadius="8" /></Border.StrokeShape>
+                    <VerticalStackLayout Spacing="12">
+                        <Label Style="{StaticResource SectionTitle}" Text="{l:Translate Key=Editor_PreviewContent}" />
+
+                        <Label FontSize="11" TextColor="#5A9E96" Text="{l:Translate Key=Editor_PreviewHint}" />
+                        <HorizontalStackLayout Spacing="8">
+                            <Button Clicked="OnPickPreview" Style="{StaticResource SecondaryButton}" Text="{l:Translate Key=Editor_ChooseImage}" />
+                            <Label x:Name="PreviewPathLabel" FontSize="11" TextColor="#7FBFB8" LineBreakMode="TailTruncation" VerticalOptions="Center" />
+                        </HorizontalStackLayout>
+
+                        <BoxView HeightRequest="1" Color="#0D3835" Margin="0,4" />
+
+                        <Label x:Name="ContentStatusLabel" FontSize="12" TextColor="#7FBFB8" />
+                        <Label x:Name="ContentSizeBody" FontSize="11" TextColor="#5A9E96" LineBreakMode="WordWrap" />
+                        <Button Clicked="OnExportContentZip" Style="{StaticResource TertiaryButton}" Text="{l:Translate Key=Editor_ExportZip}" HorizontalOptions="Start" />
+
+                        <BoxView HeightRequest="1" Color="#0D3835" Margin="0,8" />
+
+                        <!--  Additional screenshots for Steam gallery  -->
+                        <Label Style="{StaticResource SectionTitle}" Text="{l:Translate Key=Editor_Screenshots}" />
+                        <Label FontSize="11" TextColor="#5A9E96" Text="{l:Translate Key=Editor_ScreenshotsHint}" />
+                        <FlexLayout x:Name="ScreenshotsGallery" Wrap="Wrap" JustifyContent="Start" Direction="Row" />
+                        <HorizontalStackLayout Spacing="8">
+                            <Button Clicked="OnAddScreenshot" Style="{StaticResource SecondaryButton}" Text="{l:Translate Key=Editor_AddScreenshot}" />
+                            <Label x:Name="ScreenshotCountLabel" FontSize="11" TextColor="#5A9E96" VerticalOptions="Center" />
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!--  Dependency Checker card  -->
+                <Border Grid.Row="1" Grid.Column="1" Padding="20" StrokeThickness="0" BackgroundColor="#001715">
+                    <Border.StrokeShape><RoundRectangle CornerRadius="8" /></Border.StrokeShape>
+                    <VerticalStackLayout Spacing="10">
+                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                                    <Label Grid.Column="0" Style="{StaticResource SectionTitle}" Text="{l:Translate Key=Editor_UploadReadiness}" VerticalOptions="Center" />
+                                    <Button Grid.Column="1" x:Name="RecheckBtn" Clicked="OnRunUploadCheck" Style="{StaticResource SecondaryButton}" Text="{l:Translate Key=Editor_Recheck}" VerticalOptions="Center" />
+                        </Grid>
+                        <Label x:Name="ReadinessStatusLabel" FontSize="12" FontAttributes="Bold" TextColor="#61F4D8" />
+                        <CollectionView x:Name="CheckResultsList" SelectionMode="None">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="models:UploadCheckResult">
+                                    <Grid Padding="0,4" ColumnDefinitions="Auto,*" ColumnSpacing="10">
+                                        <Ellipse x:Name="CheckDot" Grid.Column="0" WidthRequest="10" HeightRequest="10" VerticalOptions="Center" />
+                                        <VerticalStackLayout Grid.Column="1" Spacing="2">
+                                            <Label FontAttributes="Bold" FontSize="12" TextColor="#C0FCF6" Text="{Binding Label}" />
+                                            <Label FontSize="11" TextColor="#5A9E96" LineBreakMode="WordWrap" Text="{Binding Detail}" />
+                                        </VerticalStackLayout>
+                                    </Grid>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!--  Publish card (spans full width)  -->
+                <Border Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Padding="20" StrokeThickness="0" BackgroundColor="#001E1C">
+                    <Border.StrokeShape><RoundRectangle CornerRadius="8" /></Border.StrokeShape>
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="16">
+                        <VerticalStackLayout Grid.Column="0" Spacing="8">
+                                <Label Style="{StaticResource SectionTitle}" Text="{l:Translate Key=Editor_Publish}" />
+                            <Label x:Name="PublishedIdLabel" FontSize="12" TextColor="#7FBFB8" />
+                            <Label x:Name="SyncStatusLabel" FontSize="11" TextColor="#5A9E96" />
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Column="1" Spacing="8" VerticalOptions="Center">
+                                    <Button Clicked="OnSaveAndUpload" Text="{l:Translate Key=Editor_SaveUpload}" />
+                                    <HorizontalStackLayout Spacing="8">
+                                        <Button Clicked="OnSave" Style="{StaticResource SecondaryButton}" Text="{l:Translate Key=Editor_SaveMeta}" />
+                                        <Button x:Name="ViewOnSteamBtn" Clicked="OnViewOnSteam" Style="{StaticResource TertiaryButton}" Text="{l:Translate Key=Editor_ViewOnSteam}" IsVisible="False" />
+                            </HorizontalStackLayout>
+                        </VerticalStackLayout>
+                    </Grid>
+                </Border>
+
+            </Grid>
         </VerticalStackLayout>
     </ScrollView>
 

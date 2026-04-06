@@ -22,4 +22,10 @@ public sealed class WorkshopMetadata
 
 	[JsonPropertyName("tags")]
 	public List<string> Tags { get; set; } = new();
+
+	[JsonPropertyName("needsFmf")]
+	public bool NeedsFmf { get; set; }
+
+	[JsonPropertyName("additionalPreviews")]
+	public List<string> AdditionalPreviews { get; set; } = new();
 }

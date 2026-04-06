@@ -1,14 +1,58 @@
 {
   "version": 1,
-  "description": "Optional manifest for download/overview pages (Docusaurus can consume later).",
+  "description": "Manifest of all mods packaged for Steam Workshop distribution.",
   "mods": [
     {
       "id": "hexmod",
-      "title": "Hex Label Mod",
+      "title": "FMF HexLabel Mod",
+      "assembly": "FMF.HexLabelMod.dll",
+      "version": "00.01.0009",
+      "author": "mleem97",
+      "workshopTags": ["modded", "melonloader", "mod"],
+      "workshopContentPath": "content/Mods/",
       "workshopUrl": "",
       "githubReleaseUrl": "",
       "wikiPath": "/wiki/wiki/mods/hexmod",
       "sourcePath": "mods/FMF.Mod.HexLabelMod"
+    },
+    {
+      "id": "console-input-guard",
+      "title": "FMF Console Input Guard",
+      "assembly": "FMF.ConsoleInputGuard.dll",
+      "version": "00.01.0001",
+      "author": "mleem97",
+      "workshopTags": ["modded", "melonloader", "mod"],
+      "workshopContentPath": "content/Mods/",
+      "workshopUrl": "",
+      "githubReleaseUrl": "",
+      "wikiPath": "/wiki/mods/mods/fmf-console-input-guard",
+      "sourcePath": "mods/FMF.ConsoleInputGuard"
+    },
+    {
+      "id": "gregify-employees",
+      "title": "FMF Gregify Employees",
+      "assembly": "FMF.GregifyEmployees.dll",
+      "version": "00.01.0009",
+      "author": "mleem97",
+      "workshopTags": ["modded", "melonloader", "mod"],
+      "workshopContentPath": "content/Mods/",
+      "workshopUrl": "",
+      "githubReleaseUrl": "",
+      "wikiPath": "/wiki/mods/mods/fmf-gregify-employees",
+      "sourcePath": "mods/FMF.Mod.GregifyEmployees"
+    },
+    {
+      "id": "lang-compat-bridge",
+      "title": "FMF JoniML Compat Mod",
+      "assembly": "FMF.JoniMLCompatMod.dll",
+      "version": "00.01.0009",
+      "author": "mleem97",
+      "workshopTags": ["modded", "melonloader", "mod"],
+      "workshopContentPath": "content/Mods/",
+      "workshopUrl": "",
+      "githubReleaseUrl": "",
+      "wikiPath": "/wiki/mods/mods/fmf-lang-compat-bridge",
+      "sourcePath": "mods/FMF.Plugin.LangCompatBridge"
     }
   ]
 }

@@ -47,6 +47,15 @@ const sidebars = {
     },
     {
       type: 'category',
+      label: 'Guides',
+      items: [
+        'guides/enduser-workshop',
+        'guides/contributor-workshop',
+        'guides/release',
+      ],
+    },
+    {
+      type: 'category',
       label: 'Releases',
       link: {type: 'doc', id: 'releases/index'},
       items: [

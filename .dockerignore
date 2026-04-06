@@ -4,8 +4,13 @@
 **/bin
 **/obj
 **/node_modules
-wiki/node_modules
-mcp-server/node_modules
+wiki/build
+wiki/.docusaurus
+wiki/.cache
 **/*.user
 _tmp
 **/BenchmarkDotNet.Artifacts
+WorkshopUploader/bin
+WorkshopUploader/obj
+*.slnx
+*.sln

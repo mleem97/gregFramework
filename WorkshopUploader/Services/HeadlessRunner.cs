@@ -10,13 +10,13 @@ public static class HeadlessRunner
 			Console.WriteLine("""
 				FrikaMF Workshop Uploader (headless)
 
-				  --mode publish       Publish a local DataCenterWS project
+				  --mode publish       Publish a local workshop project
 				  --upload             Same as --mode publish
 				  --path <dir>         Project root (must contain content/ and metadata.json)
 				  --autocommit         Write .ralph/tasks/status.json on completion
 
-				Example:
-				  WorkshopUploader.exe --mode publish --path "%USERPROFILE%/DataCenterWS/MyMod" --autocommit
+				Example (path is usually <game>/workshop/<project>):
+				  WorkshopUploader.exe --mode publish --path "D:\Steam\steamapps\common\Data Center\workshop\MyMod" --autocommit
 				""");
 			exitCode = 0;
 			return true;
@@ -105,6 +105,7 @@ public static class HeadlessRunner
 				projectRoot,
 				metadata,
 				content,
+				null,
 				upload,
 				progress,
 				CancellationToken.None).ConfigureAwait(false);

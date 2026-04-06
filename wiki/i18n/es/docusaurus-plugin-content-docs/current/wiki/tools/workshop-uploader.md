@@ -1,78 +1,127 @@
 ---
-title: WorkshopUploader
-sidebar_label: WorkshopUploader
-description: Aplicación de escritorio para Windows para gestionar proyectos de Steam Workshop y metadatos para Data Center (FrikaMF).
+title: WorkshopManager
+sidebar_label: WorkshopManager
+description: Windows desktop app for managing Steam Workshop content, browsing mods, and publishing for Data Center (FrikaMF).
 ---
 
-# WorkshopUploader
+# WorkshopManager
 
-**WorkshopUploader** es una aplicación de escritorio **.NET MAUI** para **Windows**. Te ayuda a preparar **contenido de Workshop** para *Data Center*: estructura de carpetas, `metadata.json`, imagen de vista previa y subida mediante la API de **Steamworks** (Steam debe estar en ejecución y el juego debe ser el contexto de App ID correcto).
+**WorkshopManager** is a **.NET MAUI** desktop app for **Windows** that serves as a full-featured Steam Workshop client for *Data Center*. It combines content authoring (publish/update), a **Mod Store** for browsing and installing community mods, and a **Mod Manager** for dependency health checks.
 
-## Qué hace la aplicación
+## Features
 
-- Crea un espacio de trabajo **`DataCenterWS`** en tu perfil de usuario (ruta más abajo).
-- Lista **carpetas de proyecto**; cada proyecto puede tener una subcarpeta **`content/`** — esa carpeta es la que se sube al elemento del Workshop.
-- En cada proyecto editas **título**, **descripción**, **visibilidad** (Public / FriendsOnly / Private) y **imagen de vista previa**; los datos se guardan en **`metadata.json`**.
-- **Publish to Steam** crea un **nuevo** elemento del Workshop o actualiza uno existente si ya hay un **ID de archivo publicado** guardado.
+### Author tools (Projects / Editor / My Uploads)
+- Create workshop projects from templates (vanilla assets, MelonLoader mods, FMF plugins).
+- Edit **title**, **description**, **visibility**, **tags**, and **preview image**; stored in `metadata.json`.
+- **Save and upload to Steam** — saves metadata, publishes `content/` to Steam Workshop, then **syncs** your local folder with Steam's version (like a `git pull` after push).
+- **Change notes** — when updating an existing item, describe what changed; shown on the Workshop changelog tab.
+- **View on Steam** — open your published item in the browser.
+- **Pagination** across all list views (My Uploads, Browse, Subscribed, Favorites).
+- **Per-item stats** — subscriptions, votes, score, size.
 
-## Requisitos
+### Mod Store (integrated in Mod Manager)
+- **Browse** all Workshop items for Data Center with tag filtering and sort options (last updated, newest, top rated, trending, most subscribed, title A-Z).
+- **Search** mods by text.
+- **Subscribe / Unsubscribe** to mods directly from the store.
+- **Favorites** — bookmark mods for quick access.
+- **Vote** (up/down) on workshop items.
+- **Item detail view** — full statistics, description, tags, action buttons, and links to changelog/comments.
 
-- **Windows** (el proyecto usa MAUI para Windows).
-- **Steam** con una sesión iniciada en una cuenta que **tenga Data Center** y pueda publicar en el Workshop (App ID **4170200**).
-- Opcional: **`WorkshopUploader.exe`** compilada junto a la instalación del juego (véase [Compilar y desplegar](#build-deploy)).
+### Mod Manager / Health
+- **Dependency health** checks: game installed, MelonLoader, Il2Cpp assemblies, FMF core, FMF plugins directory, ModCfg directory.
+- **MelonLoader** download page link and game folder access.
+- **FMF Plugin channels** — stable (local scan) and beta (server, TODO).
 
-## Ruta del espacio de trabajo
+### Configuración
+- **Ruta del espacio de trabajo** — cambia dónde se guardan los proyectos (por defecto `<GameRoot>/workshop`).
+- **Idioma** — alternar entre EN, DE, RU, ES, IT, JP, PL, CN (por defecto el idioma del sistema). El botón Reiniciar aplica el cambio al instante.
+- **Interruptor Mod Store** — activar/desactivar la pestaña Mod Store (desactivada por defecto). Incluye botón Reiniciar.
+- **Enlaces de la comunidad** — acceso rápido a Discord, canal de modding y GregFramework.eu.
 
-El espacio de trabajo está fijado en **`DataCenterWS`** dentro de tu perfil, por ejemplo:
+### Aviso de dependencia de FMF
+- Los proyectos pueden marcarse como **«Necesita FrikaModFramework»** en el editor. Al subir, se añade automáticamente un aviso a la descripción de Steam para indicar a los usuarios que instalen FMF.
 
-`%USERPROFILE%\DataCenterWS`
+## Requirements
 
-En el primer arranque la aplicación crea la estructura y puede dejar un **`metadata.sample.json`** de ejemplo en `.templates\`.
+- **Windows 10** (versión 1809+).
+- **Steam** con una cuenta iniciada sesión que **posea Data Center** (ID de aplicación **4170200**).
+- **Sin dependencias adicionales** — la versión publicada es totalmente autocontenida (incluye runtime de .NET y Windows App SDK).
+- `steam_api64.dll` y `steam_appid.txt` deben estar junto al exe (incluidos en la compilación Release).
 
-## Estructura del proyecto
+## Workspace path
 
-Para cada proyecto de Workshop:
+The workspace is resolved from Steam: `<Data Center install>/workshop`.
 
-1. Crea una **carpeta** bajo `DataCenterWS` (el nombre aparece en la lista).
-2. Añade una subcarpeta **`content\`** y coloca ahí los archivos que deben ir al elemento del Workshop (datos del mod, assets — solo **tu** contenido; no redistribuyas binarios del juego).
-3. Opcional: **`metadata.json`** manual o rellenado en la app; la app guarda título, descripción, visibilidad, ruta de vista previa y tras la primera subida el **ID del archivo publicado**.
-4. Opcional: **`preview.png`** en la raíz del proyecto (u otra ruta relativa en metadatos) — puedes elegir una imagen en la app; se copia como `preview.png`.
+Fallback (no Steam): `%USERPROFILE%\DataCenterWS`.
 
-Sin **`content/`**, la lista muestra un aviso («Missing content/»); no se puede subir hasta que exista.
+On first launch the app creates the structure and places a sample `metadata.sample.json` under `.templates/`.
 
-## Uso en la aplicación
+## Project layout
 
-1. **Inicio:** **Workshop projects** — arriba verás la **ruta del espacio de trabajo**. Desliza para actualizar la lista.
-2. **Abrir proyecto:** toca una entrada → **Editor**.
-3. **Editor:** título y descripción (límites de caracteres de Steam), **visibilidad**, **elegir vista previa**, luego:
-   - **Save metadata.json** — solo guardar.
-   - **Publish to Steam** — guarda y sube **`content/`**; la primera vez crea un elemento nuevo del Workshop después reutiliza el **ID** guardado.
-4. El **registro** en la página principal muestra mensajes (inicio de Steam, progreso de subida, etc.).
+For each Workshop project:
 
-Si Steam no puede inicializarse (p. ej. Steam cerrado), la aplicación lo indica.
+1. Create a **folder** under the workspace (the folder name appears in the list).
+2. Add a `content/` subfolder with files to ship:
+   - `content/Mods/` for MelonLoader mods
+   - `content/FMF/Plugins/` for FMF plugins
+   - `content/Object/` and `content/Decoration/` for vanilla assets
+3. Optionally create `metadata.json` yourself or fill it in the app.
+4. Optionally add `preview.png` at the project root.
 
-## Compilar y desplegar {#build-deploy}
+## Using the app
 
-Desde el repositorio:
+### Tabs
+
+| Tab | Purpose |
+|-----|---------|
+| **Projects** | Local workshop projects; search, open editor |
+| **New** | Create from template (vanilla, MelonLoader, FMF) |
+| **My Uploads** | Paginated list of your published items with stats |
+| **Mod Store** | Browse, search, subscribe, vote, and manage mods |
+
+### Publish workflow
+
+1. Open a project from the **Projects** tab.
+2. Fill in title, description, tags, visibility, preview image.
+3. Optionally write **change notes** (visible on Steam's changelog).
+4. Click **Save and upload to Steam**.
+5. The app saves `metadata.json`, uploads `content/` to Steam, then **syncs** by re-downloading Steam's version into your local `content/` folder.
+
+### Headless / CI publish
 
 ```bash
-dotnet build WorkshopUploader/WorkshopUploader.csproj -c Debug
+WorkshopUploader.exe --mode publish --path <project-folder>
 ```
 
-Release (publicación típica en Windows):
+## Build and deploy {#build-deploy}
+
+### Release autocontenido
+
+La aplicación se publica como ejecutable de Windows **autocontenido** — no hace falta instalar runtime de .NET ni Windows App SDK en el equipo de destino.
 
 ```bash
-dotnet publish WorkshopUploader/WorkshopUploader.csproj -c Release
+dotnet publish WorkshopUploader/WorkshopUploader.csproj -c Release -p:SelfContained=true -p:RuntimeIdentifier=win10-x64
 ```
 
-La salida suele estar en `WorkshopUploader\bin\Release\net9.0-windows10.0.19041.0\win10-x64\publish\WorkshopUploader.exe` (la ruta exacta depende del SDK / TFM).
+Salida: `WorkshopUploader/bin/Release/net9.0-windows10.0.19041.0/win10-x64/publish/`
 
-Para colocar la herramienta **junto al juego** (no dentro de `Mods` / `MelonLoader`):
+### Desplegar todos los mods + Gregtools Modmanager en carpetas Workshop
 
-`{GameRoot}\WorkshopUploader\`
+```bash
+pwsh -File scripts/Deploy-Release-ToWorkshop.ps1
+```
 
-## Ver también
+Compila todos los frameworks/plugins/mods **y** el propio WorkshopUploader, y empaqueta cada uno en una carpeta de proyecto compatible con Steamworks bajo `<GameRoot>/workshop/`. El WorkshopUploader se empaqueta como **«Gregtools Modmanager»**.
 
-- README del repositorio: [`WorkshopUploader/README.md`](https://github.com/mleem97/gregFramework/blob/master/WorkshopUploader/README.md)
-- Contexto del Workshop: [Steam Workshop and Tooling](/wiki/meta/Steam-Workshop-and-Tooling)
-- Betas DevServer (`gregframework.eu`): [DevServer betas](/wiki/meta/devserver-betas)
+### Desplegar en el directorio del juego (pruebas locales)
+
+```bash
+pwsh -File scripts/Deploy-Release-ToDataCenter.ps1 -IncludeWorkshopUploader
+```
+
+## See also
+
+- Repository README: [`WorkshopUploader/README.md`](https://github.com/mleem97/gregFramework/blob/master/WorkshopUploader/README.md)
+- [End-User Guide](/wiki/guides/enduser-workshop)
+- [Contributor Guide](/wiki/guides/contributor-workshop)
+- [Release](/wiki/guides/release)

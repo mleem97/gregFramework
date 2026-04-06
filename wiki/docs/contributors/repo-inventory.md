@@ -14,12 +14,12 @@ This page is the **source of truth snapshot** for how the DataCenterExporter / g
 | Area | Path | Role |
 |------|------|------|
 | Framework core | [`framework/FrikaMF.csproj`](https://github.com/mleem97/gregFramework/blob/master/framework/FrikaMF.csproj) | MelonLoader mod hosting runtime hooks, Harmony, bridge, events |
-| Workshop tooling | [`WorkshopUploader/`](https://github.com/mleem97/gregFramework/tree/master/WorkshopUploader) | Steam Workshop upload helper (local/CI) |
+| Workshop tooling | [`WorkshopUploader/`](https://github.com/mleem97/gregFramework/tree/master/WorkshopUploader) | Steam Workshop client: Mod Store, author tools, Mod Manager |
 | Mods (sources) | [`mods/`](https://github.com/mleem97/gregFramework/tree/master/mods) | Gameplay mods (`FMF.*`, `FMF.Mod.*` folders) |
 | Plugins (sources) | [`plugins/`](https://github.com/mleem97/gregFramework/tree/master/plugins) | Framework plugins (`FFM.Plugin.*`) |
 | Templates | [`Templates/`](https://github.com/mleem97/gregFramework/tree/master/Templates) | Scaffolds for new mods/plugins |
 | Documentation site | [`wiki/`](https://github.com/mleem97/gregFramework/tree/master/wiki) | Docusaurus wiki, landing, `/mods` catalog |
-| Scripts | [`scripts/`](https://github.com/mleem97/gregFramework/tree/master/scripts) | Release metadata, changelog (e.g. `Update-ReleaseMetadata.ps1`) |
+| Scripts | [`scripts/`](https://github.com/mleem97/gregFramework/tree/master/scripts) | Release metadata, deploy scripts (e.g. `Deploy-Release-ToWorkshop.ps1`) |
 | Wiki import (legacy) | [`wiki/docs/wiki-import/`](./../wiki-import/Home.md) | Imported `.wiki` content; still linked from many pages |
 
 ## .NET projects on disk (`*.csproj`)

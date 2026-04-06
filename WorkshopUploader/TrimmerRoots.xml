@@ -1,0 +1,9 @@
+<linker>
+  <!-- Preserve WorkshopMetadata for System.Text.Json reflection-based serialization -->
+  <assembly fullname="WorkshopUploader">
+    <type fullname="WorkshopUploader.Models.WorkshopMetadata" preserve="all" />
+  </assembly>
+
+  <!-- Preserve Steamworks internals accessed via reflection in SteamUgcPreviews -->
+  <assembly fullname="Facepunch.Steamworks.Win64" preserve="all" />
+</linker>

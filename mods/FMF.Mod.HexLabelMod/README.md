@@ -29,6 +29,20 @@ UserData/hexposition.cfg
 
 ***
 
+## Cable color viewer (F2)
+
+Press **F2** to open an on-screen panel that lists **unique cable colors** as **hex** with a small **color swatch**:
+
+- **Scene**: colors from all `CableSpinner` instances (matches what is loaded from your save in-game).
+- **Save data**: reflection on `Save` / `member_values` / `cableColor` when the game exposes them.
+- **Save files**: scans `Application.persistentDataPath` for JSON/text-like files containing `cableColor` or `member_values`.
+
+Use **Refresh** to rescan; **Close** or **F2** again to hide.
+
+**Colorblind mode** (toggle in the panel): enlarges the **Held** line and shows **RJ45 / SFP / QSFP** (when detectable via reflection on the player / held item) together with the **hex** color for the cable you are holding.
+
+***
+
 ## Configuration
 
 Edit `UserData/hexposition.cfg` to adjust label positioning and font sizes. The file is auto-generated with defaults on first launch and regenerated if any keys are missing.

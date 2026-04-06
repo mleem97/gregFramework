@@ -14,7 +14,7 @@ using MelonLoader.Utils;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-[assembly: MelonInfo(typeof(FMF.HexLabelMod.HexLabelMelon), "FMF HexLabel Mod", "00.01.0009", "mleem97")]
+[assembly: MelonInfo(typeof(FMF.HexLabelMod.HexLabelMelon), "FMF HexLabel Mod", "00.01.0010", "mleem97")]
 [assembly: MelonGame("Waseku", "Data Center")]
 
 namespace FMF.HexLabelMod;
@@ -57,6 +57,12 @@ public sealed class HexLabelMelon : MelonMod
         _liveReloadAllowed = false;
 
         LoggerInstance.Msg("HexLabelMod waiting for Steam runtime initialization...");
+        HexViewerFeature.Initialize();
+    }
+
+    public override void OnGUI()
+    {
+        HexViewerFeature.OnGui();
     }
 
     private void TryInitializeAfterSteamReady()
@@ -81,6 +87,7 @@ public sealed class HexLabelMelon : MelonMod
         _isFullyInitialized = true;
 
         LoggerInstance.Msg($"HexLabelMod initialized. Config: {GetConfigPath()}");
+        LoggerInstance.Msg("Cable color viewer: F2 (hex from scene + save member_values / JSON).");
 
         if (_liveReloadAllowed)
         {
@@ -105,6 +112,8 @@ public sealed class HexLabelMelon : MelonMod
 
             return;
         }
+
+        HexViewerFeature.Update();
 
         _scanTimer += Time.deltaTime;
         _deepScanTimer += Time.deltaTime;
@@ -294,7 +303,7 @@ public sealed class HexLabelMelon : MelonMod
         hex = null;
 
         var raw = spinner.rgbColor;
-        if (!string.IsNullOrWhiteSpace(raw) && TryNormalizeHex(raw, out hex))
+        if (!string.IsNullOrWhiteSpace(raw) && HexColorUtil.TryNormalizeHex(raw, out hex))
             return true;
 
         var material = spinner.cableMaterial;
@@ -305,13 +314,13 @@ public sealed class HexLabelMelon : MelonMod
         {
             if (material.HasProperty("_BaseColor"))
             {
-                hex = ToHex(material.GetColor("_BaseColor"));
+                hex = HexColorUtil.ToHex(material.GetColor("_BaseColor"));
                 return true;
             }
 
             if (material.HasProperty("_Color"))
             {
-                hex = ToHex(material.color);
+                hex = HexColorUtil.ToHex(material.color);
                 return true;
             }
         }
@@ -321,76 +330,6 @@ public sealed class HexLabelMelon : MelonMod
         }
 
         return false;
-    }
-
-    private static bool TryNormalizeHex(string raw, out string hex)
-    {
-        hex = null;
-        if (string.IsNullOrWhiteSpace(raw))
-            return false;
-
-        var s = raw.Trim();
-
-        if (s.StartsWith("#", StringComparison.Ordinal))
-        {
-            var h = s.ToUpperInvariant();
-            if (h.Length == 7)
-            {
-                hex = h;
-                return true;
-            }
-
-            if (h.Length == 9)
-            {
-                hex = "#" + h.Substring(3, 6);
-                return true;
-            }
-        }
-
-        if (ColorUtility.TryParseHtmlString(s, out var colorFromHtml))
-        {
-            hex = ToHex(colorFromHtml);
-            return true;
-        }
-
-        var parts = s.Split(',');
-        if (parts.Length == 3
-            && TryParseColorPart(parts[0], out var r)
-            && TryParseColorPart(parts[1], out var g)
-            && TryParseColorPart(parts[2], out var b))
-        {
-            hex = $"#{r:X2}{g:X2}{b:X2}";
-            return true;
-        }
-
-        return false;
-    }
-
-    private static bool TryParseColorPart(string value, out int parsed)
-    {
-        parsed = 0;
-        var token = value.Trim();
-        if (float.TryParse(token, NumberStyles.Float, CultureInfo.InvariantCulture, out var f))
-        {
-            if (f <= 1f)
-            {
-                parsed = Mathf.Clamp(Mathf.RoundToInt(f * 255f), 0, 255);
-                return true;
-            }
-
-            parsed = Mathf.Clamp(Mathf.RoundToInt(f), 0, 255);
-            return true;
-        }
-
-        return false;
-    }
-
-    private static string ToHex(Color c)
-    {
-        var r = Mathf.Clamp(Mathf.RoundToInt(c.r * 255f), 0, 255);
-        var g = Mathf.Clamp(Mathf.RoundToInt(c.g * 255f), 0, 255);
-        var b = Mathf.Clamp(Mathf.RoundToInt(c.b * 255f), 0, 255);
-        return $"#{r:X2}{g:X2}{b:X2}";
     }
 
     internal static void EnsureRackLabel(Rack rack)
@@ -479,13 +418,13 @@ public sealed class HexLabelMelon : MelonMod
 
                 if (mat.HasProperty("_BaseColor"))
                 {
-                    hex = ToHex(mat.GetColor("_BaseColor"));
+                    hex = HexColorUtil.ToHex(mat.GetColor("_BaseColor"));
                     return true;
                 }
 
                 if (mat.HasProperty("_Color"))
                 {
-                    hex = ToHex(mat.color);
+                    hex = HexColorUtil.ToHex(mat.color);
                     return true;
                 }
             }

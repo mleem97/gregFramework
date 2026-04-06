@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="WorkshopUploader.ProjectsPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:models="clr-namespace:WorkshopUploader.Models"
+    xmlns:l="clr-namespace:WorkshopUploader.Localization"
+    Title="{l:Translate Key=Tab_Projects}">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="Auto,Auto,*,Auto" Padding="24" RowSpacing="16">
+
+        <!--  Header  -->
+        <Grid Grid.Row="0" ColumnDefinitions="*,Auto" ColumnSpacing="16">
+            <VerticalStackLayout Grid.Column="0" Spacing="6">
+                <Label Style="{StaticResource Headline}" Text="{l:Translate Key=Projects_Headline}" />
+                <Label x:Name="WorkspacePathLabel" Style="{StaticResource SubHeadline}" />
+            </VerticalStackLayout>
+            <Button
+                Grid.Column="1"
+                Clicked="OnRefreshProjects"
+                Style="{StaticResource SecondaryButton}"
+                Text="{l:Translate Key=Refresh}"
+                VerticalOptions="Start" />
+        </Grid>
+
+        <!--  Search  -->
+        <Entry
+            Grid.Row="1"
+            x:Name="SearchEntry"
+            Placeholder="{l:Translate Key=Projects_SearchPlaceholder}"
+            TextChanged="OnSearchTextChanged" />
+
+        <!--  Project grid  -->
+        <RefreshView Grid.Row="2" Refreshing="OnRefreshing" x:Name="RefreshView">
+            <CollectionView
+                x:Name="ProjectList"
+                SelectionMode="Single"
+                SelectionChanged="OnProjectSelected">
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout Orientation="Vertical" Span="2" HorizontalItemSpacing="16" VerticalItemSpacing="16" />
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:ProjectTileVm">
+                        <Border Padding="16" StrokeThickness="0" BackgroundColor="#001715">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="8" />
+                            </Border.StrokeShape>
+                            <VerticalStackLayout Spacing="6">
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <Label Grid.Column="0" FontAttributes="Bold" FontSize="15" Text="{Binding Title}" TextColor="#C0FCF6" LineBreakMode="TailTruncation" />
+                                    <Label Grid.Column="1" FontSize="10" TextColor="{Binding ReadinessColor}" Text="{Binding ReadinessText}" VerticalOptions="Center" />
+                                </Grid>
+                                <Label FontSize="11" TextColor="#5A9E96" LineBreakMode="TailTruncation" Text="{Binding Name}" />
+                                <HorizontalStackLayout Spacing="8">
+                                    <Label FontSize="10" TextColor="#61F4D8" Text="{Binding HasContent, StringFormat='Content: {0}'}" />
+                                    <Label FontSize="10" TextColor="#61F4D8" Text="{Binding HasPreview, StringFormat='Preview: {0}'}" />
+                                    <Label FontSize="10" TextColor="#7FBFB8" Text="{Binding IsPublished, StringFormat='Published: {0}'}" />
+                                </HorizontalStackLayout>
+                                <Label FontSize="10" TextColor="#5A9E96" Text="{Binding Tags}" LineBreakMode="TailTruncation" />
+                            </VerticalStackLayout>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
+
+        <!--  Log panel  -->
+        <Border Grid.Row="3" Padding="16" StrokeThickness="0" BackgroundColor="#001E1C">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="8" />
+            </Border.StrokeShape>
+            <VerticalStackLayout Spacing="6">
+                <Label Style="{StaticResource SectionTitle}" Text="{l:Translate Key=Projects_Log}" />
+                <ScrollView x:Name="LogScroll" HeightRequest="140">
+                    <Label x:Name="LogLabel" FontFamily="Consolas" FontSize="11" TextColor="#7FBFB8" LineBreakMode="WordWrap" />
+                </ScrollView>
+            </VerticalStackLayout>
+        </Border>
+    </Grid>
+
+</ContentPage>

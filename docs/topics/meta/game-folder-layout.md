@@ -6,7 +6,7 @@ description: Canonical paths for mod configs, FMF plugins, and MelonLoader mods 
 
 # Game folder layout (FMF / MelonLoader)
 
-This page is the **single reference** for where mod-related files live next to the game executable (`{GameRoot}`). MelonLoader sets `{GameRoot}/UserData` via `MelonEnvironment.UserDataDirectory` and `{GameRoot}/Mods` as the mod load directory.
+This page is the **single reference** for where mod-related files live next to the game executable (`{GameRoot}`). MelonLoader sets `{GameRoot}/UserData` via `MelonEnvironment.UserDataDirectory`, `{GameRoot}/Mods` for **MelonMods**, and `{GameRoot}/Plugins` for **MelonPlugins** (e.g. `FMF.ModPathRedirector.dll`).
 
 ## Summary
 
@@ -14,7 +14,8 @@ This page is the **single reference** for where mod-related files live next to t
 |--------|------|------------------|
 | **Mod-Konfiguration & Sidecars** | `{GameRoot}/UserData/ModCfg/` | **JSON** für Konfigurationsdateien; weitere Sidecar-Dateien (z. B. `custom_employees_hired.txt`) liegen ebenfalls hier, damit alles Mod-Bezogene an einem Ort liegt. |
 | **FMF Framework-Plugins** (FFM.Plugin.*) | `{GameRoot}/FMF/Plugins/` | DLLs; **MelonLoader** lädt standardmäßig nur `{GameRoot}/Mods` — siehe unten. |
-| **Mods** (MelonLoader, z. B. FMF.Mod.*) | `{GameRoot}/Mods/` | MelonLoader `Mods`-Ordner. |
+| **Plugins** (MelonLoader, z. B. ModPathRedirector) | `{GameRoot}/Plugins/` | MelonLoader `Plugins`-Ordner — nur **MelonPlugin**-DLLs. |
+| **Mods** (MelonLoader, z. B. FMF.Mod.*) | `{GameRoot}/Mods/` | MelonLoader `Mods`-Ordner — **MelonMod**-DLLs. |
 
 ## UserData/ModCfg
 

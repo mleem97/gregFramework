@@ -9,32 +9,57 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <AssemblyName>WorkshopUploader</AssemblyName>
-    <ApplicationTitle>WorkshopUploader</ApplicationTitle>
-    <ApplicationId>eu.gregframework.workshopuploader</ApplicationId>
-    <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
+    <ApplicationTitle>GregTools Modmanager</ApplicationTitle>
+    <ApplicationId>eu.gregframework.modmanager</ApplicationId>
+    <ApplicationDisplayVersion>1.0.0</ApplicationDisplayVersion>
     <ApplicationVersion>1</ApplicationVersion>
+    <Version>1.0.0</Version>
+    <InformationalVersion>1.0.0</InformationalVersion>
     <WindowsPackageType>None</WindowsPackageType>
-    <!-- Bundles Windows App SDK into output so unpackaged runs do not depend on a matching machine-wide runtime (fixes WinUI XAML 0xc000027b on some setups). -->
+    <!-- Ship Windows App SDK with the app (unpackaged); reduces Microsoft.UI.Xaml 0xc000027b when machine runtime mismatches. -->
     <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
+    <SelfContained>true</SelfContained>
     <RuntimeIdentifier>win10-x64</RuntimeIdentifier>
+
+    <!-- Size reduction: only ship the locales the app actually provides -->
+    <SatelliteResourceLanguages>en;de;es;it;ja;pl;ru;zh</SatelliteResourceLanguages>
     <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
     <TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
   </PropertyGroup>
 
+  <!-- Release: trim unused IL + strip debug symbols to reduce package size -->
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
-    <PublishSingleFile>true</PublishSingleFile>
-    <SelfContained>false</SelfContained>
-    <IncludeNativeLibrariesForSelfExtract>false</IncludeNativeLibrariesForSelfExtract>
+    <PublishTrimmed>true</PublishTrimmed>
+    <TrimMode>full</TrimMode>
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+    <SuppressTrimAnalysisWarnings>true</SuppressTrimAnalysisWarnings>
+    <TrimmerRemoveSymbols>true</TrimmerRemoveSymbols>
+    <!-- Fewer built-in diagnostics assemblies pulled into the trimmed output -->
+    <HttpActivityPropagationSupport>false</HttpActivityPropagationSupport>
   </PropertyGroup>
 
   <ItemGroup>
-    <MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
-    <MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />
+    <TrimmerRootDescriptor Include="TrimmerRoots.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#001110" />
+    <MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#001110" BaseSize="128,128" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="steam_appid.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="steam_api64.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Maui.Controls" Version="9.0.90" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.0" Condition="'$(Configuration)' == 'Debug'" />
     <PackageReference Include="Facepunch.Steamworks" Version="2.3.3" />
   </ItemGroup>
 
