@@ -19,10 +19,6 @@ const config = {
     localeConfigs: {
       en: {label: 'English', htmlLang: 'en-GB'},
       de: {label: 'Deutsch', htmlLang: 'de-DE'},
-      fr: {label: 'Français', htmlLang: 'fr-FR'},
-      es: {label: 'Español', htmlLang: 'es-ES'},
-      ru: {label: 'Русский', htmlLang: 'ru-RU'},
-      ja: {label: '日本語', htmlLang: 'ja-JP'},
     },
   },
   presets: [
