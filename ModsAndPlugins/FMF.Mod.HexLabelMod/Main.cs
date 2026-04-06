@@ -46,17 +46,9 @@ public sealed class HexLabelMelon : MelonMod
     private bool _startupWaitMessageShown;
     private bool _liveReloadEnabled;
     private bool _liveReloadAllowed;
-    private bool _frameworkAvailable;
 
     public override void OnInitializeMelon()
     {
-        _frameworkAvailable = IsFrameworkLoaded();
-        if (!_frameworkAvailable)
-        {
-            LoggerInstance.Error("FMF HexLabel Mod requires FrikaModdingFramework. Load `FrikaModdingFramework.dll` first.");
-            return;
-        }
-
         _config = HexPositionConfig.CreateDefault();
         _cachedSpinners = Array.Empty<CableSpinner>();
         _cachedRacks = Array.Empty<Rack>();
@@ -102,9 +94,6 @@ public sealed class HexLabelMelon : MelonMod
 
     public override void OnUpdate()
     {
-        if (!_frameworkAvailable)
-            return;
-
         if (!_isFullyInitialized)
         {
             _startupWaitTimer += Time.deltaTime;
@@ -152,17 +141,6 @@ public sealed class HexLabelMelon : MelonMod
 
         _scanTimer = 0f;
         TryApplyToAllSpinners();
-    }
-
-    private static bool IsFrameworkLoaded()
-    {
-        var assemblies = AppDomain.CurrentDomain.GetAssemblies();
-        return assemblies.Any(assembly =>
-        {
-            var name = assembly.GetName().Name ?? string.Empty;
-            return string.Equals(name, "FrikaModdingFramework", StringComparison.OrdinalIgnoreCase)
-                || string.Equals(name, "FrikaMF", StringComparison.OrdinalIgnoreCase);
-        });
     }
 
     private void HandleLiveReloadToggleHotkey()
