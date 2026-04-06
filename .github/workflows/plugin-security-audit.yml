@@ -1,0 +1,85 @@
+name: Plugin Security Audit
+
+on:
+  workflow_dispatch:
+    inputs:
+      repository_url:
+        description: Public plugin repository URL (.git)
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Clone plugin repository
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p _audit
+          git clone --depth=1 "${{ github.event.inputs.repository_url }}" _audit/submission
+
+      - name: Run heuristic malicious pattern scan
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd _audit/submission
+          mkdir -p ../reports
+
+          {
+            echo "# Plugin Security Audit Report"
+            echo ""
+            echo "- Repository: ${{ github.event.inputs.repository_url }}"
+            echo "- Commit: $(git rev-parse HEAD)"
+            echo ""
+            echo "## Suspicious Pattern Scan"
+          } > ../reports/audit-report.md
+
+          PATTERN='(WebClient|HttpClient\(|Process\.Start|cmd\.exe|powershell|Invoke-Expression|DllImport\("kernel32|VirtualAlloc|CreateRemoteThread|WriteProcessMemory|DownloadString\()'
+          MATCHES=$(grep -RInE "$PATTERN" . --include='*.cs' --include='*.rs' --include='*.lua' --include='*.ps1' --include='*.sh' || true)
+
+          if [ -n "$MATCHES" ]; then
+            echo "Potentially suspicious usage detected:" >> ../reports/audit-report.md
+            echo '```text' >> ../reports/audit-report.md
+            echo "$MATCHES" >> ../reports/audit-report.md
+            echo '```' >> ../reports/audit-report.md
+            echo "AUDIT_RESULT=fail" >> "$GITHUB_ENV"
+          else
+            echo "No suspicious patterns found in scanned source files." >> ../reports/audit-report.md
+            echo "AUDIT_RESULT=pass" >> "$GITHUB_ENV"
+          fi
+
+      - name: Run gitleaks scan
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITLEAKS_ENABLE_UPLOAD_ARTIFACT: true
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Append final verdict
+        shell: bash
+        run: |
+          {
+            echo ""
+            echo "## Final Verdict"
+            echo "- Result: ${AUDIT_RESULT}"
+            echo ""
+            echo "If result is pass, maintainers can continue release review and set release visibility in docs."
+          } >> _audit/reports/audit-report.md
+
+      - name: Upload audit report
+        uses: actions/upload-artifact@v4
+        with:
+          name: plugin-security-audit-report
+          path: _audit/reports/audit-report.md
+
+      - name: Fail workflow when audit fails
+        if: env.AUDIT_RESULT != 'pass'
+        run: |
+          echo "Security audit failed."
+          exit 1
