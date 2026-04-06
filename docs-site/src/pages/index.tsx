@@ -15,7 +15,6 @@ import {
   FaPeopleGroup,
   FaShop,
   FaScrewdriverWrench,
-  FaServer,
 } from 'react-icons/fa6';
 
 type FeatureItem = {
@@ -112,11 +111,20 @@ export default function HomePage(): JSX.Element {
     },
   ];
 
-  const docPaths: DocPathItem[] = [
-    { title: t.docsEndUserTitle, description: t.docsEndUserDescription, link: '/wiki-import/End-User-Release' },
-    { title: t.docsModDevsTitle, description: t.docsModDevsDescription, link: '/wiki-import/Mod-Developer-Debug' },
-    { title: t.docsContributorsTitle, description: t.docsContributorsDescription, link: '/wiki-import/Contirbutors/Contributors-Debug' },
-    { title: t.docsCapabilityTitle, description: t.docsCapabilityDescription, link: '/wiki-import/Framework-Features-Use-Cases' },
+  const knowledgePaths: DocPathItem[] = [
+    { title: 'Wiki Overview', description: 'Canonical docs entrypoint under /wiki.', link: '/wiki' },
+    { title: 'Framework Core', description: 'Runtime hooks, bridge, events and architecture.', link: '/wiki/mods/framework' },
+    { title: 'Plugin Wiki', description: 'Plugin-specific docs and release pages.', link: '/wiki/mods/plugins' },
+    { title: 'Mod Wiki', description: 'Gameplay mods, release state and module docs.', link: '/wiki/mods/mods' },
+    { title: 'Unified Roadmap', description: 'Consolidated roadmap with duplicate tracks removed.', link: '/wiki/roadmap/unified-roadmap' },
+    { title: 'Mods Catalog', description: 'Dynamic /mods catalog with wiki and download links.', link: '/mods' },
+  ];
+
+  const workflowPaths: DocPathItem[] = [
+    { title: 'End-User Docs', description: 'Install, update and troubleshooting paths.', link: '/wiki/wiki-import/EndUser/End-User-Release' },
+    { title: 'Mod Developer Docs', description: 'Setup, debug and hook integration guides.', link: '/wiki/wiki-import/ModDevs/Mod-Developer-Debug' },
+    { title: 'Contributor Workflow', description: 'Contribution standards and repository workflow.', link: '/wiki/contributors/docusaurus-workflow' },
+    { title: 'Plugin Security Audit', description: 'Git-link submission and malicious-code audit process.', link: '/wiki/contributors/plugin-submission-audit' },
   ];
 
   return (
@@ -171,10 +179,10 @@ export default function HomePage(): JSX.Element {
             viewport={viewport}
             variants={variants.textReveal}
             transition={{ delay: reducedMotion ? 0 : 0.22 }}>
-            <Link to="/mods/framework" className="btn-primary px-8 py-4 rounded-full text-lg font-bold shadow-lg shadow-accent-green/20">
+            <Link to="/wiki/mods/framework" className="btn-primary px-8 py-4 rounded-full text-lg font-bold shadow-lg shadow-accent-green/20">
               {t.ctaStart}
             </Link>
-            <Link to="/mods/standalone" className="btn-outline px-8 py-4 rounded-full text-lg font-bold">
+            <Link to="/mods" className="btn-outline px-8 py-4 rounded-full text-lg font-bold">
               {t.ctaMods}
             </Link>
           </motion.div>
@@ -224,10 +232,10 @@ export default function HomePage(): JSX.Element {
           variants={variants.section}>
           <div className="mx-auto max-w-5xl text-center">
             <motion.h2 className="mb-10 text-3xl font-bold text-white" variants={variants.textReveal}>
-              {t.docsPaths}
+              Knowledge Architecture
             </motion.h2>
-            <motion.div className="grid grid-cols-1 gap-4 md:grid-cols-2" variants={variants.grid}>
-              {docPaths.map((doc) => (
+            <motion.div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3" variants={variants.grid}>
+              {knowledgePaths.map((doc) => (
                 <motion.div key={doc.link} variants={variants.card}>
                   <Link to={doc.link} className="app-card app-card-motion app-card-glow rounded-lg p-5 text-left text-gray-200 block group">
                     <div className="mb-2 text-lg font-bold text-white transition-colors group-hover:text-accent-pink">{doc.title}</div>
@@ -246,40 +254,19 @@ export default function HomePage(): JSX.Element {
           whileInView="show"
           viewport={viewport}
           variants={variants.section}>
-          <div className="mx-auto max-w-6xl">
-            <motion.h2 className="mb-8 text-center text-3xl font-bold text-white" variants={variants.textReveal}>
-              {t.ecosystemTitle}
+          <div className="mx-auto max-w-5xl text-center">
+            <motion.h2 className="mb-10 text-3xl font-bold text-white" variants={variants.textReveal}>
+              Workflows
             </motion.h2>
-            <motion.div className="grid grid-cols-1 gap-4 md:grid-cols-3" variants={variants.grid}>
-              <motion.article className="app-card app-card-motion app-card-glow p-6 rounded-xl border-t-2 flex flex-col h-full" style={{ borderTopColor: 'var(--color-accent-pink)' }} variants={variants.card}>
-                <h3 className="mb-2 flex items-center gap-2 text-lg font-bold text-white">
-                  <FaCode className="text-accent-pink" /> {t.ecosystemCoreTitle}
-                </h3>
-                <p className="text-sm text-gray-400 mb-6 grow">{t.ecosystemCoreDescription}</p>
-                <Link to="/wiki-import/Framework-Features-Use-Cases" className="text-sm font-semibold text-accent-pink transition-colors hover:text-white">
-                  {t.ecosystemCoreCta} &rarr;
-                </Link>
-              </motion.article>
-
-              <motion.article className="app-card app-card-motion app-card-glow p-6 rounded-xl border-t-2 flex flex-col h-full border-t-orange-500/50" variants={variants.card}>
-                <h3 className="mb-2 flex items-center gap-2 text-lg font-bold text-white">
-                  <FaServer className="text-orange-500" /> {t.ecosystemRustTitle}
-                </h3>
-                <p className="text-sm text-gray-400 mb-6 grow">{t.ecosystemRustDescription}</p>
-                <Link to="/wiki-import/Lua-FFI-Start-Developing" className="text-sm font-semibold text-accent-pink transition-colors hover:text-white">
-                  {t.ecosystemRustCta} &rarr;
-                </Link>
-              </motion.article>
-
-              <motion.article className="app-card app-card-motion app-card-glow p-6 rounded-xl border-t-2 flex flex-col h-full border-t-blue-500/50" variants={variants.card}>
-                <h3 className="mb-2 flex items-center gap-2 text-lg font-bold text-white">
-                  <FaPeopleGroup className="text-blue-500" /> {t.ecosystemMultiplayerTitle}
-                </h3>
-                <p className="text-sm text-gray-400 mb-6 grow">{t.ecosystemMultiplayerDescription}</p>
-                <Link to="/wiki-import/Steamworks-P2P-Multiplayer-Roadmap" className="text-sm font-semibold text-accent-pink transition-colors hover:text-white">
-                  {t.ecosystemMultiplayerCta} &rarr;
-                </Link>
-              </motion.article>
+            <motion.div className="grid grid-cols-1 gap-4 md:grid-cols-2" variants={variants.grid}>
+              {workflowPaths.map((doc) => (
+                <motion.div key={doc.link} variants={variants.card}>
+                  <Link to={doc.link} className="app-card app-card-motion app-card-glow rounded-lg p-5 text-left text-gray-200 block group">
+                    <div className="mb-2 text-lg font-bold text-white transition-colors group-hover:text-accent-pink">{doc.title}</div>
+                    <div className="text-sm text-gray-400">{doc.description}</div>
+                  </Link>
+                </motion.div>
+              ))}
             </motion.div>
           </div>
         </motion.section>
@@ -334,7 +321,7 @@ export default function HomePage(): JSX.Element {
                 <Link to="https://frikadellental.de" className="btn-social">
                   <FaArrowUpRightFromSquare /> frikadellental.de
                 </Link>
-                <Link to="/mods/standalone" className="btn-social">
+                <Link to="/mods" className="btn-social">
                   <FaShop /> {t.availableModsLabel}
                 </Link>
                 <Link to="https://github.com/mleem97/FrikaModFramework" className="btn-social">

@@ -1,0 +1,145 @@
+export type ModuleType = 'plugin' | 'mod';
+
+export type ModuleEntry = {
+  id: string;
+  name: string;
+  type: ModuleType;
+  description: string;
+  version: string;
+  author: string;
+  languages: string[];
+  dependencies: string[];
+  wikiPath: string;
+  releasePath: string;
+  downloadPath: string;
+  releaseReady: boolean;
+};
+
+export const moduleCatalog: ModuleEntry[] = [
+  {
+    id: 'ffm-plugin-asset-exporter',
+    name: 'FFM.Plugin.AssetExporter',
+    type: 'plugin',
+    description: 'Export-focused asset tooling for Data Center workflows.',
+    version: 'NotReleasedYet',
+    author: 'mleem97 / FrikaMF Community',
+    languages: ['C#'],
+    dependencies: ['MelonLoader', 'FrikaMF'],
+    wikiPath: '/wiki/mods/plugins/ffm-plugin-asset-exporter',
+    releasePath: '/wiki/mods/plugins/ffm-plugin-asset-exporter-release',
+    downloadPath: '/plugin/FFM.Plugin.AssetExporter.dll',
+    releaseReady: false,
+  },
+  {
+    id: 'ffm-plugin-multiplayer',
+    name: 'FFM.Plugin.Multiplayer',
+    type: 'plugin',
+    description: 'Multiplayer-oriented plugin surface for FrikaMF ecosystems.',
+    version: 'NotReleasedYet',
+    author: 'mleem97 / FrikaMF Community',
+    languages: ['C#'],
+    dependencies: ['MelonLoader', 'FrikaMF'],
+    wikiPath: '/wiki/mods/plugins/ffm-plugin-multiplayer',
+    releasePath: '/wiki/mods/plugins/ffm-plugin-multiplayer-release',
+    downloadPath: '/plugin/FFM.Plugin.Multiplayer.dll',
+    releaseReady: false,
+  },
+  {
+    id: 'ffm-plugin-player-models',
+    name: 'FFM.Plugin.PlayerModels',
+    type: 'plugin',
+    description: 'Player model extension plugin for runtime and presentation logic.',
+    version: 'NotReleasedYet',
+    author: 'mleem97 / FrikaMF Community',
+    languages: ['C#'],
+    dependencies: ['MelonLoader', 'FrikaMF'],
+    wikiPath: '/wiki/mods/plugins/ffm-plugin-player-models',
+    releasePath: '/wiki/mods/plugins/ffm-plugin-player-models-release',
+    downloadPath: '/plugin/FFM.Plugin.PlayerModels.dll',
+    releaseReady: false,
+  },
+  {
+    id: 'ffm-plugin-sysadmin',
+    name: 'FFM.Plugin.Sysadmin',
+    type: 'plugin',
+    description: 'Sysadmin utility plugin for diagnostics and operations.',
+    version: 'NotReleasedYet',
+    author: 'mleem97 / FrikaMF Community',
+    languages: ['C#'],
+    dependencies: ['MelonLoader', 'FrikaMF'],
+    wikiPath: '/wiki/mods/plugins/ffm-plugin-sysadmin',
+    releasePath: '/wiki/mods/plugins/ffm-plugin-sysadmin-release',
+    downloadPath: '/plugin/FFM.Plugin.Sysadmin.dll',
+    releaseReady: false,
+  },
+  {
+    id: 'ffm-plugin-web-ui-bridge',
+    name: 'FFM.Plugin.WebUIBridge',
+    type: 'plugin',
+    description: 'Bridge plugin between game runtime data and web UI overlays.',
+    version: 'NotReleasedYet',
+    author: 'mleem97 / FrikaMF Community',
+    languages: ['C#'],
+    dependencies: ['MelonLoader', 'FrikaMF'],
+    wikiPath: '/wiki/mods/plugins/ffm-plugin-web-ui-bridge',
+    releasePath: '/wiki/mods/plugins/ffm-plugin-web-ui-bridge-release',
+    downloadPath: '/plugin/FFM.Plugin.WebUIBridge.dll',
+    releaseReady: false,
+  },
+  {
+    id: 'fmf-console-input-guard',
+    name: 'FMF.ConsoleInputGuard',
+    type: 'mod',
+    description: 'Console interaction guardrails for safer gameplay input handling.',
+    version: 'NotReleasedYet',
+    author: 'mleem97 / FrikaMF Community',
+    languages: ['C#'],
+    dependencies: ['MelonLoader', 'Harmony'],
+    wikiPath: '/wiki/mods/mods/fmf-console-input-guard',
+    releasePath: '/wiki/mods/mods/fmf-console-input-guard-release',
+    downloadPath: '/mod/FMF.ConsoleInputGuard.dll',
+    releaseReady: false,
+  },
+  {
+    id: 'fmf-gregify-employees',
+    name: 'FMF.GregifyEmployees',
+    type: 'mod',
+    description: 'Gameplay mod for employee theming and behavior customization.',
+    version: 'NotReleasedYet',
+    author: 'mleem97 / FrikaMF Community',
+    languages: ['C#'],
+    dependencies: ['MelonLoader', 'Harmony'],
+    wikiPath: '/wiki/mods/mods/fmf-gregify-employees',
+    releasePath: '/wiki/mods/mods/fmf-gregify-employees-release',
+    downloadPath: '/mod/FMF.GregifyEmployees.dll',
+    releaseReady: false,
+  },
+  {
+    id: 'fmf-hex-label-mod',
+    name: 'FMF.HexLabelMod',
+    type: 'mod',
+    description: 'In-world hex color labels for cable spinners and racks.',
+    version: 'NotReleasedYet',
+    author: 'mleem97 / FrikaMF Community',
+    languages: ['C#'],
+    dependencies: ['MelonLoader', 'Harmony'],
+    wikiPath: '/wiki/mods/mods/fmf-hex-label-mod',
+    releasePath: '/wiki/mods/mods/fmf-hex-label-mod-release',
+    downloadPath: '/mod/FMF.HexLabelMod.dll',
+    releaseReady: false,
+  },
+  {
+    id: 'fmf-lang-compat-bridge',
+    name: 'FMF.LangCompatBridge',
+    type: 'mod',
+    description: 'Localization compatibility bridge for mixed mod stacks.',
+    version: 'NotReleasedYet',
+    author: 'mleem97 / FrikaMF Community',
+    languages: ['C#'],
+    dependencies: ['MelonLoader'],
+    wikiPath: '/wiki/mods/mods/fmf-lang-compat-bridge',
+    releasePath: '/wiki/mods/mods/fmf-lang-compat-bridge-release',
+    downloadPath: '/mod/FMF.JoniMLCompatMod.dll',
+    releaseReady: false,
+  },
+];

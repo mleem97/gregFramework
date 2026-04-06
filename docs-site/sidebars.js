@@ -64,12 +64,13 @@ const sidebars = {
       label: 'Contributors',
       items: [
         'contributors/docusaurus-workflow',
+        'contributors/plugin-submission-audit',
       ],
     },
     {
       type: 'category',
       label: 'Roadmap',
-      items: ['roadmap/mod-store-stages'],
+      items: ['roadmap/unified-roadmap', 'roadmap/mod-store-stages'],
     },
   ],
 };

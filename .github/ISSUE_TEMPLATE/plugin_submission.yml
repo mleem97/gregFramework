@@ -1,0 +1,64 @@
+name: Plugin Submission
+description: Submit a plugin repository for security audit and release review
+title: "[Plugin Submission] <plugin-name>"
+labels: ["plugin-submission", "security-audit"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Submit a plugin via Git repository URL. The plugin will be reviewed through an automated security audit workflow.
+
+  - type: input
+    id: plugin_name
+    attributes:
+      label: Plugin Name
+      description: Canonical plugin/module name
+      placeholder: FFM.Plugin.Example
+    validations:
+      required: true
+
+  - type: input
+    id: repository_url
+    attributes:
+      label: Repository URL (.git)
+      description: Public Git URL of the plugin source repository
+      placeholder: https://github.com/owner/repo.git
+    validations:
+      required: true
+
+  - type: input
+    id: release_version
+    attributes:
+      label: Candidate Version
+      description: Version proposed by the submitter
+      placeholder: 00.01.0001
+    validations:
+      required: true
+
+  - type: dropdown
+    id: language
+    attributes:
+      label: Primary Code Language
+      options:
+        - C#
+        - Rust
+        - Lua
+        - Python
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Dependencies
+      description: List runtime/build dependencies
+      placeholder: MelonLoader, FrikaMF, Harmony
+    validations:
+      required: true
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Additional Notes
+      description: Optional context for maintainers/audit
