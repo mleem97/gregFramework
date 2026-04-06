@@ -726,3 +726,130 @@
     opacity: 1;
   }
 }
+
+.mod-release-page {
+  margin-top: 0.5rem;
+}
+
+.mod-release-hero {
+  border: 1px solid rgba(45, 212, 191, 0.3);
+  border-radius: 1rem;
+  padding: 1.25rem 1.35rem;
+  margin-bottom: 1rem;
+  background:
+    radial-gradient(circle at 10% 20%, rgba(45, 212, 191, 0.2), transparent 45%),
+    linear-gradient(160deg, rgba(5, 32, 36, 0.9), rgba(9, 55, 61, 0.82));
+}
+
+.mod-release-hero h1 {
+  margin-bottom: 0.35rem;
+}
+
+.mod-release-hero p {
+  margin-bottom: 0;
+}
+
+.mod-release-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border: 1px solid rgba(45, 212, 191, 0.5);
+  border-radius: 9999px;
+  padding: 0.2rem 0.7rem;
+  margin-bottom: 0.6rem;
+  color: #c8fff7;
+}
+
+.mod-release-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 270px;
+  gap: 1rem;
+  align-items: start;
+}
+
+.mod-release-content {
+  border: 1px solid rgba(45, 212, 191, 0.2);
+  border-radius: 0.9rem;
+  padding: 1.05rem 1.15rem;
+  background: rgba(6, 35, 39, 0.4);
+}
+
+.mod-release-content h2 {
+  margin-top: 0.8rem;
+}
+
+.mod-release-sidebar {
+  position: sticky;
+  top: calc(var(--ifm-navbar-height) + 1rem);
+}
+
+.mod-release-sidebar-card {
+  border: 1px solid rgba(45, 212, 191, 0.25);
+  border-radius: 0.9rem;
+  padding: 0.95rem;
+  background: rgba(6, 33, 38, 0.68);
+  box-shadow: 0 12px 30px rgba(2, 12, 14, 0.35);
+}
+
+.mod-release-sidebar-card h3 {
+  margin-bottom: 0.7rem;
+}
+
+.mod-release-download-btn,
+.mod-release-secondary-btn {
+  width: 100%;
+  margin-bottom: 0.55rem;
+}
+
+.mod-release-download-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.mod-release-meta-list {
+  margin: 0.6rem 0;
+  padding: 0.65rem 0.7rem;
+  border-radius: 0.65rem;
+  border: 1px solid rgba(45, 212, 191, 0.22);
+  background: rgba(3, 18, 21, 0.46);
+}
+
+.mod-release-meta-list > div {
+  margin-bottom: 0.45rem;
+}
+
+.mod-release-meta-list > div:last-child {
+  margin-bottom: 0;
+}
+
+.mod-release-meta-list dt {
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: #99a3b2;
+}
+
+.mod-release-meta-list dd {
+  margin: 0.1rem 0 0;
+  color: #eaf2ff;
+  font-size: 0.9rem;
+}
+
+.mod-release-sidebar-note {
+  font-size: 0.84rem;
+  margin: 0.3rem 0 0;
+  color: #cfd6e1;
+}
+
+@media (max-width: 996px) {
+  .mod-release-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .mod-release-sidebar {
+    position: static;
+  }
+}

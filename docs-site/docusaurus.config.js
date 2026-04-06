@@ -49,12 +49,52 @@ const config = {
       {
         redirects: [
           {
-            to: '/mods/standalone',
+            to: '/mods/plugins',
             from: ['/mods', '/plugins', '/standalone-mods'],
           },
           {
             to: '/mods/framework',
             from: ['/framework'],
+          },
+          {
+            to: 'https://github.com/mleem97/FrikaModFramework/releases/latest/download/FFM.Plugin.AssetExporter.dll',
+            from: ['/plugin/FFM.Plugin.AssetExporter.dll'],
+          },
+          {
+            to: 'https://github.com/mleem97/FrikaModFramework/releases/latest/download/FFM.Plugin.Multiplayer.dll',
+            from: ['/plugin/FFM.Plugin.Multiplayer.dll'],
+          },
+          {
+            to: 'https://github.com/mleem97/FrikaModFramework/releases/latest/download/FFM.Plugin.PlayerModels.dll',
+            from: ['/plugin/FFM.Plugin.PlayerModels.dll'],
+          },
+          {
+            to: 'https://github.com/mleem97/FrikaModFramework/releases/latest/download/FFM.Plugin.Sysadmin.dll',
+            from: ['/plugin/FFM.Plugin.Sysadmin.dll'],
+          },
+          {
+            to: 'https://github.com/mleem97/FrikaModFramework/releases/latest/download/FFM.Plugin.WebUIBridge.dll',
+            from: ['/plugin/FFM.Plugin.WebUIBridge.dll'],
+          },
+          {
+            to: 'https://github.com/mleem97/FrikaModFramework/releases/latest/download/FMF.ConsoleInputGuard.dll',
+            from: ['/mod/FMF.ConsoleInputGuard.dll'],
+          },
+          {
+            to: 'https://github.com/mleem97/FrikaModFramework/releases/latest/download/FMF.GregifyEmployees.dll',
+            from: ['/mod/FMF.GregifyEmployees.dll'],
+          },
+          {
+            to: 'https://github.com/mleem97/FrikaModFramework/releases/latest/download/FMF.HexLabelMod.dll',
+            from: ['/mod/FMF.HexLabelMod.dll'],
+          },
+          {
+            to: 'https://github.com/mleem97/FrikaModFramework/releases/latest/download/FMF.JoniMLCompatMod.dll',
+            from: ['/mod/FMF.JoniMLCompatMod.dll', '/mod/FMF.LangCompatBridge.dll'],
+          },
+          {
+            to: 'https://github.com/mleem97/FrikaModFramework/releases/latest/download/FMF.UIReplacementMod.dll',
+            from: ['/mod/FMF.UIReplacementMod.dll'],
           },
         ],
       },
