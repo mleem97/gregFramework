@@ -38,10 +38,10 @@ internal static class HexviewerFeature
     {
         try
         {
-            if (HexTargetResolver.TryGetAimedColor(out var aimHex, out var aimLabel))
+            if (HexTargetResolver.TryGetAimedColor(out var aimHex, out var aimDetailSuffix))
             {
                 _hudLine = aimHex;
-                _hudDetail = $"Anvisiert · {aimLabel}";
+                _hudDetail = $"Anvisiert · {aimDetailSuffix}";
                 UpdateHeldLine();
                 return;
             }

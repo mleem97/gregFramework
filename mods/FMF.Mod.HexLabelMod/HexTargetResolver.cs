@@ -8,10 +8,11 @@ internal static class HexTargetResolver
 {
     private const float MaxRayDistance = 48f;
 
-    public static bool TryGetAimedColor(out string hex, out string label)
+    /// <param name="aimDetailSuffix">Text after "Anvisiert ·", e.g. <c>Kabelrolle · RJ</c> or <c>Rack · Colored</c>.</param>
+    public static bool TryGetAimedColor(out string hex, out string aimDetailSuffix)
     {
         hex = null;
-        label = null;
+        aimDetailSuffix = null;
 
         var cam = Camera.main;
         if (cam == null)
@@ -24,14 +25,17 @@ internal static class HexTargetResolver
         var spinner = hit.collider.GetComponentInParent<CableSpinner>();
         if (spinner != null && GameObjectColorHex.TryGetSpinnerHex(spinner, out hex))
         {
-            label = "Spinner";
+            var p = GameObjectKindResolver.GetSpinnerPortKind(spinner);
+            var shortPort = p != null ? CablePortKindUtil.ToShortPortLabel(p) : null;
+            aimDetailSuffix = shortPort != null ? $"Kabelrolle · {shortPort}" : "Kabelrolle";
             return true;
         }
 
         var rack = hit.collider.GetComponentInParent<Rack>();
         if (rack != null && GameObjectColorHex.TryGetRackHex(rack, out hex))
         {
-            label = "Rack";
+            var v = GameObjectKindResolver.GetRackVariantLabel(rack);
+            aimDetailSuffix = v != null ? $"Rack · {v}" : "Rack";
             return true;
         }
 

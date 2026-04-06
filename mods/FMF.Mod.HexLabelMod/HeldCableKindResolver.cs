@@ -54,10 +54,8 @@ internal static class HeldCableKindResolver
     }
 
     /// <summary>
-    /// Tries to read a cable color string from held / player state (matches save <c>cableColor</c> style).
-    /// </summary>
-    /// <summary>
     /// Rack, cable reel (spinner), or patch cable in hand — returns a display label and hex when possible.
+    /// Labels include port (RJ/SFP/QSFP) for reels and Normal/Colored for racks when detected.
     /// </summary>
     public static bool TryGetHeldItemHex(out string hex, out string kindLabel)
     {
@@ -102,7 +100,9 @@ internal static class HeldCableKindResolver
         var kind = Resolve();
         if (TryGetHeldCableHex(out hex))
         {
-            kindLabel = string.IsNullOrEmpty(kind) ? "Kabel" : kind;
+            kindLabel = string.IsNullOrEmpty(kind)
+                ? "Kabel"
+                : $"Kabel · {CablePortKindUtil.ToShortPortLabel(kind)}";
             return true;
         }
 
@@ -116,13 +116,16 @@ internal static class HeldCableKindResolver
 
         if (val is Rack rack && GameObjectColorHex.TryGetRackHex(rack, out hex))
         {
-            kindLabel = "Rack";
+            var v = GameObjectKindResolver.GetRackVariantLabel(rack);
+            kindLabel = v != null ? $"Rack · {v}" : "Rack";
             return true;
         }
 
         if (val is CableSpinner sp && GameObjectColorHex.TryGetSpinnerHex(sp, out hex))
         {
-            kindLabel = "Spinner";
+            var p = GameObjectKindResolver.GetSpinnerPortKind(sp);
+            var shortPort = p != null ? CablePortKindUtil.ToShortPortLabel(p) : null;
+            kindLabel = shortPort != null ? $"Kabelrolle · {shortPort}" : "Kabelrolle";
             return true;
         }
 
@@ -131,14 +134,17 @@ internal static class HeldCableKindResolver
             var r = go.GetComponentInParent<Rack>();
             if (r != null && GameObjectColorHex.TryGetRackHex(r, out hex))
             {
-                kindLabel = "Rack";
+                var v = GameObjectKindResolver.GetRackVariantLabel(r);
+                kindLabel = v != null ? $"Rack · {v}" : "Rack";
                 return true;
             }
 
             var s = go.GetComponentInParent<CableSpinner>();
             if (s != null && GameObjectColorHex.TryGetSpinnerHex(s, out hex))
             {
-                kindLabel = "Spinner";
+                var p = GameObjectKindResolver.GetSpinnerPortKind(s);
+                var shortPort = p != null ? CablePortKindUtil.ToShortPortLabel(p) : null;
+                kindLabel = shortPort != null ? $"Kabelrolle · {shortPort}" : "Kabelrolle";
                 return true;
             }
         }
@@ -148,14 +154,17 @@ internal static class HeldCableKindResolver
             var r = c.GetComponentInParent<Rack>();
             if (r != null && GameObjectColorHex.TryGetRackHex(r, out hex))
             {
-                kindLabel = "Rack";
+                var v = GameObjectKindResolver.GetRackVariantLabel(r);
+                kindLabel = v != null ? $"Rack · {v}" : "Rack";
                 return true;
             }
 
             var s = c.GetComponentInParent<CableSpinner>();
             if (s != null && GameObjectColorHex.TryGetSpinnerHex(s, out hex))
             {
-                kindLabel = "Spinner";
+                var p = GameObjectKindResolver.GetSpinnerPortKind(s);
+                var shortPort = p != null ? CablePortKindUtil.ToShortPortLabel(p) : null;
+                kindLabel = shortPort != null ? $"Kabelrolle · {shortPort}" : "Kabelrolle";
                 return true;
             }
         }
@@ -258,12 +267,12 @@ internal static class HeldCableKindResolver
     private static string ClassifyObject(object o)
     {
         if (o is string s)
-            return ClassifyString(s);
+            return CablePortKindUtil.ClassifyPortString(s);
 
         var s2 = o.ToString();
         if (!string.IsNullOrEmpty(s2))
         {
-            var k = ClassifyString(s2);
+            var k = CablePortKindUtil.ClassifyPortString(s2);
             if (k != null)
                 return k;
         }
@@ -288,29 +297,11 @@ internal static class HeldCableKindResolver
 
             if (val is string str)
             {
-                var k = ClassifyString(str);
+                var k = CablePortKindUtil.ClassifyPortString(str);
                 if (k != null)
                     return k;
             }
         }
-
-        return null;
-    }
-
-    private static string ClassifyString(string s)
-    {
-        if (string.IsNullOrEmpty(s))
-            return null;
-
-        var u = s.ToUpperInvariant();
-        if (u.Contains("QSFP", StringComparison.Ordinal))
-            return "QSFP";
-        if (u.Contains("SFP", StringComparison.Ordinal))
-            return "SFP";
-        if (u.Contains("RJ45", StringComparison.Ordinal) || u.Contains("RJ-45", StringComparison.Ordinal))
-            return "RJ45";
-        if (u == "RJ" || u.Contains("RJ ", StringComparison.Ordinal) || u.EndsWith("RJ", StringComparison.Ordinal))
-            return "RJ45";
 
         return null;
     }
