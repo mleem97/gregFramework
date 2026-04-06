@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "description": "Optional manifest for download/overview pages (Docusaurus can consume later).",
+  "mods": [
+    {
+      "id": "hexmod",
+      "title": "Hex Label Mod",
+      "workshopUrl": "",
+      "githubReleaseUrl": "",
+      "wikiPath": "/wiki/wiki/mods/hexmod",
+      "sourcePath": "mods/FMF.Mod.HexLabelMod"
+    }
+  ]
+}
