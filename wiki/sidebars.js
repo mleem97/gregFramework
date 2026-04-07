@@ -73,6 +73,13 @@ const sidebars = {
         },
         {
           type: 'category',
+          label: 'Tool releases',
+          items: [
+            'releases/tools/gregtools-modmanager-1.0-release',
+          ],
+        },
+        {
+          type: 'category',
           label: 'Mod releases',
           items: [
             'releases/mods/fmf-console-input-guard-release',

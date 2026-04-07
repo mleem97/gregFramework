@@ -1,0 +1,42 @@
+---
+title: GregTools 1.0 Modmanager
+sidebar_label: GregTools Modmanager 1.0
+description: First stable release of the GregTools Modmanager (Workshop Uploader) for Data Center — download ZIP, install, and links.
+---
+
+# GregTools 1.0 Modmanager
+
+**Version:** 1.0.0 · **Application title:** GregTools Modmanager · **Windows:** win10-x64, self-contained (.NET MAUI)
+
+This is the **first numbered release** line for the desktop Workshop client: Mod Store, author tools, Mod Manager, and Steam publish flows for **Data Center** (Steam App ID `4170200`).
+
+## Download
+
+Releases are published on **GitHub** from the [`gregtools-modmanager-release`](https://github.com/mleem97/gregFramework/blob/main/.github/workflows/gregtools-modmanager-release.yml) workflow.
+
+| What | Where |
+|------|--------|
+| **Latest release** | [github.com/mleem97/gregFramework/releases/latest](https://github.com/mleem97/gregFramework/releases/latest) |
+| **1.0.0 assets** | Look for tag **`gregtools-modmanager-v1.0.0`** and the ZIP **`Gregtools-Modmanager-1.0.0-win10-x64.zip`** (best-compression portable folder). |
+
+:::tip Creating the GitHub release
+
+Push tag **`gregtools-modmanager-v1.0.0`** on `main` (or run the workflow manually with that tag) so CI builds and attaches the ZIP.
+
+:::
+
+## Install
+
+1. Download **`Gregtools-Modmanager-1.0.0-win10-x64.zip`** from the release.
+2. Extract to a folder of your choice (or next to the game — see [Workshop uploader](/wiki/tools/workshop-uploader)).
+3. Run **`WorkshopUploader.exe`**. **Steam** must be installed; the app uses the Steamworks API for Workshop.
+
+## Documentation
+
+- [Workshop uploader (full guide)](/wiki/tools/workshop-uploader)
+- [End-user Workshop guide](/wiki/guides/enduser-workshop)
+- Open-source and third-party components: [`WorkshopUploader/EXTERNAL_DEPENDENCIES.md`](https://github.com/mleem97/gregFramework/blob/main/WorkshopUploader/EXTERNAL_DEPENDENCIES.md) in the repository
+
+## Scope of 1.0
+
+Initial **1.0** marks a stable baseline for the MAUI Windows app (self-contained publish, trimmed Release builds, localization, Mod Store / Mod Manager / editor flows). Patch and feature releases will use **1.0.x** / **1.x** as versioning on the [application version](/wiki/tools/workshop-uploader) in the project file.

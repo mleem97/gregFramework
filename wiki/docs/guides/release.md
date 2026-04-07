@@ -41,9 +41,9 @@ The following components are built and packaged for Steam Workshop distribution:
 
 ### Gregtools Modmanager (WorkshopManager)
 
-| Component | Target | Description |
-|-----------|--------|-------------|
-| Gregtools Modmanager | `net9.0-windows` (win10-x64), self-contained | Steam Workshop client + Mod Store + Mod Manager. No .NET runtime required. |
+| Version | Component | Target | Description |
+|---------|-----------|--------|-------------|
+| **1.0** | Gregtools Modmanager | `net9.0-windows` (win10-x64), self-contained | Steam Workshop client + Mod Store + Mod Manager. No .NET runtime required. See [GregTools 1.0 Modmanager release](/wiki/releases/tools/gregtools-modmanager-1.0-release). |
 
 ## Installation for end users
 
