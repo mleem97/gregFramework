@@ -454,3 +454,9 @@ _filter_repo_replacements.txt
 
 # Local MCP server experiments (keep package.json; ignore install tree)
 mcp-server/node_modules/
+
+# Local clone of GitHub Wiki (npm run wiki:refresh); do not commit
+.wiki/
+
+# GregTools Modmanager — Inno Setup output (build.ps1 / CI)
+WorkshopUploader/installer/Output/

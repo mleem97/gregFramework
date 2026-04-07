@@ -4,8 +4,9 @@
 # Standalone workshopuploader repo: copy this file to `.github/workflows/`, then add tag pattern `v*`
 #   (see WorkshopUploader/EXTERNAL_DEPENDENCIES.md — avoid broad `v*` while this app lives inside the monorepo).
 #
-# First releases: primary artifact is a ZIP at best compression (folder layout, self-contained).
-# MSIX / App Installer: optional job — enable when packaging + code signing are configured.
+# Artifacts: portable ZIP (best compression) + Inno Setup EXE (GregToolsModmanager-*-Setup.exe).
+# Authenticode on CI: optional — add repository secrets / Azure Trusted Signing if you need signed builds on the runner.
+# MSIX / App Installer: optional job below — enable when packaging is configured.
 
 name: GregTools Modmanager Release
 
@@ -31,7 +32,7 @@ env:
 
 jobs:
   package-zip:
-    name: Publish (ZIP, best compression)
+    name: Publish (ZIP + Inno Setup)
     runs-on: windows-latest
     timeout-minutes: 45
 
@@ -107,17 +108,47 @@ jobs:
           "zipPath=$zipPath" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
           Get-Item -LiteralPath $zipPath | Format-List Name, Length
 
+      - name: Install Inno Setup 6
+        shell: pwsh
+        run: choco install innosetup -y --no-progress
+
+      - name: Compile Inno Setup (GregToolsModmanager-Setup.exe)
+        id: inno
+        shell: pwsh
+        run: |
+          $wu = "${{ steps.meta.outputs.wuRoot }}"
+          $ver = "${{ steps.meta.outputs.displayVersion }}"
+          $candidates = @(
+            (Join-Path ${env:ProgramFiles(x86)} 'Inno Setup 6\ISCC.exe'),
+            (Join-Path $env:ProgramFiles 'Inno Setup 6\ISCC.exe')
+          )
+          $iscc = $candidates | Where-Object { Test-Path -LiteralPath $_ } | Select-Object -First 1
+          if (-not $iscc) { throw "ISCC.exe not found after choco install innosetup. Tried: $($candidates -join ', ')" }
+          $iss = Join-Path $wu "installer\GregToolsModmanager.iss"
+          & $iscc $iss "/DMyAppVersion=$ver"
+          if ($LASTEXITCODE -ne 0) { throw "ISCC failed with exit code $LASTEXITCODE" }
+          $setupName = "GregToolsModmanager-$ver-Setup.exe"
+          $setupPath = Join-Path $wu "installer\Output\$setupName"
+          if (-not (Test-Path -LiteralPath $setupPath)) { throw "Setup output not found: $setupPath" }
+          $setupOut = $setupPath.Replace('\', '/')
+          "setupPath=$setupOut" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          Get-Item -LiteralPath $setupPath | Format-List FullName, Length
+
       - name: Upload to GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.meta.outputs.tag }}
           name: GregTools Modmanager ${{ steps.meta.outputs.displayVersion }}
-          files: ${{ steps.zip.outputs.zipPath }}
+          files: |
+            ${{ steps.zip.outputs.zipPath }}
+            ${{ steps.inno.outputs.setupPath }}
           generate_release_notes: true
           body: |
-            **Distribution (this release):** portable ZIP (self-contained win10-x64), best compression.
+            **Artifacts**
+            - **Portable ZIP** — self-contained `win10-x64` publish folder (best compression).
+            - **Windows installer** — `GregToolsModmanager-*-Setup.exe` (Inno Setup 6). For Authenticode-signed installers, build locally with `WorkshopUploader/build.ps1 -Sign` and repository secrets for CI signing if needed (`WorkshopUploader/installer/CODE_SIGNING.md`).
 
-            **App Installer / MSIX:** not attached for early releases; see `WorkshopUploader/EXTERNAL_DEPENDENCIES.md` for roadmap and licensing.
+            **MSIX / App Installer:** not attached here; see `WorkshopUploader/EXTERNAL_DEPENDENCIES.md`.
 
   # Flip `if` to `true` after: WindowsPackageType=Msix (or equivalent), signing cert in secrets, and verified local publish.
   package-app-installer:

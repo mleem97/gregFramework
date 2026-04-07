@@ -68,7 +68,8 @@ if ($SignOnly) {
 
 $isccCandidates = @(
     (Join-Path ${env:ProgramFiles(x86)} 'Inno Setup 6\ISCC.exe'),
-    (Join-Path $env:ProgramFiles 'Inno Setup 6\ISCC.exe')
+    (Join-Path $env:ProgramFiles 'Inno Setup 6\ISCC.exe'),
+    (Join-Path $env:LOCALAPPDATA 'Programs\Inno Setup 6\ISCC.exe')
 )
 $iscc = $isccCandidates | Where-Object { Test-Path -LiteralPath $_ } | Select-Object -First 1
 if (-not $iscc) {
@@ -78,6 +79,7 @@ Inno Setup 6 Compiler (ISCC.exe) nicht gefunden.
 Erwartet unter:
   $($isccCandidates[0])
   $($isccCandidates[1])
+  $($isccCandidates[2]) (z. B. winget: JRSoftware.InnoSetup)
 
 Download: https://jrsoftware.org/isdl.php
 Nur signieren (ohne Inno): .\build.ps1 -SignOnly
