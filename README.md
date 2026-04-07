@@ -1,5 +1,5 @@
 # GREG FRAMEWORK
-** DATA CENTER MODDING API **
+**DATA CENTER MODDING API**
 [![.NET CI](https://github.com/mleem97/gregFramework/actions/workflows/dotnet-ci.yml/badge.svg?branch=master)](https://github.com/mleem97/gregFramework/actions/workflows/dotnet-ci.yml)
 [![Commit Lint](https://github.com/mleem97/gregFramework/actions/workflows/commitlint.yml/badge.svg?branch=master)](https://github.com/mleem97/gregFramework/actions/workflows/commitlint.yml)
 [![Last Commit](https://img.shields.io/github/last-commit/mleem97/gregFramework/master)](https://github.com/mleem97/gregFramework/commits/master)
