@@ -51,6 +51,31 @@ Output: `bin/Release/net9.0-windows10.0.19041.0/win10-x64/publish/WorkshopUpload
 dotnet publish WorkshopUploader.csproj -c Release -p:SelfContained=true -p:WindowsPackageType=None -p:WindowsAppSDKSelfContained=true -o ./publish-out
 ```
 
+### Setup-EXE (Inno Setup — echter Installer)
+
+1. [Inno Setup 6](https://jrsoftware.org/isdl.php) installieren (liefert `ISCC.exe`).
+2. Im Ordner `WorkshopUploader`:
+
+```powershell
+.\build.ps1
+```
+
+Führt `dotnet publish` aus und erzeugt **`installer\Output\GregToolsModmanager-<Version>-Setup.exe`** (Assistent, **Deinstallieren** unter Windows-Einstellungen → Apps, Startmenü-Eintrag, optionale Desktop-Verknüpfung). Standardinstallationspfad: **`Program Files\GregTools Modmanager`** (Administrator nötig).
+
+Nur neu kompilieren, wenn Publish schon da ist: `.\build.ps1 -SkipPublish`. Das Inno-Skript liegt unter **`installer\GregToolsModmanager.iss`**.
+
+**Update / Neuinstallation:** Gleiche **`AppId`** wie zuvor — Setup erkennt die bestehende Installation und **überschreibt** den Zielordner (`Program Files\GregTools Modmanager`). Vorher wird eine **laufende** `WorkshopUploader.exe` über den Windows-Restart-Manager geschlossen (`CloseApplications`). Die portable Variante **`install-local.ps1`** beendet die App ebenfalls und ersetzt den Installationsordner komplett.
+
+**Signatur:** Mit einer **öffentlichen CA** verschwindet der „Unbekannter Herausgeber“-Eindruck für Nutzer weitgehend; mit **Self-Signed** kannst du trotzdem z. B. **mleem97 / Greg Modding Team** im Zertifikat anzeigen — siehe **`installer\CODE_SIGNING.md`**. Self-Signed anlegen: **`.\installer\create-selfsigned-codesign-cert.ps1`**. Nur signieren **ohne Inno Setup**: **`.\build.ps1 -SignOnly`** (`CODE_SIGN_THUMBPRINT` setzen, Setup-EXE in `installer\Output\` oder `-SetupPath`).
+
+### Schnell ohne Setup-EXE (nur Kopie + Verknüpfungen)
+
+```powershell
+.\install-local.ps1
+```
+
+Installiert benutzerweit nach `%LOCALAPPDATA%\Programs\GregTools Modmanager\` (ohne Admin). Deinstallation: `.\install-local.ps1 -Uninstall`.
+
 ## Deploy all mods to Workshop folders
 
 ```bash
