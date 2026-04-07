@@ -162,12 +162,12 @@ foreach ($m in $mods) {
 #endregion
 
 #region Package Gregtools Modmanager (WorkshopUploader self-contained)
-$wuProj = Join-Path $RepoRoot 'WorkshopUploader\WorkshopUploader.csproj'
+$wuProj = Join-Path $RepoRoot 'workshopuploader\WorkshopUploader.csproj'
 Write-Host "[workshop] Publishing $wuProj (self-contained, trimmed)"
 & dotnet publish $wuProj -c $Configuration
 if ($LASTEXITCODE -ne 0) { throw "WorkshopUploader publish failed" }
 
-$wuPublish = Join-Path $RepoRoot "WorkshopUploader\bin\$Configuration\net9.0-windows10.0.19041.0\win10-x64\publish"
+$wuPublish = Join-Path $RepoRoot "workshopuploader\bin\$Configuration\net9.0-windows10.0.19041.0\win10-x64\publish"
 if (-not (Test-Path -LiteralPath $wuPublish)) { throw "Missing: $wuPublish" }
 
 $mmProject = Join-Path $WorkshopRoot 'Gregtools Modmanager'

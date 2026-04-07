@@ -14,7 +14,7 @@ This page is the **source of truth snapshot** for how the DataCenterExporter / g
 | Area | Path | Role |
 |------|------|------|
 | Framework core | [`framework/FrikaMF.csproj`](https://github.com/mleem97/gregFramework/blob/master/framework/FrikaMF.csproj) | MelonLoader mod hosting runtime hooks, Harmony, bridge, events |
-| Workshop tooling | [`WorkshopUploader/`](https://github.com/mleem97/gregFramework/tree/master/WorkshopUploader) | Steam Workshop client: Mod Store, author tools, Mod Manager |
+| Workshop tooling | [`workshopuploader/`](https://github.com/mleem97/gregFramework/tree/master/workshopuploader) (rename from `WorkshopUploader/`; see [`WorkshopUploader/MIGRATION_PUBLIC_REPO.md`](https://github.com/mleem97/gregFramework/blob/master/WorkshopUploader/MIGRATION_PUBLIC_REPO.md)) | Steam Workshop client: Mod Store, author tools, Mod Manager |
 | Mods (sources) | [`mods/`](https://github.com/mleem97/gregFramework/tree/master/mods) | Gameplay mods (`FMF.*`, `FMF.Mod.*` folders) |
 | Plugins (sources) | [`plugins/`](https://github.com/mleem97/gregFramework/tree/master/plugins) | Framework plugins (`FFM.Plugin.*`) |
 | Templates | [`Templates/`](https://github.com/mleem97/gregFramework/tree/master/Templates) | Scaffolds for new mods/plugins |
@@ -27,7 +27,7 @@ This page is the **source of truth snapshot** for how the DataCenterExporter / g
 | Project | Location | In `FrikaMF.sln`? |
 |---------|----------|-------------------|
 | FrikaMF | `framework/FrikaMF.csproj` | Yes |
-| WorkshopUploader | `WorkshopUploader/WorkshopUploader.csproj` | Yes |
+| WorkshopUploader | `workshopuploader/WorkshopUploader.csproj` (after folder rename) | No — build via `WorkshopUploader.sln` inside that folder or `dotnet build workshopuploader/WorkshopUploader.csproj` |
 | FFM.Plugin.* (x5) | `plugins/FFM.Plugin.*/` | Yes — paths in [`FrikaMF.sln`](https://github.com/mleem97/gregFramework/blob/master/FrikaMF.sln) use `plugins\...` |
 | FMF.HexLabelMod | `mods/FMF.Mod.HexLabelMod/` | No (build standalone or add to solution) |
 | FMF.ConsoleInputGuard | `mods/FMF.ConsoleInputGuard/` | No |
@@ -37,8 +37,8 @@ This page is the **source of truth snapshot** for how the DataCenterExporter / g
 
 ## Build status (framework project)
 
-- `framework/FrikaMF.csproj` explicitly **excludes** repo-root `WorkshopUploader/**` from compile (that app builds only via `WorkshopUploader/WorkshopUploader.csproj` / solution).
-- `dotnet build FrikaMF.sln` builds framework, `WorkshopUploader`, and plugin projects under `plugins\` (MelonLoader/game refs still required locally unless `CI=true`).
+- `framework/FrikaMF.csproj` explicitly **excludes** `workshopuploader/**` from compile (that app builds only via `workshopuploader/WorkshopUploader.csproj` / `WorkshopUploader.sln` inside that folder).
+- `dotnet build FrikaMF.sln` builds framework and plugin projects under `plugins\` — **not** the MAUI Workshop app (MelonLoader/game refs still required locally unless `CI=true`).
 
 ## `FrikaMF.sln` drift (action items)
 

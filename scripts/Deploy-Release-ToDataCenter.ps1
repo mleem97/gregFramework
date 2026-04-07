@@ -59,7 +59,7 @@ foreach ($rel in $GameProjects) {
 }
 
 if ($IncludeWorkshopUploader) {
-    $wuProj = Join-Path $RepoRoot 'WorkshopUploader\WorkshopUploader.csproj'
+    $wuProj = Join-Path $RepoRoot 'workshopuploader\WorkshopUploader.csproj'
     Write-Host "[deploy] dotnet publish $wuProj -c $Configuration (self-contained)"
     & dotnet publish $wuProj -c $Configuration -p:SelfContained=true -p:RuntimeIdentifier=win10-x64
     if ($LASTEXITCODE -ne 0) { throw "dotnet publish failed: $LASTEXITCODE" }
@@ -101,7 +101,7 @@ foreach ($name in $pluginNames) {
 
 if ($IncludeWorkshopUploader) {
     $WuTarget = Join-Path $GameDir 'WorkshopUploader'
-    $wuSrc = Join-Path $RepoRoot "WorkshopUploader\bin\$Configuration\net9.0-windows10.0.19041.0\win10-x64\publish"
+    $wuSrc = Join-Path $RepoRoot "workshopuploader\bin\$Configuration\net9.0-windows10.0.19041.0\win10-x64\publish"
     if (-not (Test-Path -LiteralPath $wuSrc)) { throw "Missing WorkshopUploader publish: $wuSrc" }
     Get-ChildItem -LiteralPath $WuTarget -ErrorAction SilentlyContinue | Remove-Item -Recurse -Force -ErrorAction SilentlyContinue
     Copy-Item -Path (Join-Path $wuSrc '*') -Destination $WuTarget -Recurse -Force
